@@ -15,7 +15,7 @@ http.interceptors.request.use(async config => {
 			config.header.Authorization = 'Bearer ' + store.state.token
 		} else {
 			uni.navigateTo({
-				url: '/pages/auth/auth.vue'
+				url: '/pages/auth/auth'
 			})
 			return Promise.reject(config)
 		}
@@ -36,7 +36,7 @@ http.interceptors.response.use(async response => {
 				1) || ['credentials_required', 'invalid_token', 'revoked_token'].includes(response.data
 				.code)) {
 			store.commit('clearToken')
-			uni.redirectTo({
+			uni.navigateTo({
 				url: '/pages/auth/auth'
 			})
 		}

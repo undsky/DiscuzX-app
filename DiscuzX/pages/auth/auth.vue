@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		// TODO: 禁用返回，授权成功后跳转
 	</view>
 </template>
 
