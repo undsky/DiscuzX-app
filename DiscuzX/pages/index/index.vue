@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-column flex-align-center">
-		<image class="logo margin-lg-top" src="/static/logo.png"></image>
-		<view class="text-color-grey margin-top">{{version}}</view>
+		<image class="logo margin-top-lg" src="/static/logo.png"></image>
+		<view class="text-size-base text-color-grey margin-top">{{version}}</view>
 	</view>
 </template>
 

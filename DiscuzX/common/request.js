@@ -36,8 +36,8 @@ http.interceptors.response.use(async response => {
 				1) || ['credentials_required', 'invalid_token', 'revoked_token'].includes(response.data
 				.code)) {
 			store.commit('clearToken')
-			uni.navigateTo({
-				url: '/pages/auth/auth.vue'
+			uni.redirectTo({
+				url: '/pages/auth/auth'
 			})
 		}
 	}

@@ -67,5 +67,21 @@
     },
     "uniStatistics" : {
         "enable" : false
+    },
+    "h5" : {
+        "router" : {
+            "mode" : "hash",
+            "base" : "/5/"
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "template" : "index.html",
+        "title" : "DiscuzX",
+        "devServer" : {
+            "https" : false
+        }
     }
 }
