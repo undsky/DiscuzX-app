@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import App from './App'
 
+// #ifdef H5
+Vue.prototype.$wx = require('jweixin-module')
+// #endif
+
+import http from 'common/request.js'
+Vue.prototype.$http = http
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'
 
 const app = new Vue({
-    ...App
+	...App
 })
 app.$mount()

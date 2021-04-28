@@ -1,0 +1,8 @@
+{
+  "name": "discuzx",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "jweixin-module": "^1.6.0"
+  }
+}

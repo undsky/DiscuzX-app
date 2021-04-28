@@ -78,3 +78,7 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+.DS_Store
+yarn.lock
+unpackage
