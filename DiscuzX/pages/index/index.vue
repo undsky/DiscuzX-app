@@ -1,9 +1,7 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view>
+	<view class="flex flex-column flex-align-center">
+		<image class="logo margin-lg-top" src="/static/logo.png"></image>
+		<view class="text-color-grey margin-top">{{version}}</view>
 	</view>
 </template>
 
@@ -11,11 +9,17 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				version: ''
 			}
 		},
-		onLoad() {
-
+		onLoad: async function(options) {
+			const result = await this.$http.post('version', {}, {
+				custom: {
+					auth: false
+				}
+			})
+			if (200 == result.code)
+				this.version = result.data.version
 		},
 		methods: {
 
@@ -23,30 +27,9 @@
 	}
 </script>
 
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
+<style scoped>
 	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+		width: 160rpx;
+		height: 160rpx;
 	}
 </style>
