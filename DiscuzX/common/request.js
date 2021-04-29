@@ -29,7 +29,7 @@ http.interceptors.response.use(async response => {
 	if ('development' === process.env.NODE_ENV) {
 		console.log(response)
 	}
-	return response.data
+	return response.data || {}
 }, async response => {
 	if (response.data) {
 		if (('string' == typeof response.data && response.data.toLowerCase().indexOf('unauthorized') > -

@@ -8,11 +8,14 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		methods: {
-			
+
+		},
+		onBackPress: function() {
+			return true;
 		}
 	}
 </script>
