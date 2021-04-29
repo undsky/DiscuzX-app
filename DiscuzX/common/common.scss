@@ -347,11 +347,31 @@
 	}
 }
 
-// .border {}
+.border {
+	border-width: 1px;
+	border-style: solid;
+	border-color: $uni-border-color;
 
-// .opacity {}
+	&-radius {
+		border-radius: $uni-border-radius-base;
 
-.myp-lines {
+		&-sm {
+			border-radius: $uni-border-radius-sm;
+		}
+
+		&-lg {
+			border-radius: $uni-border-radius-lg;
+		}
+	}
+}
+
+.opacity {
+	&-disabled {
+		opacity: $uni-opacity-disabled;
+	}
+}
+
+.lines {
 	&-one {
 		lines: 1;
 		overflow: hidden;

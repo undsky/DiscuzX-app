@@ -5,7 +5,10 @@ import App from './App'
 Vue.prototype.$wx = require('jweixin-module')
 // #endif
 
-import http from 'common/request.js'
+import util from './common/util.js'
+Vue.prototype.$util = util
+
+import http from './common/request.js'
 Vue.prototype.$http = http
 
 Vue.config.productionTip = false
