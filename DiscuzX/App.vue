@@ -13,5 +13,5 @@
 </script>
 
 <style lang="scss">
-	@import '@/common/common.scss'
+	@import '@/common/common.scss';
 </style>

@@ -11,6 +11,9 @@ Vue.prototype.$util = util
 import http from './common/request.js'
 Vue.prototype.$http = http
 
+import store from './store/index.js'
+Vue.prototype.$store = store
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'
