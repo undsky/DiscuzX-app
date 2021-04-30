@@ -11,14 +11,18 @@ const http = new Request({
 
 http.interceptors.request.use(async config => {
 	if (config.custom.auth) {
-		if (store.state.token) {
-			config.header.Authorization = 'Bearer ' + store.state.token
-		} else {
-			uni.navigateTo({
-				url: '/pages/auth/auth'
-			})
-			return Promise.reject(config)
+		if (!store.state.token) {
+			const token = uni.getStorageSync('token')
+			if (token) {
+				this.$store.commit('setToken', token)
+			} else {
+				uni.navigateTo({
+					url: '/pages/auth/auth'
+				})
+				return Promise.reject(config)
+			}
 		}
+		config.header.Authorization = 'Bearer ' + store.state.token
 	}
 	return config
 }, async config => {

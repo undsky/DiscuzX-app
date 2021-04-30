@@ -7,7 +7,6 @@ export default {
 	},
 	mutations: {
 		setToken(state, token) {
-			uni.setStorageSync('token', token)
 			state.token = token
 		},
 		clearToken(state) {
