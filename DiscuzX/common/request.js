@@ -2,7 +2,7 @@ import Request from '../js_sdk/luch-request/luch-request/index.js';
 import store from '../store/index.js'
 
 const http = new Request({
-	baseURL: 'https://undsky.com/api',
+	baseURL: 'http://localhost:7001/api',
 	withCredentials: true,
 	custom: {
 		auth: true
@@ -31,15 +31,12 @@ http.interceptors.response.use(async response => {
 	}
 	return response.data || {}
 }, async response => {
-	if (response.data) {
-		if (('string' == typeof response.data && response.data.toLowerCase().indexOf('unauthorized') > -
-				1) || ['credentials_required', 'invalid_token', 'revoked_token'].includes(response.data
-				.code)) {
-			store.commit('clearToken')
-			uni.navigateTo({
-				url: '/pages/auth/auth'
-			})
-		}
+	if (response.data && ['credentials_required', 'invalid_token', 'revoked_token'].includes(response
+			.data.code)) {
+		store.commit('clearToken')
+		uni.navigateTo({
+			url: '/pages/auth/auth'
+		})
 	}
 	return Promise.reject(response)
 })

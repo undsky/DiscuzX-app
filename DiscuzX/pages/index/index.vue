@@ -13,7 +13,7 @@
 			}
 		},
 		onLoad: async function(options) {
-			const result = await this.$http.post('version', {}, {
+			const result = await this.$http.post('', {}, {
 				custom: {
 					auth: false
 				}
