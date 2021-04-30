@@ -13,10 +13,10 @@
 			}
 		},
 		onLoad: async function(options) {
-			const result = await this.$http.post('', {}, {
-				// custom: {
-				// 	auth: false
-				// }
+			const result = await this.$http.post('version', {}, {
+				custom: {
+					auth: false
+				}
 			})
 			if (200 == result.code)
 				this.version = result.data.version
