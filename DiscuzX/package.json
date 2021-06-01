@@ -1,8 +1,8 @@
 {
-  "name": "discuzx",
+  "name": "uniapp",
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "jweixin-module": "^1.6.0"
+    "luch-request": "^3.0.6"
   }
 }

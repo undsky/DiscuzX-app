@@ -1,7 +1,7 @@
 .flex {
 	flex: 1;
 	/* #ifndef APP-NVUE */
-	display: flex;
+	display: flex !important;
 	/* #endif */
 
 	&-row {

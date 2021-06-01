@@ -1,7 +1,9 @@
-import queryParams from './queryParams.js'
-
 function parse(url) {
 	let params = {}
+	// #ifdef H5
+	if (!url)
+		url = window.location.href
+	// #endif
 	if (url)
 		url.replace(/[?&]([^=#]+)=([^&#]*)/gi, function(m, key, value) {
 			params[key] = value
@@ -11,6 +13,5 @@ function parse(url) {
 }
 
 export default {
-	parse,
-	stringify: queryParams
+	parse
 }
