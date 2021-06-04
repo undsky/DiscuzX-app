@@ -1,28 +1,54 @@
 <template>
-	<view class="flex flex-column flex-align-center">
-		<image class="logo margin-top-lg" src="/static/logo.png"></image>
-		<view class="text-size-base text-color-grey margin-top">{{version}}</view>
+	<view>
+		<u-tabbar v-model="currentTab" :list="tabbar" :mid-button="true" @change="tabbarChange"></u-tabbar>
+		<u-popup v-model="popupShow" mode="bottom" :safe-area-inset-bottom="true" @close="popupClose">
+			<u-grid :col="2" @click="gridClick">
+				<u-grid-item>
+					<u-icon name="file-text-fill" :size="46"></u-icon>
+					<view class="grid-text">发帖</view>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon name="edit-pen-fill" :size="46"></u-icon>
+					<view class="grid-text">签到</view>
+				</u-grid-item>
+			</u-grid>
+		</u-popup>
 	</view>
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
+
 	export default {
 		data() {
 			return {
-				version: ''
+				currentTab: 0,
+				popupShow: false
 			}
 		},
-		onLoad: async function(options) {
-			const result = await this.$http.post('version', {}, {
-				custom: {
-					auth: false
-				}
+		computed: {
+			...mapState({
+				tabbar: state => state.tabbar.tabbar
 			})
-			if (200 == result.code)
-				this.version = result.data.version
+		},
+		onLoad: async function(options) {
+
 		},
 		methods: {
-
+			tabbarChange(index) {
+				if (2 == index) {
+					this.popupShow = true
+				}
+				this.currentTab = index
+			},
+			popupClose() {
+				this.currentTab = 0
+			},
+			gridClick(index) {
+				this.popupShow = false
+			}
 		}
 	}
 </script>
