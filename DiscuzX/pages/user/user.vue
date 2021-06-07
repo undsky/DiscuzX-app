@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		<dx-tabbar :currentTab="4"></dx-tabbar>
 	</view>
 </template>
 

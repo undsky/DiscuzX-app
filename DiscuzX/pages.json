@@ -2,8 +2,8 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "DiscuzX",
-		"navigationBarBackgroundColor": "#303133",
-		"backgroundColor": "#303133"
+		"navigationBarBackgroundColor": "#606266",
+		"backgroundColor": "#606266"
 	},
 	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
@@ -23,7 +23,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/auth/auth",
@@ -33,24 +34,60 @@
 		}, {
 			"path": "pages/board/board",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "板块",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/message/message",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "消息",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "我的",
 				"enablePullDownRefresh": false
 			}
 
 		}
-	]
+	    ,{
+            "path" : "pages/detail/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/board/list/list",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/post/post",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/chat/chat",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ]
 }
