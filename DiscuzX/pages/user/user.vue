@@ -1,13 +1,16 @@
 <template>
 	<view>
-		<scroll-view scroll-y="true" class="has-tabbar">
+		<scroll-view scroll-y="true" class="wrapper">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 				<view class="u-m-r-10">
 					<u-avatar :src="pic" size="140"></u-avatar>
 				</view>
 				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">uView ui</view>
-					<view class="u-font-14 u-tips-color">微信号:helang_uView</view>
+					<navigator hover-class="none" url="../auth/auth">
+						<view class="u-font-18 u-p-b-20 text-color-primary">登录</view>
+					</navigator>
+					<!-- <view class="u-font-18 u-p-b-20">uView ui</view>
+					<view class="u-font-14 u-tips-color">微信号:helang_uView</view> -->
 				</view>
 			</view>
 
@@ -55,7 +58,7 @@
 </script>
 
 <style scoped>
-	.has-tabbar {
+	.wrapper {
 		height: calc(100vh - 94px);
 	}
 </style>

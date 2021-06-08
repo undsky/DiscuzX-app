@@ -1,11 +1,11 @@
 <template>
 	<view class="wrap padding">
 		<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-			<u-form-item :leftIconStyle="{color: '#888', fontSize: '32rpx'}" left-icon="account" label-width="150"
+			<u-form-item :leftIconStyle="iconStyle" left-icon="account" label-width="150"
 				:label-position="labelPosition" label="用户名" prop="name">
 				<u-input :border="border" placeholder="请输入用户名" v-model="model.name" type="text"></u-input>
 			</u-form-item>
-			<u-form-item :leftIconStyle="{color: '#888', fontSize: '32rpx'}" left-icon="lock" label-width="150"
+			<u-form-item :leftIconStyle="iconStyle" left-icon="lock" label-width="150"
 				:label-position="labelPosition" label="密码" prop="password">
 				<u-input :password-icon="true" :border="border" type="password" v-model="model.password"
 					placeholder="请输入密码"></u-input>
@@ -14,7 +14,7 @@
 		<view class="margin-top-lg">
 			<u-button type="warning" @click="submit">登录</u-button>
 		</view>
-		<navigator url="./register/register">
+		<navigator hover-class="none" url="./register/register">
 			<view class="margin-top-lg text-color-primary flex flex-justify-center">注册</view>
 		</navigator>
 	</view>
@@ -23,8 +23,11 @@
 <script>
 	export default {
 		data() {
-			let that = this;
 			return {
+				iconStyle: {
+					color: '#888',
+					fontSize: '32rpx'
+				},
 				model: {
 					name: '',
 					password: ''
@@ -33,7 +36,7 @@
 					name: [{
 						required: true,
 						message: '请输入用户名',
-						trigger: 'blur',
+						trigger: ['change', 'blur'],
 					}],
 					password: [{
 						required: true,
@@ -45,9 +48,6 @@
 				labelPosition: 'left',
 				errorType: ['message'],
 			};
-		},
-		onLoad() {
-
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);

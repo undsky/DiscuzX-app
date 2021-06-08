@@ -24,8 +24,5 @@
 </script>
 
 <style scoped>
-	.logo {
-		width: 160rpx;
-		height: 160rpx;
-	}
+	
 </style>
