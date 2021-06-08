@@ -12,10 +12,7 @@
 			}
 		},
 		methods: {
-			setToken(token) {
-				uni.setStorageSync('token', token)
-				this.$store.commit('setToken', token)
-			}
+
 		},
 		onBackPress: function() {
 			return true;

@@ -165,5 +165,14 @@
 			}
 
 		}
-	]
+	    ,{
+            "path" : "pages/auth/register/register",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "注册",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ]
 }

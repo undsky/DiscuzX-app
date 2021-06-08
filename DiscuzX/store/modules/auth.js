@@ -1,17 +1,18 @@
 export default {
 	state: {
-		token: null
+		user: uni.getStorageSync('user')
 	},
 	getters: {
 
 	},
 	mutations: {
-		setToken(state, token) {
-			state.token = token
+		setUser(state, user) {
+			state.user = user
+			uni.setStorageSync('user', user)
 		},
-		clearToken(state) {
-			uni.removeStorageSync('token')
-			state.token = null
+		clearUser(state) {
+			state.user = null
+			uni.removeStorageSync('user')
 		}
 	},
 	actions: {
