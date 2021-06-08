@@ -54,7 +54,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.has-tabbar {
 		height: calc(100vh - 94px);
 	}
