@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<dx-navbar title="首页"></dx-navbar>
 		<dx-tabbar :currentTab="0"></dx-tabbar>
 	</view>
 </template>

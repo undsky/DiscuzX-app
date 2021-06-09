@@ -1,38 +1,47 @@
 <template>
 	<view>
+		<dx-navbar title="我的" :showUser="false"></dx-navbar>
 		<scroll-view scroll-y="true" class="wrapper">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 				<view class="u-m-r-10">
 					<u-avatar :src="pic" size="140"></u-avatar>
 				</view>
 				<view class="u-flex-1">
-					<navigator hover-class="none" url="../auth/auth">
-						<view class="u-font-18 u-p-b-20 text-color-primary">登录</view>
-					</navigator>
-					<!-- <view class="u-font-18 u-p-b-20">uView ui</view>
-					<view class="u-font-14 u-tips-color">微信号:helang_uView</view> -->
+					<template v-if="user">
+						<view class="u-font-18 u-p-b-20">uView ui</view>
+						<view class="u-font-14 u-tips-color">微信号:helang_uView</view>
+					</template>
+					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false"
+						:title-style="titleStyle">
+					</u-cell-item>
 				</view>
 			</view>
 
 			<view class="u-m-t-20">
-				<u-cell-group>
-					<u-cell-item @click="goto('./friend/friend')" icon="man-add" title="我的好友"></u-cell-item>
-					<u-cell-item @click="goto('./following/following')" icon="bookmark" title="我的关注"></u-cell-item>
-					<u-cell-item @click="goto('./followers/followers')" icon="heart" title="我的粉丝"></u-cell-item>
+				<u-cell-group :border="false">
+					<u-cell-item @click="$util.helper.goto('./friend/friend',true)" icon="man-add" title="我的好友">
+					</u-cell-item>
+					<u-cell-item @click="$util.helper.goto('./following/following',true)" icon="bookmark" title="我的关注">
+					</u-cell-item>
+					<u-cell-item @click="$util.helper.goto('./followers/followers',true)" icon="heart" title="我的粉丝">
+					</u-cell-item>
 				</u-cell-group>
 			</view>
 
 			<view class="u-m-t-20">
-				<u-cell-group>
-					<u-cell-item @click="goto('./post/post')" icon="file-text" title="我的发表"></u-cell-item>
-					<u-cell-item @click="goto('./reply/reply')" icon="edit-pen" title="我的回复"></u-cell-item>
-					<u-cell-item @click="goto('./star/star')" icon="heart" title="我的收藏"></u-cell-item>
+				<u-cell-group :border="false">
+					<u-cell-item @click="$util.helper.goto('./post/post',true)" icon="file-text" title="我的发表">
+					</u-cell-item>
+					<u-cell-item @click="$util.helper.goto('./reply/reply',true)" icon="edit-pen" title="我的回复">
+					</u-cell-item>
+					<u-cell-item @click="$util.helper.goto('./star/star',true)" icon="heart" title="我的收藏"></u-cell-item>
 				</u-cell-group>
 			</view>
 
 			<view class="u-m-t-20">
-				<u-cell-group>
-					<u-cell-item @click="goto('../setting/setting')" icon="setting" title="设置"></u-cell-item>
+				<u-cell-group :border="false">
+					<u-cell-item @click="$util.helper.goto('../setting/setting')" icon="setting" title="设置">
+					</u-cell-item>
 				</u-cell-group>
 			</view>
 		</scroll-view>
@@ -44,15 +53,14 @@
 	export default {
 		data() {
 			return {
-
+				titleStyle: {
+					fontWeight: 'bold',
+					fontSize : '32rpx'
+				}
 			}
 		},
 		methods: {
-			goto(url) {
-				uni.navigateTo({
-					url
-				});
-			}
+
 		}
 	}
 </script>
