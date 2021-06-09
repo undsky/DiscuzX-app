@@ -6,24 +6,28 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-
+export default {
+	data() {
+		return {};
+	},
+	computed: {},
+	onLoad: async function(options) {
+		const res = await this.$http.get({
+			custom: {
+				auth: false
+			},
+			params: {
+				r: 'user/topiclist',
+				sortby: 'new',
+				boardId: 0,
+				filterType: 'typeid',
+				filterId: 0,
+				page: 0
 			}
-		},
-		computed: {
-
-		},
-		onLoad: async function(options) {
-
-		},
-		methods: {
-
-		}
-	}
+		});
+	},
+	methods: {}
+};
 </script>
 
-<style scoped>
-	
-</style>
+<style scoped></style>
