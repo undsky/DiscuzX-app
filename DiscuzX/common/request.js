@@ -3,7 +3,7 @@ import store from '../store/index.js'
 
 const http = new Request({
 	baseURL: 'http://www.qdh100.com/mobcent/app/web/index.php',
-	withCredentials: true,
+	withCredentials: false,
 	header: {
 		"content-type": "application/x-www-form-urlencoded"
 	},
