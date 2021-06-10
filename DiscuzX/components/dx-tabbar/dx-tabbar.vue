@@ -37,13 +37,20 @@
 		},
 		computed: {
 			...mapState({
-				tabbar: state => state.tabbar.tabbar
+				tabbar: state => state.tabbar.tabbar,
+				user: state => state.auth.user
 			})
 		},
 		methods: {
 			tabbarChange(index) {
 				if (2 == index) {
-					this.popupShow = true
+					if (this.user) {
+						this.popupShow = true
+					} else {
+						uni.navigateTo({
+							url: '/pages/auth/auth'
+						});
+					}
 				}
 				this.index = index
 			},

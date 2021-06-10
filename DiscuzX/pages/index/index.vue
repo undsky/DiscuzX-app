@@ -17,12 +17,12 @@ export default {
 				auth: false
 			},
 			params: {
-				r: 'user/topiclist',
+				r: 'forum/topiclist',
 				sortby: 'new',
 				boardId: 0,
 				filterType: 'typeid',
 				filterId: 0,
-				page: 0
+				page: 1
 			}
 		});
 	},
