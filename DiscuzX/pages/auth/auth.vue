@@ -15,7 +15,7 @@
 			<u-button type="warning" @click="submit">登录</u-button>
 		</view>
 		<navigator hover-class="none" url="./register/register">
-			<view class="margin-top-lg u-font-lg text-color-primary flex flex-justify-center">注册</view>
+			<view class="flex justify-center margin-top text-df text-blue">注册</view>
 		</navigator>
 	</view>
 </template>

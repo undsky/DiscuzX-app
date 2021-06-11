@@ -1,17 +1,17 @@
 <template>
 	<u-navbar :background="background" :is-back="false">
-		<view class="flex flex-justify-between">
-			<view v-if="showUser" class="navbar-left">
+		<view class="flex flex-sub justify-between">
+			<view v-if="showUser" class="margin-left">
 				<u-image v-if="user" :src="user.avatar" shape="circle" width="44" height="44">
 				</u-image>
 				<navigator v-else url="../../pages/auth/auth" hover-class="none">
 					<u-icon name="account" color="#FFFFFF" size="38"></u-icon>
 				</navigator>
 			</view>
-			<view class="navbar-title flex flex-justify-center">
+			<view class="flex flex-sub justify-center text-lg text-white text-bold">
 				{{title}}
 			</view>
-			<navigator url="../../pages/search/search" hover-class="none" class="navbar-right">
+			<navigator url="../../pages/search/search" hover-class="none" class="margin-right">
 				<u-icon name="search" color="#FFFFFF" size="38"></u-icon>
 			</navigator>
 		</view>
@@ -47,20 +47,6 @@
 	}
 </script>
 
-<style scoped>
-	.navbar-left {
-		margin-left: 24rpx;
-		display: flex;
-	}
+<style>
 
-	.navbar-right {
-		margin-right: 24rpx;
-		display: flex;
-	}
-
-	.navbar-title {
-		font-size: 32rpx;
-		font-weight: bold;
-		color: white;
-	}
 </style>
