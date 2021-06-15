@@ -11,7 +11,7 @@ import zPagingRefresh from '../components/z-paging-refresh'
 import zPagingLoadMore from '../components/z-paging-load-more'
 import zPagingEmptyView from '../../z-paging-empty-view/z-paging-empty-view'
 
-const currentVersion = 'V1.8.1';
+const currentVersion = 'V1.8.5';
 const systemInfo = uni.getSystemInfoSync();
 const commonDelayTime = 100;
 const i18nUpdateKey = 'z-paging-i18n-update';
@@ -140,7 +140,7 @@ function toKebab(value) {
  * @event {Function} onRefresh 自定义下拉刷新被触发
  * @event {Function} onRestore 自定义下拉刷新被复位
  * @event {Function} scroll 滚动时触发，event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
- * @example <z-paging ref="paging" @query="queryList" :list.sync="dataList"></z-paging>
+ * @example <z-paging ref="paging" v-model="dataList" @query="queryList"></z-paging>
  */
 export default {
 	name: "z-paging",
@@ -193,6 +193,7 @@ export default {
 			isUserPullDown: false,
 			privateRefresherEnabled: -1,
 			privateScrollWithAnimation: -1,
+			myParentQuery: -1,
 			chatRecordLoadingMoreText: '',
 			moveDistance: 0,
 			loadingMoreDefaultSlot: null,
@@ -200,6 +201,7 @@ export default {
 			showBackToTopClass: false,
 			tempLanguageUpdateKey: 0,
 			isLoadFailed: false,
+			isIos: systemInfo.platform === 'ios',
 			privateShowRefresherWhenReload: false,
 			nRefresherLoading: true,
 			nListIsDragging: false,
@@ -207,13 +209,18 @@ export default {
 			nFixFreezing: false,
 			nShowRefresherReveal: false,
 			nShowRefresherRevealHeight: 0,
+			nIsFirstPageAndNoMore: false,
+			nFirstPageAndNoMoreChecked: false,
 			wxsPropType: '',
 			refresherRevealStackCount: 0,
 			renderPropScrollTop: 0,
+			renderUsePageScroll: false,
 			wxsIsScrollTopInTopRange: true,
 			wxsScrollTop: 0,
 			wxsPageScrollTop: 0,
+			wxsOnPullingDown: false,
 			disabledBounce: false,
+			cacheScrollNodeHeight: -1
 		};
 	},
 	props: {
@@ -235,6 +242,20 @@ export default {
 			type: [Number, Object],
 			default: function() {
 				return _getConfig('dataKey', null);
+			},
+		},
+		//自动注入的list名，可自动修改父view(包含ref="paging")中对应name的list值
+		autowireListName: {
+			type: String,
+			default: function() {
+				return _getConfig('autowireListName', '');
+			},
+		},
+		//自动注入的query名，可自动调用父view(包含ref="paging")中的query方法
+		autowireQueryName: {
+			type: String,
+			default: function() {
+				return _getConfig('autowireQueryName', '');
 			},
 		},
 		//i18n国际化设置语言，支持简体中文(zh-cn)、繁体中文(zh-hant-cn)和英文(en)
@@ -719,6 +740,13 @@ export default {
 				return _getConfig('showConsoleError', true);
 			}
 		},
+		//父组件v-model所绑定的list的值
+		value: {
+			type: Array,
+			default: function() {
+				return [];
+			}
+		}
 	},
 	mounted() {
 		this.wxsPropType = (new Date()).getTime().toString();
@@ -749,6 +777,20 @@ export default {
 		uni.$off(errorUpdateKey);
 	},
 	watch: {
+		value(newVal, oldVal) {
+			let dataType = Object.prototype.toString.call(newVal);
+			if (dataType === '[object Undefined]') {
+				zUtils.consoleErr('v-model所绑定的值不存在！');
+				return;
+			}
+			if (dataType !== '[object Array]') {
+				zUtils.consoleErr('v-model所绑定的值必须为Array类型！');
+				return;
+			}
+			if (!zUtils.arrayIsEqual(newVal, this.totalData)) {
+				this.totalData = newVal;
+			}
+		},
 		totalData(newVal, oldVal) {
 			if ((!this.isUserReload || !this.autoCleanListWhenReload) && this.firstPageLoaded && !newVal.length &&
 				oldVal.length) {
@@ -777,8 +819,10 @@ export default {
 				}, commonDelayTime)
 			}
 			this.realTotalData = newVal;
+			this.$emit('input', newVal);
 			this.$emit('update:list', newVal);
 			this.$emit('listChange', newVal);
+			this._callMyParentList(newVal);
 			this.firstPageLoaded = false;
 			this.isTotalChangeFromAddData = false;
 			this.$nextTick(() => {
@@ -787,6 +831,13 @@ export default {
 						this.$emit('pagingContentHeightChanged', res[0].height);
 					}
 				});
+				// #ifdef APP-NVUE
+				if (this.useChatRecordMode && this.nIsFirstPageAndNoMore && this.pageNo === this
+					.defaultPageNo && !this.nFirstPageAndNoMoreChecked) {
+					this.nFirstPageAndNoMoreChecked = true;
+					this._scrollToBottom(false);
+				}
+				// #endif
 			})
 		},
 		currentData(newVal, oldVal) {
@@ -794,16 +845,29 @@ export default {
 		},
 		loadingStatus(newVal, oldVal) {
 			this.$emit('loadingStatusChange', newVal);
+			// #ifdef APP-NVUE
+			if (this.useChatRecordMode) {
+				if (this.pageNo === this.defaultPageNo && newVal === 2) {
+					this.nIsFirstPageAndNoMore = true;
+					return;
+				}
+			}
+			this.nIsFirstPageAndNoMore = false;
+			//  #endif
 		},
 		oldScrollTop(newVal, oldVal) {
 			if (!this.usePageScroll) {
 				this.$emit('scrollTopChange', newVal);
 				this.$emit('update:scrollTop', newVal);
 				this._checkShouldShowBackToTop(newVal, oldVal);
-				if (newVal > 5) {
-					this.wxsScrollTop = 1;
+				if (this.isIos) {
+					if (newVal > 5) {
+						this.wxsScrollTop = 6;
+					} else {
+						this.wxsScrollTop = 0;
+					}
 				} else {
-					this.wxsScrollTop = 0;
+					this.wxsScrollTop = newVal;
 				}
 			}
 		},
@@ -812,10 +876,14 @@ export default {
 				this.$emit('scrollTopChange', newVal);
 				this.$emit('update:scrollTop', newVal);
 				this._checkShouldShowBackToTop(newVal, oldVal);
-				if (newVal > 5) {
-					this.wxsPageScrollTop = 1;
+				if (this.isIos) {
+					if (newVal > 5) {
+						this.wxsPageScrollTop = 6;
+					} else {
+						this.wxsPageScrollTop = 0;
+					}
 				} else {
-					this.wxsPageScrollTop = 0;
+					this.wxsPageScrollTop = newVal;
 				}
 			}
 		},
@@ -827,10 +895,16 @@ export default {
 			},
 			immediate: true
 		},
-		usePageScroll(newVal, oldVal) {
-			if (this.loaded && this.autoHeight) {
-				this._setAutoHeight(!newVal);
-			}
+		usePageScroll: {
+			handler(newVal) {
+				this.$nextTick(() => {
+					this.renderUsePageScroll = newVal;
+				})
+				if (this.loaded && this.autoHeight) {
+					this._setAutoHeight(!newVal);
+				}
+			},
+			immediate: true
 		},
 		autoHeight(newVal, oldVal) {
 			if (this.loaded && !this.usePageScroll) {
@@ -858,12 +932,21 @@ export default {
 		},
 		finalScrollTop(newVal, oldVal) {
 			if (!this.useChatRecordMode) {
-				if (newVal === 0) {
+				if (newVal < 6) {
 					this.renderPropScrollTop = 0;
 				} else {
 					this.renderPropScrollTop = 10;
 				}
 			}
+		},
+		nIsFirstPageAndNoMore: {
+			handler(newVal) {
+				const cellStyle = !this.useChatRecordMode || newVal ? {} : {
+					transform: 'rotate(180deg)'
+				};
+				this.$emit('update:cellStyle', cellStyle);
+			},
+			immediate: true
 		}
 	},
 	computed: {
@@ -1183,17 +1266,25 @@ export default {
 			this.totalData = [...this.totalData, ...data];
 			//#endif
 			//#ifdef APP-NVUE
-			this.totalData = [...data, ...this.totalData];
+			if (this.nIsFirstPageAndNoMore) {
+				this.totalData = [...this.totalData, ...data];
+			} else {
+				this.totalData = [...data, ...this.totalData];
+			}
 			//#endif
 			if (toBottom) {
 				setTimeout(() => {
 					//#ifndef APP-NVUE
 					this._scrollToBottom(toBottomWithAnimate);
 					//#endif
+					//#ifdef APP-NVUE
+					if (this.nIsFirstPageAndNoMore) {
+						this._scrollToBottom(toBottomWithAnimate);
+					} else {
+						this._scrollToTop(toBottomWithAnimate);
+					}
+					//#endif
 				}, commonDelayTime)
-				//#ifdef APP-NVUE
-				this._scrollToTop(toBottomWithAnimate);
-				//#endif
 			}
 		},
 		//从顶部添加数据，不会影响分页的pageNo和pageSize
@@ -1213,7 +1304,7 @@ export default {
 		resetTotalData(data) {
 			if (data == undefined) {
 				if (this.showConsoleError) {
-					console.error('[z-paging]方法resetTotalData参数缺失！');
+					zUtils.consoleErr('方法resetTotalData参数缺失！');
 				}
 				return;
 			}
@@ -1286,7 +1377,7 @@ export default {
 		//当使用页面滚动并且自定义下拉刷新时，请在页面的onPageScroll中调用此方法，告知z-paging当前的pageScrollTop，否则会导致在任意位置都可以下拉刷新
 		updatePageScrollTop(value) {
 			if (value == undefined) {
-				//console.error('[z-paging]updatePageScrollTop方法缺少参数，请将页面onPageScroll事件中的scrollTop传递给此方法');
+				//zUtils.consoleErr('updatePageScrollTop方法缺少参数，请将页面onPageScroll事件中的scrollTop传递给此方法');
 				return;
 			}
 			this.pageScrollTop = value;
@@ -1362,9 +1453,10 @@ export default {
 		//重新加载分页数据
 		_reload(isClean = false, isFromMounted = false) {
 			this.isAddedData = false;
+			this.cacheScrollNodeHeight = -1;
 			this.pageNo = this.defaultPageNo;
 			// #ifdef APP-NVUE
-			if (systemInfo.platform !== 'ios') {
+			if (this.isIos) {
 				this.nShowBottom = false;
 			}
 			// #endif
@@ -1376,6 +1468,7 @@ export default {
 			this.totalData = [];
 			if (!isClean) {
 				this.$emit('query', this.pageNo, this.defaultPageSize);
+				this._callMyParentQuery();
 				if (!isFromMounted && this.autoScrollToTopWhenReload) {
 					let checkedNRefresherLoading = true;
 					// #ifdef APP-NVUE
@@ -1423,7 +1516,7 @@ export default {
 				let methodStr = isLocal ? 'setLocalPaging' : 'complete';
 				if (dataType !== '[object Undefined]') {
 					if (this.showConsoleError) {
-						console.error(`[z-paging]:${methodStr}参数类型不正确，第一个参数类型必须为Array!`);
+						zUtils.consoleErr(`${methodStr}参数类型不正确，第一个参数类型必须为Array!`);
 					}
 				}
 			}
@@ -1526,6 +1619,24 @@ export default {
 				}
 			}
 		},
+		//通过@scroll事件检测是否滚动到了底部
+		_checkScrolledToBottom(scrollDiff) {
+			if (this.cacheScrollNodeHeight === -1) {
+				this._getNodeClientRect('.zp-scroll-view').then((res) => {
+					if (res) {
+						let pageScrollNodeHeight = res[0].height;
+						this.cacheScrollNodeHeight = pageScrollNodeHeight;
+						if (scrollDiff - pageScrollNodeHeight <= this.finalLowerThreshold) {
+							this._onLoadingMore('toBottom');
+						}
+					}
+				});
+			} else {
+				if (scrollDiff - this.cacheScrollNodeHeight <= this.finalLowerThreshold) {
+					this._onLoadingMore('toBottom');
+				}
+			}
+		},
 		//触发加载更多时调用,from:0-滑动到底部触发；1-点击加载更多触发
 		_onLoadingMore(from = 'click') {
 			if (from === 'toBottom') {
@@ -1559,7 +1670,7 @@ export default {
 			if (this.loadingStatus === 2) {
 				return;
 			}
-			
+
 			this._onLoadingMore('click');
 		},
 		//滚动到顶部
@@ -1666,7 +1777,7 @@ export default {
 							animated: animate
 						});
 					} else {
-						console.error('[z-paging]在nvue中滚动到指定位置，cell必须设置 :ref="`z-paging-${index}`"');
+						zUtils.consoleErr('在nvue中滚动到指定位置，cell必须设置 :ref="`z-paging-${index}`"');
 					}
 					return;
 					// #endif
@@ -1746,6 +1857,7 @@ export default {
 					})
 				} else {
 					this.$emit('query', this.pageNo, this.defaultPageSize);
+					this._callMyParentQuery();
 				}
 				this.loadingType = 1;
 			}
@@ -1753,6 +1865,10 @@ export default {
 		_scroll(e) {
 			this.$emit('scroll', e);
 			this.oldScrollTop = e.detail.scrollTop;
+			const scrollDiff = e.detail.scrollHeight - this.oldScrollTop;
+			if (!this.isIos) {
+				this._checkScrolledToBottom(scrollDiff);
+			}
 		},
 		//自定义下拉刷新被触发
 		_onRefresh() {
@@ -1781,7 +1897,7 @@ export default {
 			if (this._getRefresherTouchDisabled()) {
 				return;
 			}
-			const touch = this._getCommonTouch(e);
+			const touch = zUtils.getCommonTouch(e);
 			this._handleRefresherTouchstart(touch);
 		},
 		//进一步处理拖拽开始结果
@@ -1805,7 +1921,7 @@ export default {
 				return;
 			}
 			this.pullDownTimeStamp = Number(currentTimeStamp);
-			const touch = this._getCommonTouch(e);
+			const touch = zUtils.getCommonTouch(e);
 			let refresherTouchmoveY = touch.touchY;
 			let moveDistance = refresherTouchmoveY - this.refresherTouchstartY;
 			if (moveDistance < 0) {
@@ -1863,7 +1979,7 @@ export default {
 			if (this._getRefresherTouchDisabled() || !this.isTouchmoving) {
 				return;
 			}
-			const touch = this._getCommonTouch(e);
+			const touch = zUtils.getCommonTouch(e);
 			let refresherTouchendY = touch.touchY;
 			let moveDistance = refresherTouchendY - this.refresherTouchstartY;
 			moveDistance = this._getFinalRefresherMoveDistance(moveDistance);
@@ -1884,8 +2000,8 @@ export default {
 			if (moveDistance < 0 && this.usePageScroll && this.loadingMoreEnabled && this.useCustomRefresher && this
 				.pageScrollTop === -1) {
 				if (this.showConsoleError) {
-					console.error(
-						'[z-paging]usePageScroll为true并且自定义下拉刷新时必须引入mixin或在page滚动时通过调用z-paging组件的updatePageScrollTop方法设置当前的scrollTop'
+					zUtils.consoleErr(
+						'usePageScroll为true并且自定义下拉刷新时必须引入mixin或在page滚动时通过调用z-paging组件的updatePageScrollTop方法设置当前的scrollTop'
 					)
 				}
 			}
@@ -1908,13 +2024,22 @@ export default {
 		},
 		//处理scroll-view bounce是否生效
 		_handleScrollViewDisableBounce(e) {
-			if (!this.usePageScroll && systemInfo.platform === 'ios' && !this.scrollToTopBounceEnabled) {
+			if (!this.usePageScroll && this.isIos && !this.scrollToTopBounceEnabled) {
 				if (!e.bounce) {
 					if (this.scrollEnable) {
 						this.scrollEnable = false;
 					}
 				} else {
 					this.scrollEnable = true;
+				}
+			}
+		},
+		//wxs正在下拉处理
+		_handleWxsOnPullingDown(onPullingDown) {
+			this.wxsOnPullingDown = onPullingDown;
+			if (onPullingDown) {
+				if (!this.useChatRecordMode) {
+					this.renderPropScrollTop = 0;
 				}
 			}
 		},
@@ -2014,8 +2139,8 @@ export default {
 					const scrollViewTotalH = scrollViewNode[0].top + scrollViewNode[0].height;
 					if (scrollViewTotalH > this.systemInfo.windowHeight + 100) {
 						if (this.showConsoleError) {
-							console.error(
-								'[z-paging]检测到z-paging的高度超出页面高度，这将导致滚动出现异常，请设置【:fixed="true"】或【确保z-paging有确定的高度(如果通过百分比设置z-paging的高度，请保证z-paging的所有父view已设置高度，同时确保page也设置了height:100%，如：page{height:100%}】，此时z-paging的百分比高度才能生效。详情参考demo或访问：https://ext.dcloud.net.cn/plugin?id=3935)'
+							zUtils.consoleErr(
+								'检测到z-paging的高度超出页面高度，这将导致滚动出现异常，请设置【:fixed="true"】或【确保z-paging有确定的高度(如果通过百分比设置z-paging的高度，请保证z-paging的所有父view已设置高度，同时确保page也设置了height:100%，如：page{height:100%}】，此时z-paging的百分比高度才能生效。详情参考demo或访问：https://ext.dcloud.net.cn/plugin?id=3935)'
 							);
 						}
 					}
@@ -2163,26 +2288,7 @@ export default {
 			}
 			return 0;
 		},
-		//获取最终的touch位置
-		_getCommonTouch(e) {
-			let touch = null;
-			if (e.touches && e.touches.length) {
-				touch = e.touches[0];
-			} else if (e.changedTouches && e.changedTouches.length) {
-				touch = e.changedTouches[0];
-			} else if (e.datail && e.datail !== {}) {
-				touch = e.datail;
-			} else {
-				return {
-					touchX: 0,
-					touchY: 0
-				}
-			}
-			return {
-				touchX: touch.clientX,
-				touchY: touch.clientY
-			};
-		},
+
 		//判断是否要显示返回顶部按钮
 		_checkShouldShowBackToTop(newVal, oldVal) {
 			if (!this.autoShowBackToTop) {
@@ -2264,6 +2370,29 @@ export default {
 			}
 			return zI18n[key][this.finalLanguage];
 		},
+		//修改父view的list
+		_callMyParentList(newVal) {
+			if (this.autowireListName.length) {
+				const myParent = zUtils.getParent(this.$parent);
+				if (myParent && myParent[this.autowireListName]) {
+					myParent[this.autowireListName] = newVal;
+				}
+			}
+		},
+		//调用父view的query
+		_callMyParentQuery() {
+			if (this.autowireQueryName) {
+				if (this.myParentQuery === -1) {
+					const myParent = zUtils.getParent(this.$parent);
+					if (myParent && myParent[this.autowireQueryName]) {
+						this.myParentQuery = myParent[this.autowireQueryName];
+					}
+				}
+				if (this.myParentQuery !== -1) {
+					this.myParentQuery(this.pageNo, this.defaultPageSize);
+				}
+			}
+		},
 		// ------------nvue独有的方法----------------
 		//列表滚动时触发
 		_nOnScroll(e) {
@@ -2280,7 +2409,7 @@ export default {
 		},
 		//下拉刷新下拉中
 		_nOnPullingdown(e) {
-			if (this.refresherStatus === 2 || (systemInfo.platform === 'ios' && !this.nListIsDragging)) {
+			if (this.refresherStatus === 2 || (this.isIos && !this.nListIsDragging)) {
 				return;
 			}
 			const viewHeight = e.viewHeight;

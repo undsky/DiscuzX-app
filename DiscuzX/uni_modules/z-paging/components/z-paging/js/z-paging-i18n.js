@@ -9,17 +9,17 @@ const i18nUpdateKey = 'z-paging-i18n-update';
 const refresherDefaultText = {
 	'en': 'Pull down to refresh',
 	'zh-cn': '继续下拉刷新',
-	'zh-hant-cn': '繼續下拉刷新',
+	'zh-hant-cn': '繼續下拉重繪',
 }
 const refresherPullingText = {
 	'en': 'Release to refresh',
 	'zh-cn': '松开立即刷新',
-	'zh-hant-cn': '鬆開立即刷新',
+	'zh-hant-cn': '鬆開立即重繪',
 }
 const refresherRefreshingText = {
 	'en': 'Refreshing...',
 	'zh-cn': '正在刷新...',
-	'zh-hant-cn': '正在刷新...',
+	'zh-hant-cn': '正在重繪...',
 }
 
 const loadingMoreDefaultText = {
@@ -96,7 +96,7 @@ function getPrivateLanguage(myLanguage, followSystemLanguage = true) {
 	var reg = new RegExp('_', '');
 	language = language.replace(reg, '-');
 	if (language.indexOf('zh') !== -1) {
-		if (language === 'zh' || language === 'zh-cn' || language === 'zh-hans-cn') {
+		if (language === 'zh' || language === 'zh-cn' || language.indexOf('zh-hans') !== -1) {
 			return 'zh-cn';
 		}
 		return 'zh-hant-cn';
@@ -112,13 +112,13 @@ function getLanguage(followSystemLanguage = true) {
 	return getPrivateLanguage(false, followSystemLanguage);
 }
 
-// 获取当前语言，格式为:简体中文、繁体中文、英语。followSystemLanguage:获取的结果是否是在不跟随系统语言下获取到的
+// 获取当前语言，格式为:简体中文、繁體中文、English。followSystemLanguage:获取的结果是否是在不跟随系统语言下获取到的
 function getLanguageName(followSystemLanguage = true) {
 	const language = getLanguage(followSystemLanguage);
 	const languageNameMap = {
 		'zh-cn': '简体中文',
-		'zh-hant-cn': '繁体中文',
-		'en': '英语'
+		'zh-hant-cn': '繁體中文',
+		'en': 'English'
 	};
 	return languageNameMap[language];
 }
