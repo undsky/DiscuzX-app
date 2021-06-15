@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<z-paging ref="paging" autowire-list-name="zList" autowire-query-name="zQuery" :auto="false"
+		<z-paging style="height: 100%;" ref="paging" autowire-list-name="zList" autowire-query-name="zQuery" :auto="false"
 			:enable-back-to-top="currentIndex===tabIndex">
 			<view class="cu-list menu-avatar">
 				<view v-for="(item,index) in zList" :key="item.topic_id" class="cu-item cur post-item"

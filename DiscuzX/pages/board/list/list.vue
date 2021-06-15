@@ -38,6 +38,6 @@
 
 <style scoped>
 	.swiper {
-		height: calc(100vh - 80rpx);
+		height: calc(100vh - 80rpx - var(--status-bar-height));
 	}
 </style>

@@ -81,6 +81,6 @@
 
 <style scoped>
 	.wrapper {
-		height: calc(100vh - 94px);
+		height: calc(100vh - 94px - var(--status-bar-height));
 	}
 </style>
