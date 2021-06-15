@@ -1,12 +1,13 @@
 <template>
 	<view class="content">
-		<z-paging ref="paging" autowire-list-name="zList" autowire-query-name="zQuery">
+		<z-paging ref="paging" autowire-list-name="zList" autowire-query-name="zQuery" :auto="false"
+			:enable-back-to-top="currentIndex===tabIndex">
 			<view class="cu-list menu-avatar">
-				<view v-for="(item,index) in zList" :key="item.topic_id" class="cu-item cur margin-tb-sm"
+				<view v-for="(item,index) in zList" :key="item.topic_id" class="cu-item cur post-item"
 					@click="$util.helper.goto('/pages/detail/detail?id='+item.topic_id)">
 					<view class="cu-avatar round lg" :style="'background-image:url('+item.userAvatar+');'">
 					</view>
-					<view class="content flex-sub">
+					<view class="content flex-sub justify-center">
 						<view class="text-cut">{{item.title}}</view>
 						<view class="text-cut text-grey text-sm">{{item.subject}}</view>
 						<view class="text-xs flex justify-between">
@@ -77,13 +78,14 @@
 					pageSize
 				}
 				if (this.tabs && this.tabKey) {
-					_params[this.tabKey] = this.tabs[this.tabIndex][this.tabKey]
+					_params.filterType = 'typeid'
+					_params.filterId = this.tabs[this.tabIndex][this.tabKey]
 				}
 				const res = await this.$http[this.method]({
 					custom: {
 						auth: this.auth
 					},
-					params: Object.assign(_params, this.params)
+					params: this.$u.deepMerge(_params, this.params)
 				});
 				this.$refs.paging.complete(res.list);
 				this.firstLoaded = true;
@@ -93,6 +95,10 @@
 </script>
 
 <style scoped>
+	.post-item {
+		height: 80px !important;
+	}
+
 	.content {
 		height: 100%;
 		display: flex;
