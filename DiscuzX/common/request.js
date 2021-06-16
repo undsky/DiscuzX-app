@@ -67,8 +67,10 @@ http.interceptors.response.use(async response => {
 	return Promise.reject(response)
 })
 
-function get(options) {
-	return http.get('', options)
+function get(params, options) {
+	return http.get('', Object.assign({}, options, {
+		params
+	}))
 }
 
 function post(data, options) {

@@ -39,7 +39,7 @@ function image(content) {
 }
 
 function http(content) {
-	return content.replace(/http(.*?) /g, '<a href="http$1">http$1</a>'))
+	return content.replace(/http(.*?)/g, '<a href="http$1">http$1</a>')
 }
 
 function phiz(content) {
