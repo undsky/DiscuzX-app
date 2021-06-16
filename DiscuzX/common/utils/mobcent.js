@@ -14,7 +14,7 @@ const emojis = ['[泪]', '[哈哈]', '[抓狂]', '[嘻嘻]', '[偷笑]', '[怒]'
 ]
 
 function br(content) {
-	return content.replace('/\[mobcent_br\]/g', '<br />');
+	return content.replace(/\[mobcent_br\]/g, '<br />');
 }
 
 function url(content) {
@@ -34,12 +34,18 @@ function attachment(content) {
 }
 
 function image(content) {
-	return content.replace(/\[mobcent_image=(.*?)\(aid=(.*?)\)\]/g, '<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
+	return content.replace(/\[mobcent_image=(.*?)\(aid=(.*?)\)\]/g,
+		'<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
+}
+
+function http(content) {
+	return content.replace(/http(.*?) /g, '<a href="http$1">http$1</a>'))
 }
 
 function phiz(content) {
 	content = content.replace(/\n/g, '<br/>')
-	content = content.replace(/\[mobcent_phiz=(.*?)\]/g, '<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
+	content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
+		'<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
 	content = content.replace(/\[video\](.*?)\[\/video\]/g,
 		'<video controls controlslist="nodownload" src="$1"></video>')
 	for (var i = 0; i < emojis.length; i++) {
@@ -69,7 +75,7 @@ function content(content) {
 				if (['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'].indexOf(item.infor.substr(item.infor
 						.lastIndexOf('.') +
 						1)) > -1) {
-					// h += `<img src="${item.url}"/>`
+					h += `<img src="${item.url}"/>`
 				} else {
 					h += `<a href="${item.url}">&nbsp;${item.infor}</a>`
 				}
