@@ -11,15 +11,10 @@
 				</view>
 				<u-grid :col="3">
 					<u-grid-item v-for="board in item.board_list" :key="board.board_id">
-						<u-badge :count="board.posts_total_num" :offset="[20, 20]"></u-badge>
-						<u-icon
-							:name="
-								board.board_img ||
-									(board.td_posts_num ? 'https://www.qdh100.com/static/image/common/forum_new.gif' : 'https://www.qdh100.com/static/image/common/forum.gif')
-							"
-							:size="46"
-						></u-icon>
-						<view class="grid-text">{{ board.board_name + (board.td_posts_num || '') }}</view>
+						<u-badge :count="board.td_posts_num" :offset="[20, 20]"></u-badge>
+						<u-icon :color="board.td_posts_num ? '#f37b1d' : '#8799a3'"
+							:name="board.board_img || 'chat-fill'" :size="64"></u-icon>
+						<view class="grid-text text-grey margin-top-sm">{{ board.board_name }}</view>
 					</u-grid-item>
 				</u-grid>
 			</view>
@@ -29,32 +24,29 @@
 </template>
 
 <script>
-export default {
-	data() {
-		return {
-			boardList: []
-		};
-	},
-	methods: {},
-	onLoad: async function(options) {
-		const result = await this.$http.post(
-			{
+	export default {
+		data() {
+			return {
+				boardList: []
+			};
+		},
+		methods: {},
+		onLoad: async function(options) {
+			const result = await this.$http.post({
 				r: 'forum/forumlist'
-			},
-			{
+			}, {
 				custom: {
 					auth: false
 				}
-			}
-		);
+			});
 
-		this.boardList = result.list;
-	}
-};
+			this.boardList = result.list;
+		}
+	};
 </script>
 
 <style scoped>
-.wrapper {
-	height: calc(100vh - 94px - var(--status-bar-height));
-}
+	.wrapper {
+		height: calc(100vh - 94px - var(--status-bar-height));
+	}
 </style>
