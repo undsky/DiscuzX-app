@@ -63,7 +63,7 @@ function content(content) {
 	if (content) {
 		for (let item of content) {
 			if (0 == item.type && item.infor) {
-				h += `<view>${mobcentPhiz(item.infor || '')}</view>`
+				h += `<view>${phiz(item.infor || '')}</view>`
 			} else if (1 == item.type && item.infor) {
 				if (item.infor.indexOf('//forum') == -1)
 					h += `<img src="${item.infor}"/>`

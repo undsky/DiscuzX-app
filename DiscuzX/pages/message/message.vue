@@ -5,8 +5,6 @@
 			<u-cell-group :border="false">
 				<u-cell-item @click="$util.helper.goto('./atme/atme',true)" icon="volume" title="提到我的"></u-cell-item>
 				<u-cell-item @click="$util.helper.goto('./comment/comment',true)" icon="chat" title="评论"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./friend/friend',true)" icon="man-add" title="好友"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./chat/chat',true)" icon="bell" title="消息"></u-cell-item>
 			</u-cell-group>
 		</view>
 		<dx-tabbar :currentTab="3"></dx-tabbar>

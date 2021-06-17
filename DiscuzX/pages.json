@@ -34,33 +34,16 @@
 				"enablePullDownRefresh": false
 			}
 		}, {
+			"path": "pages/auth/register/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
 			"path": "pages/board/board",
 			"style": {
 				"navigationBarTitleText": "板块",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/message/message",
-			"style": {
-				"navigationBarTitleText": "消息",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/user/user",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/detail/detail",
-			"style": {
-				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
@@ -73,24 +56,11 @@
 			}
 
 		}, {
-			"path": "pages/post/post",
-			"style": {
-				"navigationBarTitleText": "发帖",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/chat/chat",
+			"path": "pages/message/message",
 			"style": {
 				"navigationBarTitleText": "消息",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/search/search",
-			"style": {
-				"navigationBarTitleText": "搜索",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
@@ -108,45 +78,11 @@
 			}
 
 		}, {
-			"path": "pages/message/friend/friend",
+			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/message/chat/chat",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/setting/setting",
-			"style": {
-				"navigationBarTitleText": "设置",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/user/followers/followers",
-			"style": {
-				"navigationBarTitleText": "我的粉丝",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/user/following/following",
-			"style": {
-				"navigationBarTitleText": "我的关注",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/user/friend/friend",
-			"style": {
-				"navigationBarTitleText": "我的好友",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
@@ -171,9 +107,24 @@
 			}
 
 		}, {
-			"path": "pages/auth/register/register",
+			"path": "pages/detail/detail",
 			"style": {
-				"navigationBarTitleText": "注册",
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/post/post",
+			"style": {
+				"navigationBarTitleText": "发帖",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
 				"enablePullDownRefresh": false
 			}
 

@@ -2,8 +2,8 @@
 	<view class="wrap padding">
 		<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 			<u-form-item :leftIconStyle="iconStyle" left-icon="account" label-width="180"
-				:label-position="labelPosition" label="用户名" prop="name">
-				<u-input :border="border" placeholder="请输入用户名" v-model="model.name" type="text"></u-input>
+				:label-position="labelPosition" label="用户名" prop="username">
+				<u-input :border="border" placeholder="请输入用户名" v-model="model.username" type="text"></u-input>
 			</u-form-item>
 			<u-form-item :leftIconStyle="iconStyle" left-icon="lock" label-width="180" :label-position="labelPosition"
 				label="密码" prop="password">
@@ -19,8 +19,8 @@
 				<u-input :border="border" placeholder="请输入邮箱" v-model="model.email"></u-input>
 			</u-form-item>
 			<u-form-item :leftIconStyle="iconStyle" left-icon="phone" :label-position="labelPosition" label="手机号码"
-				prop="phone" label-width="180">
-				<u-input :border="border" placeholder="请输入手机号" v-model="model.phone" type="number"></u-input>
+				prop="mobile" label-width="180">
+				<u-input :border="border" placeholder="请输入手机号" v-model="model.mobile" type="number"></u-input>
 			</u-form-item>
 		</u-form>
 		<view class="margin-top-lg">
@@ -38,14 +38,14 @@
 					fontSize: '32rpx'
 				},
 				model: {
-					name: '',
+					username: '',
 					password: '',
 					rePassword: '',
 					email: '',
-					phone: '',
+					mobile: '',
 				},
 				rules: {
-					name: [{
+					username: [{
 						required: true,
 						message: '请输入用户名',
 						trigger: ['change', 'blur'],
@@ -81,7 +81,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					phone: [{
+					mobile: [{
 							required: true,
 							message: '请输入手机号',
 							trigger: ['change', 'blur'],
@@ -104,12 +104,36 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
-			submit() {
-				this.$refs.uForm.validate(valid => {
+			submit: async function() {
+				this.$refs.uForm.validate(async valid => {
 					if (valid) {
-						console.log('验证通过');
-					} else {
-						console.log('验证失败');
+						const result = await this.$http.post({
+							r: 'user/register',
+							username: this.model.username,
+							password: this.model.password,
+							email: this.model.email,
+							mobile: this.model.mobile,
+							isValidation: 0,
+						}, {
+							custom: {
+								auth: false
+							}
+						})
+
+						uni.showModal({
+							title: '',
+							content: '注册成功！请返回登录',
+							showCancel: false,
+							cancelText: '',
+							confirmText: '确定',
+							success: res => {
+								uni.navigateBack({
+									delta: 1
+								});
+							},
+							fail: () => {},
+							complete: () => {}
+						});
 					}
 				});
 			},

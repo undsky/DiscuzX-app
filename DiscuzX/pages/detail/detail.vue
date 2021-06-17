@@ -5,11 +5,52 @@
 				<u-icon name="more-dot-fill" color="#FFFFFF" size="38"></u-icon>
 			</view>
 		</u-navbar>
+		<view class="cu-card">
+			<view class="cu-item">
+				<view class="title text-bold text-lg">{{topic.title}}</view>
+				<view class="flex justify-between margin-top">
+					<view class="text-gray text-sm text-left">
+						{{ $u.timeFrom(topic.create_date) }}
+					</view>
+					<view class="text-gray text-sm text-right">
+						<text class="cuIcon-attentionfill margin-lr-xs"></text>
+						{{ topic.hits }}
+						<text class="cuIcon-messagefill margin-lr-xs"></text>
+						{{ topic.replies }}
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-list menu-avatar">
+			<view class="cu-item cur">
+				<view class="cu-avatar round lg" :style="'background-image:url('+ topic.icon+');'">
+				</view>
+				<view class="content">
+					<view>
+						<view class="text-cut">{{ topic.user_nick_name }}</view>
+					</view>
+					<view class="text-orange text-sm flex">
+						{{ topic.userTitle }}
+					</view>
+				</view>
+				<view class="action">
+					<view class="text-blue text-xs">楼主</view>
+					<view class="cuIcon-appreciatefill text-gray"></view>
+				</view>
+			</view>
+		</view>
+		<view class="padding-sm">
+			<mp-html lazy-load :content="mobcent" />
+		</view>
+		<z-paging ref="paging" use-page-scroll v-model="zList" autowire-query-name="zQuery">
+		</z-paging>
 	</view>
 </template>
 
 <script>
 	import ZPagingMixin from '@/uni_modules/z-paging/components/z-paging/js/z-paging-mixin';
+
+	let _id;
 
 	export default {
 		mixins: [ZPagingMixin],
@@ -18,186 +59,41 @@
 				background: {
 					backgroundColor: "#606266"
 				},
-				commentList: []
+				zList: [],
+				firstLoaded: false,
+				topic: {}
 			};
 		},
-		onLoad() {
-			this.getComment();
+		computed: {
+			mobcent: function() {
+				return this.$util.mobcent.content(this.topic.content);
+			},
+		},
+		onLoad: async function(options) {
+			_id = options.id
 		},
 		methods: {
-			// 跳转到全部回复
-			toAllReply() {
-				uni.navigateTo({
-					url: '/pages/template/comment/reply'
-				});
-			},
-			// 点赞
-			getLike(index) {
-				this.commentList[index].isLike = !this.commentList[index].isLike;
-				if (this.commentList[index].isLike == true) {
-					this.commentList[index].likeNum++;
-				} else {
-					this.commentList[index].likeNum--;
-				}
-			},
-			// 评论列表
-			getComment() {
-				this.commentList = [{
-						id: 1,
-						name: '叶轻眉',
-						date: '12-25 18:58',
-						contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-						url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-						allReply: 12,
-						likeNum: 33,
-						isLike: false,
-						replyList: [{
-								name: 'uview',
-								contentStr: 'uview是基于uniapp的一个UI框架，代码优美简洁，宇宙超级无敌彩虹旋转好用，用它！'
-							},
-							{
-								name: '粘粘',
-								contentStr: '今天吃什么，明天吃什么，晚上吃什么，我只是一只小猫咪为什么要烦恼这么多'
-							}
-						]
-					},
-					{
-						id: 2,
-						name: '叶轻眉1',
-						date: '01-25 13:58',
-						contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-						allReply: 0,
-						likeNum: 11,
-						isLike: false,
-						url: 'https://cdn.uviewui.com/uview/template/niannian.jpg'
-					},
-					{
-						id: 3,
-						name: '叶轻眉2',
-						date: '03-25 13:58',
-						contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-						allReply: 0,
-						likeNum: 21,
-						isLike: false,
-						allReply: 2,
-						url: '../../../static/logo.png',
-						replyList: [{
-								name: 'uview',
-								contentStr: 'uview是基于uniapp的一个UI框架，代码优美简洁，宇宙超级无敌彩虹旋转好用，用它！'
-							},
-							{
-								name: '豆包',
-								contentStr: '想吃冰糖葫芦粘豆包，但没钱5555.........'
-							}
-						]
-					},
-					{
-						id: 4,
-						name: '叶轻眉3',
-						date: '06-20 13:58',
-						contentText: '我不信伊朗会没有后续反应，美国肯定会为今天的事情付出代价的',
-						url: 'https://cdn.uviewui.com/uview/template/SmilingDog.jpg',
-						allReply: 0,
-						likeNum: 150,
-						isLike: false
+			zQuery: async function(page, pageSize) {
+				const res = await this.$http.get({
+					r: 'forum/postlist',
+					topicId: _id,
+					authorId: 0,
+					order: 0,
+					page,
+					pageSize
+				}, {
+					custom: {
+						auth: false
 					}
-				];
+				});
+				if (!this.firstLoaded) {
+					this.topic = res.topic
+				}
+				this.$refs.paging.complete(res.list);
+				this.firstLoaded = true;
 			}
 		}
 	};
 </script>
 
-<style lang="scss" scoped>
-	.comment {
-		display: flex;
-		padding: 30rpx;
-
-		.left {
-			image {
-				width: 64rpx;
-				height: 64rpx;
-				border-radius: 50%;
-				background-color: #f2f2f2;
-			}
-		}
-
-		.right {
-			flex: 1;
-			padding-left: 20rpx;
-			font-size: 30rpx;
-
-			.top {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 10rpx;
-
-				.name {
-					color: #5677fc;
-				}
-
-				.like {
-					display: flex;
-					align-items: center;
-					color: #9a9a9a;
-					font-size: 26rpx;
-
-					.num {
-						margin-right: 4rpx;
-						color: #9a9a9a;
-					}
-				}
-
-				.highlight {
-					color: #5677fc;
-
-					.num {
-						color: #5677fc;
-					}
-				}
-			}
-
-			.content {
-				margin-bottom: 10rpx;
-			}
-
-			.reply-box {
-				background-color: rgb(242, 242, 242);
-				border-radius: 12rpx;
-
-				.item {
-					padding: 20rpx;
-					border-bottom: solid 2rpx $u-border-color;
-
-					.username {
-						font-size: 24rpx;
-						color: #999999;
-					}
-				}
-
-				.all-reply {
-					padding: 20rpx;
-					display: flex;
-					color: #5677fc;
-					align-items: center;
-
-					.more {
-						margin-left: 6rpx;
-					}
-				}
-			}
-
-			.bottom {
-				margin-top: 20rpx;
-				display: flex;
-				font-size: 24rpx;
-				color: #9a9a9a;
-
-				.reply {
-					color: #5677fc;
-					margin-left: 10rpx;
-				}
-			}
-		}
-	}
-</style>
+<style></style>

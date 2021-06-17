@@ -18,17 +18,6 @@
 
 			<view class="u-m-t-20">
 				<u-cell-group :border="false">
-					<u-cell-item @click="$util.helper.goto('./friend/friend', true)" icon="man-add" title="我的好友">
-					</u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./following/following', true)" icon="bookmark" title="我的关注">
-					</u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./followers/followers', true)" icon="heart" title="我的粉丝">
-					</u-cell-item>
-				</u-cell-group>
-			</view>
-
-			<view class="u-m-t-20">
-				<u-cell-group :border="false">
 					<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表">
 					</u-cell-item>
 					<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="edit-pen" title="我的回复">
@@ -38,12 +27,6 @@
 				</u-cell-group>
 			</view>
 
-			<view class="u-m-t-20">
-				<u-cell-group :border="false">
-					<u-cell-item @click="$util.helper.goto('../setting/setting')" icon="setting" title="设置">
-					</u-cell-item>
-				</u-cell-group>
-			</view>
 			<view v-if="user" class="margin-top-lg padding">
 				<u-button @click="logout">退出登录</u-button>
 			</view>
@@ -73,7 +56,7 @@
 		},
 		methods: {
 			logout() {
-
+				this.$store.commit('clearUser')
 			}
 		}
 	};
