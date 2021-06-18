@@ -126,6 +126,10 @@
 							}
 						})
 					})
+					uni.showToast({
+						title: result.errcode
+					});
+					this.$refs.paging.reload()
 				} else {
 					uni.navigateTo({
 						url: '../auth/auth',
@@ -142,7 +146,7 @@
 					r: 'forum/postlist',
 					topicId: _id,
 					authorId: 0,
-					order: 0,
+					order: 1,
 					page,
 					pageSize
 				}, {
