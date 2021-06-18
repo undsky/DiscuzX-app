@@ -51,7 +51,7 @@ function phiz(content) {
 	for (var i = 0; i < emojis.length; i++) {
 		var emoji = emojis[i];
 		content = content.replace(new RegExp('\\' + emoji.substr(0, emoji.length - 1) + '\\]', 'g'),
-			'<img style="width: 32px;height: 32px;" src="/static/emoji/' +
+			'<img style="width: 32px;height: 32px;" src="static/emoji/' +
 			(i < 10 ? '0' +
 				i : i) + '.png"/>');
 	}
