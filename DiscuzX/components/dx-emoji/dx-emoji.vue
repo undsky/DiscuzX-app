@@ -10,7 +10,6 @@
 <script>
 	export default {
 		name: 'dx-emoji',
-		props: ['parent'],
 		data() {
 			return {
 				emojis: this.$util.mobcent.emojis
@@ -18,10 +17,7 @@
 		},
 		methods: {
 			handleEmoji: function(e) {
-				uni.$emit('tapemoji', {
-					emoji: e.target.dataset.emoji,
-					parent: this.parent
-				});
+				uni.$emit('emoji', e.target.dataset.emoji);
 			}
 		}
 	};

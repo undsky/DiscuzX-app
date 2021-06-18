@@ -14,14 +14,17 @@ const http = new Request({
 
 http.interceptors.request.use(async config => {
 	if (config.custom.auth) {
-		if (!store.state.user) {
+		const user = store.state.auth.user
+		if (!user) {
 			uni.navigateTo({
 				url: '/pages/auth/auth'
 			})
 			return Promise.reject(config)
 		} else {
-			config.data.accessToken = store.state.user.token
-			config.data.accessSecret = store.state.user.secret
+			Object.assign('GET' == config.method ? config.params : config.data, {
+				accessToken: user.token,
+				accessSecret: user.secret
+			})
 		}
 	}
 	return config
