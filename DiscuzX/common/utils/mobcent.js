@@ -35,7 +35,7 @@ function attachment(content) {
 
 function image(content) {
 	return content.replace(/\[mobcent_image=(.*?)\(aid=(.*?)\)\]/g,
-		'<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
+		'<img src="$1"/>');
 }
 
 function http(content) {
@@ -45,13 +45,13 @@ function http(content) {
 function phiz(content) {
 	content = content.replace(/\n/g, '<br/>')
 	content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
-		'<img style="width: 32rpx !important;height: 32rpx !important;" src="$1"/>');
+		'<img src="$1"/>');
 	content = content.replace(/\[video\](.*?)\[\/video\]/g,
 		'<video controls controlslist="nodownload" src="$1"></video>')
 	for (var i = 0; i < emojis.length; i++) {
 		var emoji = emojis[i];
 		content = content.replace(new RegExp('\\' + emoji.substr(0, emoji.length - 1) + '\\]', 'g'),
-			'<img style="width: 32rpx !important;height: 32rpx !important;" src="/static/emoji/' +
+			'<img style="width: 32px;height: 32px;" src="/static/emoji/' +
 			(i < 10 ? '0' +
 				i : i) + '.png"/>');
 	}
