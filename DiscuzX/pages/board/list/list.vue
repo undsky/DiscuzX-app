@@ -1,10 +1,16 @@
 <template>
 	<view>
-		<u-tabs-swiper ref="tabs" :list="tabList" :current="tabIndex" @change="tabChange"></u-tabs-swiper>
+		<u-tabs-swiper v-if="tabList.length > 0" ref="tabs" :list="tabList" name="classificationType_name"
+			:current="tabIndex" @change="tabChange">
+		</u-tabs-swiper>
 		<swiper class="swiper" :current="currentIndex" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item class="swiper-item" v-for="(item, index) in tabList" :key="index">
-				<dx-post-paging :params="params" :tabs="tabList" :tabKey="'classificationType_id'" :tabIndex="tabIndex"
-					:currentIndex="currentIndex"></dx-post-paging>
+				<dx-post-paging :params="{
+					r:'forum/topiclist',
+					boardId : board_id,
+					filterType: 'typeid',
+					filterId: item.classificationType_id
+				}" :tabIndex="tabIndex" :currentIndex="currentIndex"></dx-post-paging>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -14,7 +20,7 @@
 	export default {
 		data() {
 			return {
-				params: {},
+				board_id: 0,
 				tabList: [],
 				tabIndex: 0,
 				currentIndex: 0
@@ -32,6 +38,29 @@
 				this.$refs.tabs.setFinishCurrent(current);
 				this.tabIndex = current;
 			},
+		},
+		onLoad: async function(options) {
+			this.board_id = options.board_id
+			const result = await this.$http.get({
+				r: 'forum/topiclist',
+				boardId: this.board_id,
+				page: 1
+			}, {
+				custom: {
+					auth: false
+				}
+			})
+			uni.setNavigationBarTitle({
+				title: result.forumInfo.title
+			});
+			let _tabList = [{
+				classificationType_id: 0,
+				classificationType_name: '全部'
+			}]
+			if (result.classificationType_list && result.classificationType_list.length > 0) {
+				_tabList.push(...result.classificationType_list)
+			}
+			this.tabList = _tabList;
 		}
 	}
 </script>

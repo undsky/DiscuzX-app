@@ -43,8 +43,6 @@
 				type: String,
 				default: 'get'
 			},
-			tabs: Array,
-			tabKey: String,
 			tabIndex: {
 				type: Number,
 				default: 0
@@ -76,15 +74,10 @@
 		},
 		methods: {
 			zQuery: async function(page, pageSize) {
-				let _params = {
+				const res = await this.$http[this.method](Object.assign(this.params, {
 					page,
 					pageSize
-				};
-				if (this.tabs && this.tabKey) {
-					_params.filterType = 'typeid';
-					_params.filterId = this.tabs[this.tabIndex][this.tabKey];
-				}
-				const res = await this.$http[this.method](this.$u.deepMerge(_params, this.params), {
+				}), {
 					custom: {
 						auth: this.auth
 					}
