@@ -1,22 +1,19 @@
 <template>
-	<view>
-		
-	</view>
+	<view><dx-post-paging usePageScroll :params="params"></dx-post-paging></view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
+export default {
+	data() {
+		return {
+			params: {
+				r: 'message/notifylist',
+				type: 'post'
 			}
-		},
-		methods: {
-			
-		}
-	}
+		};
+	},
+	methods: {}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

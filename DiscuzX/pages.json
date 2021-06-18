@@ -66,14 +66,14 @@
 		}, {
 			"path": "pages/message/atme/atme",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "提到我的",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/message/comment/comment",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "评论",
 				"enablePullDownRefresh": false
 			}
 
