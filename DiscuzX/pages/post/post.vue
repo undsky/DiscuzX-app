@@ -129,16 +129,12 @@ export default {
 					const images = this.$refs.upload.lists;
 					if (images && images.length > 0) {
 						images.forEach(res => {
-							if (null == res[0]) {
-								if (200 == res[1].statusCode) {
-									const imgdata = JSON.parse(res[1].data);
-									body.push({
-										type: 1,
-										infor: imgdata.body.attachment[0].urlName.replace('//forum', '/forum')
-									});
-									aid.push(imgdata.body.attachment[0].id);
-								}
-							}
+							const imgdata = res.response;
+							body.push({
+								type: 1,
+								infor: imgdata.body.attachment[0].urlName.replace('//forum', '/forum')
+							});
+							aid.push(imgdata.body.attachment[0].id);
 						});
 					}
 					topic.content = JSON.stringify(body);
