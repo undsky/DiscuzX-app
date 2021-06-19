@@ -1,5 +1,5 @@
 <template>
-	<view style="height: 100vh;"><dx-post-paging auth :params="params"></dx-post-paging></view>
+	<view style="height: 100vh;"><dx-post-paging auth :hasAvatar="false" :params="params"></dx-post-paging></view>
 </template>
 
 <script>

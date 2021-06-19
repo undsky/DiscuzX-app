@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="padding"><u-search placeholder="请输入关键字" v-model="keyword" focus @search="search" @custom="search"></u-search></view>
-		<view class="wrapper"><dx-post-paging :params="params"></dx-post-paging></view>
+		<view class="wrapper"><dx-post-paging :params="params" reload></dx-post-paging></view>
 	</view>
 </template>
 

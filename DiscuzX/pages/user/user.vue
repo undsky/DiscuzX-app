@@ -9,12 +9,11 @@
 						<view class="u-font-18 u-p-b-20">{{ user.userName }}</view>
 						<view class="margin-bottom-xs text-gray text-sm">
 							<text v-for="item in user.creditShowList" :key="item.type">
-								{{item.title}}:<text class="text-green margin-lr-xs">{{item.data}}</text>
+								{{ item.title }}:
+								<text class="text-green margin-lr-xs">{{ item.data }}</text>
 							</text>
 						</view>
-						<view class="text-sm text-orange">
-							{{ user.userTitle }}
-						</view>
+						<view class="text-sm text-orange">{{ user.userTitle }}</view>
 					</template>
 					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>

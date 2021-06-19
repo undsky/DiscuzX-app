@@ -9,9 +9,9 @@
 			:auto="false"
 			:enable-back-to-top="currentIndex === tabIndex"
 		>
-			<view class="cu-list menu-avatar">
+			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
 				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" @click="$util.helper.goto('/pages/detail/detail?id=' + item.topic_id)">
-					<view class="cu-avatar round lg" :style="'background-image:url(' + item.userAvatar + ');'"></view>
+					<view v-if="hasAvatar" class="cu-avatar round lg" :style="'background-image:url(' + item.userAvatar + ');'"></view>
 					<view class="content flex-sub justify-center">
 						<view>
 							<view class="text-cut">{{ item.title }}</view>
@@ -41,6 +41,14 @@ export default {
 	name: 'dx-post-paging',
 	props: {
 		params: Object,
+		reload: {
+			type: Boolean,
+			default: false
+		},
+		hasAvatar: {
+			type: Boolean,
+			default: true
+		},
 		usePageScroll: {
 			type: Boolean,
 			default: false
@@ -70,7 +78,7 @@ export default {
 	},
 	watch: {
 		params: function() {
-			if (this.firstLoaded) this.$refs.paging.reload();
+			if (this.reload) this.$refs.paging.reload();
 		},
 		currentIndex: {
 			handler(newVal) {

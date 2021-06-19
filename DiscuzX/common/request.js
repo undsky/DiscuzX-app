@@ -2,7 +2,7 @@ import Request from 'luch-request'
 import store from '../store/index.js'
 
 const config = {
-	baseURL: 'http://www.qdh100.com/mobcent/app/web/index.php',
+	baseURL: 'https://bbsapi.foodmate.net/app/web/index.php',
 	withCredentials: false,
 	header: {
 		"content-type": "application/x-www-form-urlencoded"
