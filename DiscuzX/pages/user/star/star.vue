@@ -1,5 +1,5 @@
 <template>
-	<view><dx-post-paging usePageScroll :params="params"></dx-post-paging></view>
+	<view style="height: 100vh;"><dx-post-paging auth :params="params"></dx-post-paging></view>
 </template>
 
 <script>

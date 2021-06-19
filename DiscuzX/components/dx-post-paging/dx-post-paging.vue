@@ -1,6 +1,14 @@
 <template>
 	<view class="content">
-		<z-paging style="height: 100%;" ref="paging" v-model="zList" :use-page-scroll="usePageScroll" autowire-query-name="zQuery" :auto="false" :enable-back-to-top="currentIndex === tabIndex">
+		<z-paging
+			style="height: 100%;"
+			ref="paging"
+			v-model="zList"
+			:use-page-scroll="usePageScroll"
+			autowire-query-name="zQuery"
+			:auto="false"
+			:enable-back-to-top="currentIndex === tabIndex"
+		>
 			<view class="cu-list menu-avatar">
 				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" @click="$util.helper.goto('/pages/detail/detail?id=' + item.topic_id)">
 					<view class="cu-avatar round lg" :style="'background-image:url(' + item.userAvatar + ');'"></view>

@@ -1,7 +1,7 @@
 import Request from 'luch-request'
 import store from '../store/index.js'
 
-const http = new Request({
+const config = {
 	baseURL: 'http://www.qdh100.com/mobcent/app/web/index.php',
 	withCredentials: false,
 	header: {
@@ -10,7 +10,9 @@ const http = new Request({
 	custom: {
 		auth: true
 	}
-})
+}
+
+const http = new Request(config)
 
 http.interceptors.request.use(async config => {
 	if (config.custom.auth) {
@@ -110,6 +112,7 @@ function post(data, options) {
 }
 
 export default {
+	config,
 	get,
 	post
 }

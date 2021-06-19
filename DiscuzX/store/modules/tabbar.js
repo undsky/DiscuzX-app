@@ -12,8 +12,8 @@ export default {
 			pagePath: "/pages/board/board"
 		}, {
 			iconPath: "plus-circle-fill",
-			selectedIconPath: "close-circle-fill",
-			text: '工具',
+			selectedIconPath: "plus-circle-fill",
+			text: '发帖',
 			midButton: true
 		}, {
 			iconPath: "chat",
