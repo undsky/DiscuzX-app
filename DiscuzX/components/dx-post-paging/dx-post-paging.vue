@@ -11,22 +11,26 @@
 		>
 			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
 				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" @click="$util.helper.goto('/pages/detail/detail?id=' + item.topic_id)">
-					<view v-if="hasAvatar" class="cu-avatar round lg" :style="'background-image:url(' + item.userAvatar + ');'"></view>
+					<view v-if="hasAvatar" class="cu-avatar round lg" :style="'background-image:url(' + (item.userAvatar || item.icon) + ');'"></view>
 					<view class="content flex-sub justify-center">
 						<view>
-							<view class="text-cut">{{ item.title }}</view>
+							<view class="text-cut">{{ item.title || item.topic_subject }}</view>
 						</view>
-						<view class="text-cut text-grey text-sm">{{ item.subject }}</view>
+						<view class="text-cut text-grey text-sm">{{ item.subject || item.reply_content }}</view>
 						<view class="text-xs flex justify-between">
 							<view class="flex">
-								<view class="text-cut text-green">{{ item.user_nick_name }}</view>
-								<view class="text-gray margin-left-xs">{{ $u.timeFrom(item.last_reply_date) }}</view>
+								<view class="text-cut text-green">{{ item.user_nick_name || item.reply_nick_name }}</view>
+								<view class="text-gray margin-left-xs">{{ $u.timeFrom(item.last_reply_date || item.replied_date) }}</view>
 							</view>
 							<view class="text-gray">
-								<text class="cuIcon-attentionfill margin-lr-xs"></text>
-								{{ item.hits }}
-								<text class="cuIcon-messagefill margin-lr-xs"></text>
-								{{ item.replies }}
+								<template v-if="item.hits">
+									<text class="cuIcon-attentionfill margin-lr-xs"></text>
+									{{ item.hits }}
+								</template>
+								<template v-if="item.replies">
+									<text class="cuIcon-messagefill margin-lr-xs"></text>
+									{{ item.replies }}
+								</template>
 							</view>
 						</view>
 					</view>
