@@ -10,7 +10,7 @@
 			:enable-back-to-top="currentIndex === tabIndex"
 		>
 			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
-				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" @click="$util.helper.goto('/pages/detail/detail?id=' + item.topic_id)">
+				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" :data-id="item.topic_id" @click="gotoDetail">
 					<view v-if="hasAvatar" class="cu-avatar round lg" :style="'background-image:url(' + (item.userAvatar || item.icon) + ');'"></view>
 					<view class="content flex-sub justify-center">
 						<view>
@@ -119,6 +119,9 @@ export default {
 				this.$refs.paging.complete(list);
 				this.firstLoaded = true;
 			}
+		},
+		gotoDetail(e) {
+			this.$util.helper.goto('/pages/detail/detail?id=' + e.currentTarget.dataset.id);
 		}
 	}
 };

@@ -8,7 +8,7 @@
 					<text class="text-lg text-bold">{{ item.board_category_name }}</text>
 				</view>
 			</view>
-			<u-grid :col="3">
+			<u-grid :border="false" :col="4">
 				<u-grid-item @click="$util.helper.goto('./list/list?board_id='+board.board_id)"
 					v-for="board in item.board_list" :key="board.board_id">
 					<u-badge :count="board.td_posts_num" :offset="[20, 20]"></u-badge>
