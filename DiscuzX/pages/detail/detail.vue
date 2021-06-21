@@ -69,6 +69,9 @@
 </template>
 
 <script>
+	import {
+		setClipboardData
+	} from '@/uni_modules/u-clipboard/js_sdk';
 	import ZPagingMixin from '@/uni_modules/z-paging/components/z-paging/js/z-paging-mixin';
 	import {
 		mapState
@@ -203,15 +206,16 @@
 								this.showShare = true
 								break;
 							case 2:
-								// #ifndef H5
-								uni.setClipboardData({
-									data: this.forumTopicUrl
-								});
-
-								uni.showToast({
-									title: '复制成功'
-								});
-								// #endif
+								try {
+									await setClipboardData(this.forumTopicUrl)
+									uni.showToast({
+										title: '复制成功'
+									});
+								} catch (e) {
+									uni.showToast({
+										title: '复制失败'
+									});
+								}
 								break;
 						}
 					},
