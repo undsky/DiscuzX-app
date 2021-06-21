@@ -27,7 +27,7 @@
 									<text class="cuIcon-attentionfill margin-lr-xs"></text>
 									{{ item.hits }}
 								</template>
-								<template v-if="item.replies">
+								<template v-if="'undefined' != typeof item.replies">
 									<text class="cuIcon-messagefill margin-lr-xs"></text>
 									{{ item.replies }}
 								</template>
