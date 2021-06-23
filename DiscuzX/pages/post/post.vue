@@ -60,7 +60,7 @@ export default {
 				]
 			},
 			border: false,
-			labelPosition: 'top',
+			labelPosition: 'left',
 			errorType: ['message']
 		};
 	},
