@@ -24,6 +24,7 @@ http.interceptors.request.use(async config => {
 			return Promise.reject(config)
 		} else {
 			Object.assign('GET' == config.method ? config.params : config.data, {
+				uid: user.uid,
 				accessToken: user.token,
 				accessSecret: user.secret
 			})

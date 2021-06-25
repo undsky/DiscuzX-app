@@ -1,31 +1,21 @@
 <template>
-	<view style="height: 100vh;"><dx-post-paging auth :hasAvatar="false" :params="params"></dx-post-paging></view>
+	<view style="height: 100vh;">
+		<dx-post-paging auth :hasAvatar="false" :params="params"></dx-post-paging>
+	</view>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
-export default {
-	data() {
-		return {
-			params: {}
-		};
-	},
-	computed: {
-		...mapState({
-			user: state => state.auth.user
-		})
-	},
-	methods: {},
-	onLoad: function(options) {
-		this.params = {
-			r: 'user/topiclist',
-			type: 'favorite',
-			idType: 'tid',
-			uid: this.user.uid
-		};
-	}
-};
+	export default {
+		data() {
+			return {
+				params: {
+					r: 'user/topiclist',
+					type: 'favorite',
+					idType: 'tid'
+				}
+			};
+		}
+	};
 </script>
 
 <style></style>

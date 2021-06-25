@@ -18,7 +18,7 @@
 				prop="email" label-width="180">
 				<u-input :border="border" placeholder="请输入邮箱" v-model="model.email"></u-input>
 			</u-form-item>
-			<u-form-item :leftIconStyle="iconStyle" left-icon="phone" :label-position="labelPosition" label="手机号码"
+			<u-form-item :leftIconStyle="iconStyle" left-icon="phone" :label-position="labelPosition" label="手机号"
 				prop="mobile" label-width="180">
 				<u-input :border="border" placeholder="请输入手机号" v-model="model.mobile" type="number"></u-input>
 			</u-form-item>
@@ -64,7 +64,7 @@
 							validator: (rule, value, callback) => {
 								return value === this.model.password;
 							},
-							message: '两次输入的密码不相等',
+							message: '两次输入的密码不一致',
 							trigger: ['change', 'blur'],
 						}
 					],
@@ -77,7 +77,7 @@
 							validator: (rule, value, callback) => {
 								return this.$u.test.email(value);
 							},
-							message: '邮箱码不正确',
+							message: '邮箱不正确',
 							trigger: ['change', 'blur'],
 						}
 					],
@@ -90,7 +90,7 @@
 							validator: (rule, value, callback) => {
 								return this.$u.test.mobile(value);
 							},
-							message: '手机号码不正确',
+							message: '手机号不正确',
 							trigger: ['change', 'blur'],
 						}
 					],

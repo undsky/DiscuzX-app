@@ -9,3 +9,5 @@
 ### 修改配置，使用自己的论坛接口
 
 修改 `common/request.js` 文件 `baseURL: '你的接口地址'`
+
+H5跨域问题参考：[https://ask.dcloud.net.cn/article/35267](https://ask.dcloud.net.cn/article/35267)
