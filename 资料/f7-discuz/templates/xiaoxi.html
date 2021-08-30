@@ -1,0 +1,17 @@
+<li data-id="{{lastDateline}}">
+    <a href="/chat/?fromUid={{toUserId}}" class="item-link item-content">
+        <div class="item-media">
+            <img class="lazy max-80" data-src="{{toUserAvatar}}" />
+        </div>
+        <div class="item-inner">
+            <div class="item-title-row">
+                <div class="item-title">{{toUserName}}</div>
+            </div>
+            <div class="item-subtitle">{{js "app.methods.mobcentPhiz(this.lastSummary)"}}</div>
+            <div class="item-text item-footer margin-top">
+                <i class="iconfont icon-icon-time"></i>
+                <span>{{js "timeago.format(this.lastDateline)"}}</span>
+            </div>
+        </div>
+    </a>
+</li>

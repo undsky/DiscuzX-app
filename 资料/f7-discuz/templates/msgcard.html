@@ -1,0 +1,17 @@
+<li data-id="{{reply_remind_id}}" class="card message-card">
+    <div class="card-header">
+        <div class="message-card-avatar">
+            <img class="lazy max-32" src="{{icon}}" />
+        </div>
+        <div class="message-card-name">{{reply_nick_name}}</div>
+        <div class="message-card-date text-color-gray">{{js "timeago.format(this.replied_date)"}}</div>
+    </div>
+    <div class="card-content card-content-padding">
+        <p>{{js "app.methods.mobcentPhiz(this.reply_content)"}}</p>
+        <!-- <p class="text-color-gray">{{js "app.methods.mobcentPhiz(this.topic_content)"}}</p> -->
+    </div>
+    <div class="card-footer">
+        <a href="/topic/?topicId={{topic_id}}" class="link">查看原帖</a>
+        <a href="/reply/?fid={{board_id}}&tid={{topic_id}}&replyId={{reply_remind_id}}&isQuote=1" class="link">回复</a>
+    </div>
+</li>

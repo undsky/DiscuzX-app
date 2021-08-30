@@ -1,0 +1,171 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">设置</div>
+            </div>
+        </div>
+        <div id="find_setting" class="page-content">
+            <div class="list links-list no-hairlines">
+                <ul>
+                    <!-- <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">通知</div>
+                                <div class="item-after">
+                                    <label class="toggle toggle-init">
+                                        <input type="checkbox" name="notice" class="notice" checked />
+                                        <span class="toggle-icon"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li> -->
+                    <!-- <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">定位</div>
+                                <div class="item-after">
+                                    <label class="toggle toggle-init">
+                                        <input type="checkbox" name="location" class="location" checked />
+                                        <span class="toggle-icon"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li> -->
+                    <li>
+                        <div class="block-title">主题</div>
+                        <div class="block">
+                            <div class="row">
+                                <div class="col-50 bg-color-white" @click="setLayoutTheme('light')" style="cursor: pointer; padding: 30px; border: 1px solid rgba(0,0,0,0.1)"></div>
+                                <div class="col-50 bg-color-black" @click="setLayoutTheme('dark')" style="cursor: pointer; padding: 30px; border: 1px solid rgba(255,255,255,0.1)"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="block-title">颜色</div>
+                        <div class="block">
+                            <div class="row">
+                                {{#each colors}}
+                                <div class="col-33">
+                                    <button class="button button-fill button-round button-raised color-{{this.color}}"
+                                        @click="setColorTheme('{{this.color}}')">{{this.zh}}</button>
+                                </div>
+                                {{/each}}
+                                <div class="col-33"></div>
+                            </div>
+                        </div>
+                    </li>
+                    {{#js_if "app.device.cordova"}}
+                    <li>
+                        <a @click="share" href="#">分享应用</a>
+                    </li>
+                    {{/js_if}}
+                    <!-- <li>
+                        <a href="#">清理缓存</a>
+                    </li> -->
+                    <!-- <li>
+                        <a href="/self/about/">关于</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+    .button {
+        margin-bottom: 1em;
+        text-transform: capitalize;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            var colors = [{
+                    color: 'red',
+                    zh: '红色'
+                },
+                {
+                    color: 'green',
+                    zh: '绿色'
+                },
+                {
+                    color: 'blue',
+                    zh: '蓝色'
+                },
+                {
+                    color: 'pink',
+                    zh: '粉红'
+                },
+                {
+                    color: 'yellow',
+                    zh: '黄色'
+                },
+                {
+                    color: 'orange',
+                    zh: '橙色'
+                },
+                {
+                    color: 'gray',
+                    zh: '灰色'
+                },
+                {
+                    color: 'black',
+                    zh: '黑色'
+                },
+            ];
+            return {
+                colors: colors,
+                theme: Template7.global.setting.theme,
+                color: Template7.global.setting.color,
+            };
+        },
+        methods: {
+            share: function () {
+                var self = this;
+                app.f7Share.open('论坛', 'discuz bbs', 'http://w.foodmate.net/discuz/');
+            },
+            setLayoutTheme: function (theme) {
+                var self = this;
+                app.root.removeClass('theme-dark theme-light').addClass('theme-' + theme);
+                app.f7Storage.cache(app.name + 'theme', theme, function () {}, function (err) {});
+            },
+            setColorTheme: function (color) {
+                var self = this;
+                var currentColorClass = app.root[0].className.match(/color-theme-([a-z]*)/);
+                if (currentColorClass) app.root.removeClass(currentColorClass[0])
+                app.root.addClass('color-theme-' + color);
+                app.f7Storage.cache(app.name + 'color', color, function () {}, function (err) {});
+            },
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+                app.f7Share.destroy();
+            },
+        }
+    }
+</script>

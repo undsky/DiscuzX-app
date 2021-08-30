@@ -1,0 +1,77 @@
+好友申请列表
+https://bbsapi.foodmate.net/app/web/index.php?r=message/notifylist&type=friend&act=&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+//好友管理html视图[Private]
+#添加好友
+https://bbsapi.foodmate.net/app/web/index.php?r=user/useradminview&uid=880925&act=add&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+#删除好友
+https://bbsapi.foodmate.net/app/web/index.php?r=user/useradminview&uid=835509&act=ignore&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+#屏蔽好友
+https://bbsapi.foodmate.net/app/web/index.php?r=user/useradminview&uid=835509&act=shield&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+#批准好友请求
+https://bbsapi.foodmate.net/app/web/index.php?r=user/useradminview&uid=880925&act=add2&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+@提到我的（data是提到我的人，list是帖子）
+https://bbsapi.foodmate.net/app/web/index.php?r=message/notifylist&type=at&sdkVersion=2.4.0.3&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+短消息列表:
+https://bbsapi.foodmate.net/app/web/index.php?r=message/pmsessionlist&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+参数:json
+json={'page':1,'pageSize': 100}
+回复私信
+https://bbsapi.foodmate.net/app/web/index.php?r=message/pmadmin&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+json={'toUid':116726,'plid':137236,'pmid':137236 ,'msg':{'type':'text','content':'66666666666'}}
+对话列表
+https://bbsapi.foodmate.net/app/web/index.php?r=message/pmlist&pmlist={}&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+$pmlist ={"body":{"pmInfos":[{"cacheCount":0,"fromUid":116726,"pmid":83345,"plid":83345,"stopTime":0}]}}
+系统提醒:
+https://bbsapi.foodmate.net/app/web/index.php?r=message/notifylist&type=system&page=1&pagesize=20&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+评论
+https://bbsapi.foodmate.net/app/web/index.php?r=message/notifylist&type=post&page=1&pagesize=20&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+意见反馈
+https://bbsapi.foodmate.net/app/web/index.php?r=user/feedback&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+参数:content=$content
+评分
+https://bbsapi.foodmate.net/app/web/index.php?r=forum/topicrate&pid=6594814&tid=687978&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+（tid）topic_id 是帖子ID   （pid）reply_posts_id 是楼层ID （帖子详情）
+用户搜索
+https://bbsapi.foodmate.net/app/web/index.php?r=user/userlist&type=all&orderBy=search&kw=%E6%9D%8E%E6%9C%8B&page=1&pageSize=10&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+帖子详情（带评分数据）
+https://bbsapi.foodmate.net/app/web/index.php?r=forum/postlist&topicId=687978&authorId=0&order=0&page=1&pageSize=10&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+发帖
+https://bbsapi.foodmate.net/app/web/index.php?r=forum/topicadmin&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+json使用rawurlencode加密
+http://www.onexin.net/tool/urlcode.php
+
+1.将content内容（数组加密）
+{"body":{"json":{"typeId":32,"content":"%5B%7B%22type%22%3A%220%22%2C%22infor%22%3A%22%E8%AF%B7%E9%97%AE%E5%90%A7%EF%BC%9A%22%7D%2C%7B%22type%22%3A%221%22%2C%22infor%22%3A%22http%3A%2F%2Fbbs.foodmate.net%2Fdata%2Fattachment%2F%2Fforum%2F201509%2F08%2F084418o29sqsi28wq38q8q.jpg%22%7D%5D","isShowPostion":"1","title":"你好","aid":"1028594","fid":"4","isQuote":"0"}}}
+
+2.将整个数据加密
+
+%7B%22body%22%3A%7B%22json%22%3A%7B%22typeId%22%3A32%2C%22content%22%3A%22%255B%257B%2522type%2522%253A%25220%2522%252C%2522infor%2522%253A%2522%25E8%25AF%25B7%25E9%2597%25AE%25E5%2590%25A7%25EF%25BC%259A%2522%257D%252C%257B%2522type%2522%253A%25221%2522%252C%2522infor%2522%253A%2522http%253A%252F%252Fbbs.foodmate.net%252Fdata%252Fattachment%252F%252Fforum%252F201509%252F08%252F084418o29sqsi28wq38q8q.jpg%2522%257D%255D%22%2C%22isShowPostion%22%3A%221%22%2C%22title%22%3A%22%E4%BD%A0%E5%A5%BD%22%2C%22aid%22%3A%221028594%22%2C%22fid%22%3A%224%22%2C%22isQuote%22%3A%220%22%7D%7D%7D
+
+act=new&platType=1&json={"body":{"json":{"typeId":32,"content":"[{"type":"0","infor":"请问吧："},{"type":"1","infor":"http://bbs.foodmate.net/data/attachment//forum/201509/08/084418o29sqsi28wq38q8q.jpg"}]","isShowPostion":"1","title":"你好","aid":"1028594","fid":"4","isQuote":"0"}}}
+
+type = 0 文本 1 图片 3 音频
+
+图片id用逗号分割
+    "aid" : "1028747,1028748",（只是图片，音频不需要）
+
+//新版上传附件[参数：type=image|audio，module=forum|album，albumId=相册ID -1 为默认相册]（服务器使用$_FILES['uploadFile']接收上传资源）
+https://bbsapi.foodmate.net/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&albumId=-1&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+
+http://bbs.foodmate.cc/mobcent/upload.html
+
+$type=image|audio
+$module=forum(帖子)|album（相册）
+上传表单名称为:uploadFile[]
+
+//举报接口[Private][参数：id=$id,message=$message,idtype=thread|user|post|group|album|blog|pic]
+https://bbsapi.foodmate.net/app/web/index.php?r=user/report&id=116726&message=111111111&type=thread&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+
+[粗俗内容]举报说明
+
+升级检测
+http://bbs.foodmate.cc/mobcent/upgrade.php
+
+帖子详情（链接在应用内打开，附件在浏览器打开）
+https://bbsapi.foodmate.net/app/web/index.php?r=forum/postlist&topicId=397075&authorId=0&order=0&page=1&pageSize=10&accessToken=db86245215045a2614d5e6fd19fcf&accessSecret=be1ca1b9e0dcf90c114c356f229a4
+
+array('text' => 0, 'image' => 1, 'video' => 2, 'audio' => 3, 'url' => 4, 'attachment' => 5,);

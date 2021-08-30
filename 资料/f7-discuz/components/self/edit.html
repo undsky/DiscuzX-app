@@ -1,0 +1,192 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">个人设置</div>
+            </div>
+        </div>
+        <div id="self-edit" class="page-content">
+            <div class="row block">
+                <div class="col-30">
+                    注册邮箱
+                </div>
+                <div class="col-70 text-color-gray">{{user.email}}</div>
+            </div>
+            <div class="row block">
+                <div class="col-30">
+                    用户名
+                </div>
+                <div class="col-70 text-color-gray">
+                    {{user.name}}
+                </div>
+            </div>
+            <div class="row block">
+                <div class="col-30">
+                    头像
+                </div>
+                <div class="col-70 text-color-gray">
+                    <img @click="showImg()" class="avatar lazy max-80" data-src="{{user.icon}}" />
+                    <button @click="addImg()" style="width: 80px;" class="button">更换头像</button>
+                </div>
+            </div>
+            <div class="row block">
+                <div class="col-30">
+                    性别
+                </div>
+                <div class="col-70 text-color-gray">
+                    <label class="radio">
+                        <input type="radio" name="gender" value="0" {{#js_if "this.user.gender == 0"}} checked{{/js_if}}>
+                            <i class="icon-radio"></i>
+                    </label>
+                    <span class="margin-right">保密</span>
+                    <label class="radio">
+                        <input type="radio" name="gender" value="1" {{#js_if "this.user.gender == 1"}} checked{{/js_if}}>
+                            <i class="icon-radio"></i>
+                    </label>
+                    <span class="margin-right">男</span>
+                    <label class="radio">
+                        <input type="radio" name="gender" value="2" {{#js_if "this.user.gender == 2"}} checked{{/js_if}}>
+                            <i class="icon-radio"></i>
+                    </label>
+                    <span class="margin-right">女</span>
+                </div>
+            </div>
+            <div class="row block">
+                <button class="col button button-fill" @click="save">保存</button>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                user: app.data.cache.user,
+                cameraTemplates: app.methods.getTemplate('camera'),
+                photolibTemplates: app.methods.getTemplate('photolib'),
+                avatar: null,
+            }
+        },
+        methods: {
+            save: function () {
+                var self = this;
+                self.gender = $$('input[name=gender]:checked').val();
+                if (self.avatar == null && self.gender == self.user.gender) {
+                    app.dialog.alert('您没有修改任何设置');
+                } else {
+                    async.waterfall([
+                        function (callback) {
+                            if (self.avatar) {
+                                var options = new FileUploadOptions();
+                                options.fileKey = "userAvatar";
+                                options.mimeType = "image/jpeg";
+                                options.params = {
+                                    r: 'user/uploadavatarex',
+                                    type: 'image',
+                                    accessToken: Template7.global.user.token,
+                                    accessSecret: Template7.global.user.secret,
+                                };
+                                options.fileName = self.avatar.substr(self.avatar.lastIndexOf('/') + 1);
+                                var ft = new FileTransfer();
+                                ft.upload(self.avatar, mobcent, function (r) {
+                                        var res = JSON.parse(r['response']);
+                                        self.avatar = res.pic_path;
+                                        callback(null);
+                                    },
+                                    function (err) {
+                                        console.log(err);
+                                        callback(null);
+                                    },
+                                    options);
+                            } else {
+                                callback(null);
+                            }
+                        },
+                        function (callback) {
+                            app.f7Net.post(api, {
+                                r: 'user/updateuserinfo',
+                                type: 'info',
+                                avatar: self.avatar,
+                                gender: self.gender,
+                                accessToken: Template7.global.user.token,
+                                accessSecret: Template7.global.user.secret,
+                            }, function (data) {
+                                callback(app.methods.resError(data));
+                            });
+                        }
+                    ], function (err, results) {
+                        app.dialog.alert(err ? err : '保存成功');
+
+                        if (!err) {
+                            if (self.gender != self.user.gender) {
+                                app.data.cache.user.gender = self.user.gender = self.gender;
+                            }
+                            self.$router.back();
+                        }
+                    });
+                }
+            },
+            showImg: function () {
+                var self = this;
+                app.f7Media.showImg(self.avatar || self.user.icon);
+            },
+            addImg: function () {
+                var self = this;
+                self.chooseImg.open();
+            },
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                self.gender = self.user.gender;
+                self.chooseImg = app.actions.create({
+                    buttons: [{
+                            text: self.photolibTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromPhotoLib(function (img) {
+                                    self.avatar = img;
+                                    $$('#self-edit .avatar').attr('src', img);
+                                });
+                            }
+                        },
+                        {
+                            text: self.cameraTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromCamera(function (img) {
+                                    self.avatar = img;
+                                    $$('#self-edit .avatar').attr('src', img);
+                                });
+                            }
+                        },
+                    ]
+                });
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+                if (navigator.camera)
+                    navigator.camera.cleanup();
+            },
+        }
+    }
+</script>

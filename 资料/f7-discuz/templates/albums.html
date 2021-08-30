@@ -1,0 +1,29 @@
+
+<div class="block">
+        <div class="row">
+            <div class="col">
+                <div class="elevation-12">
+                    <a href="/self/xiangce/show/?album_id={{this[0].album_id}}" class="card">
+                        <div style="background-image:url({{this[0].thumb_pic}})" class="card-header align-items-flex-end">
+                        </div>
+                        <div class="card-content card-content-padding">
+                            <p class="text-color-gray">{{this[0].title}}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                {{#if this[1]}}
+                <div class="elevation-12">
+                    <a href="/self/xiangce/show/?album_id={{this[1].album_id}}" class="card">
+                        <div style="background-image:url({{this[1].thumb_pic}})" class="card-header align-items-flex-end">
+                        </div>
+                        <div class="card-content card-content-padding">
+                            <p class="text-color-gray">{{this[1].title}}</p>
+                        </div>
+                    </a>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>

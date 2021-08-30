@@ -1,0 +1,138 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">相片</div>
+            </div>
+        </div>
+        <div class="page-content ptr-content infinite-scroll-content">
+            <div class="list media-list virtual-list no-margin no-hairlines">
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+    .card {
+        margin: 0;
+    }
+
+    .card .card-header {
+        height: 40vw;
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                itemTemplate: app.methods.getTemplate('photos'),
+                emptyTemplate: app.methods.getTemplate('empty'),
+                allowLoad: true,
+                hasMore: true,
+                page: 1,
+            }
+        },
+        methods: {
+            reload: function () {
+                var self = this;
+                if (self.allowLoad) {
+                    self.allowLoad = false;
+                    self.page = 1;
+                    app.f7Net.json(api, {
+                            r: 'user/photolist',
+                            albumId: self.$route.query.album_id,
+                            uid: Template7.global.user.uid,
+                            page: self.page,
+                            pageSize: app.data.pageSize,
+                            accessToken: Template7.global.user.token,
+                            accessSecret: Template7.global.user.secret,
+                        },
+                        function (data) {
+                            self.allowLoad = true;
+                            self.hasMore = data.list.length == app.data.pageSize;
+                            self.vl.deleteAllItems();
+                            if (data.list.length % 2 == 1) {
+                                data.list.push(null);
+                            }
+                            self.vl.appendItems(_.chunk(data.list, 2));
+                        },
+                        function () {
+                            self.allowLoad = true;
+                        });
+                }
+            },
+        },
+        on: {
+            'ptr:refresh': function (e, done) {
+                var self = this;
+                self.reload();
+                done();
+            },
+            'infinite': function () {
+                var self = this;
+                if (self.allowLoad && self.hasMore) {
+                    self.allowLoad = false;
+                    self.page += 1;
+                    app.f7Net.json(api, {
+                        r: 'user/photolist',
+                        albumId: self.$route.query.album_id,
+                        uid: Template7.global.user.uid,
+                        page: self.page,
+                        pageSize: app.data.pageSize,
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                    }, function (data) {
+                        self.allowLoad = true;
+                        self.hasMore = data.list.length == app.data.pageSize;
+                        if (data.list.length % 2 == 1) {
+                            data.list.push(null);
+                        }
+                        self.vl.appendItems(_.chunk(data.list, 2));
+                    }, function () {
+                        self.allowLoad = true;
+                    });
+                }
+            },
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                var vlEl = self.$el.find('.virtual-list');
+                self.vl = self.$app.virtualList.create({
+                    el: vlEl,
+                    items: [],
+                    rowsBefore: app.data.pageSize,
+                    rowsAfter: app.data.pageSize,
+                    height: app.data.tmpPhotosH,
+                    itemTemplate: self.itemTemplate,
+                    emptyTemplate: self.emptyTemplate
+                });
+
+                self.reload();
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+
+            },
+        }
+    }
+</script>

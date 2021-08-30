@@ -1,0 +1,264 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">聊天</div>
+            </div>
+        </div>
+        <div id="chat-messagebar" class="toolbar messagebar">
+            <div class="toolbar-inner">
+                {{#js_if "app.device.cordova"}}
+                <a class="link icon-only no-padding-right" @click="addImg()">
+                    <img src="./img/paizhao.svg" alt="">
+                </a>
+                {{/js_if}}
+                <a class="link icon-only" @click="sheetToggle">
+                    <img src="./img/biaoqing.svg" alt="">
+                </a>
+                <div class="messagebar-area">
+                    <textarea name="content" class="resizable content" placeholder=""></textarea>
+                </div>
+                <a class="link icon-only demo-send-message-link" @click="send">
+                    <img src="./img/send.svg" alt="">
+                </a>
+            </div>
+            <div class="messagebar-sheet"></div>
+        </div>
+        <div class="page-content messages-content">
+            <div class="messages">
+                {{#each chats}}
+                {{#if sent}}
+                <div class="message message-sent">
+                    <div class="message-avatar" style="background-image:url({{avatar}})"></div>
+                    <div class="message-content">
+                        <div class="message-name">{{name}}</div>
+                        <div class="message-bubble">
+                            {{#js_if "this.type == 'text'"}}
+                            <div class="message-text">
+                                {{js "app.methods.mobcentPhiz(this.content)"}}
+                            </div>
+                            {{/js_if}}
+                            {{#js_if "this.type == 'image'"}}
+                            <div class="message-image">
+                                <img onclick="app.f7Media.showImg('{{content}}')" src="{{content}}" class="chat-img">
+                            </div>
+                            {{/js_if}}
+                        </div>
+                    </div>
+                </div>
+                {{else}}
+                <div class="message message-received">
+                    <div class="message-avatar" style="background-image:url({{avatar}})"></div>
+                    <div class="message-content">
+                        <div class="message-name">{{name}}</div>
+                        <div class="message-bubble">
+                            {{#js_if "this.type == 'text'"}}
+                            <div class="message-text">
+                                {{js "app.methods.mobcentPhiz(this.content)"}}
+                            </div>
+                            {{/js_if}}
+                            {{#js_if "this.type == 'image'"}}
+                            <div class="message-image">
+                                <img src="{{content}}" class="chat-img">
+                            </div>
+                            {{/js_if}}
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+    .messagebar-sheet-image,
+    .messagebar-sheet-item {
+        width: 32px;
+        height: 32px;
+        margin: 15px;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                chatsentTemplates: Template7.compile(app.methods.getTemplate('chatsent')),
+                cameraTemplates: app.methods.getTemplate('camera'),
+                photolibTemplates: app.methods.getTemplate('photolib'),
+            }
+        },
+        methods: {
+            sheetToggle: function () {
+                var self = this;
+                self.messagebar.sheetToggle();
+            },
+            addImg: function () {
+                var self = this;
+                self.messagebar.sheetHide();
+                self.chooseImg.open();
+            },
+            uploadImg: function (img, callback) {
+                var options = new FileUploadOptions();
+                options.fileKey = "uploadFile[]";
+                options.mimeType = "image/jpeg";
+                options.params = {
+                    r: 'forum/sendattachmentex',
+                    type: 'image',
+                    module: 'forum',
+                    accessToken: Template7.global.user.token,
+                    accessSecret: Template7.global.user.secret,
+                };
+                options.fileName = img.substr(img.lastIndexOf('/') + 1, img.lastIndexOf(
+                    '.')) + '.jpeg';
+                var ft = new FileTransfer();
+                ft.upload(img, mobcent, function (r) {
+                        var res = JSON.parse(r['response']);
+                        if (res['rs'] && res['body']['attachment']['length'] > 0) {
+                            callback(res['body']['attachment'][0]['urlName']);
+                        } else {
+                            callback(null);
+                        }
+                    },
+                    function (err) {
+                        console.log(err);
+                        callback(null);
+                    },
+                    options);
+            },
+            send: function () {
+                var self = this;
+                var content = $$('#chat-messagebar .content').val();
+                if (content) {
+                    self.sendMessage('text', content);
+                } else {
+                    app.dialog.alert('回复内容不能为空');
+                }
+            },
+            sendMessage: function (type, content) {
+                var self = this;
+                app.f7Net.post(api, {
+                    r: 'message/pmadmin',
+                    json: JSON.stringify({
+                        action: 'send',
+                        toUid: self.$route.query.fromUid,
+                        msg: {
+                            type: type,
+                            content: content
+                        }
+                    }),
+                    accessToken: Template7.global.user.token,
+                    accessSecret: Template7.global.user.secret,
+                }, function (data) {
+                    var err = app.methods.resError(data);
+                    if (err) {
+                        app.dialog.alert(err);
+                    } else {
+                        app.dialog.alert('发送成功', function () {
+                            $$('.messages').append(self.chatsentTemplates({
+                                avatar: self.toUser.avatar,
+                                name: self.toUser.name,
+                                type: type,
+                                content: content,
+                            }));
+                            self.messagebar.clear();
+                            self.messagebar.sheetHide();
+                        });
+                    }
+                });
+            }
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                var app = self.$app;
+                self.chooseImg = app.actions.create({
+                    buttons: [{
+                            text: self.photolibTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromPhotoLib(function (img) {
+                                    self.uploadImg(img, function (imgUrl) {
+                                        if (imgUrl) {
+                                            self.sendMessage('image', imgUrl);
+                                        } else {
+
+                                        }
+                                    });
+                                });
+                            }
+                        },
+                        {
+                            text: self.cameraTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromCamera(function (img) {
+                                    self.uploadImg(img, function (imgUrl) {
+                                        if (imgUrl) {
+                                            self.sendMessage('image', imgUrl);
+                                        } else {
+
+                                        }
+                                    });
+                                    navigator.camera.cleanup();
+                                });
+                            }
+                        },
+                    ]
+                });
+                self.messagebar = app.messagebar.create({
+                    el: page.$el.find('.messagebar')
+                });
+                $$('.messagebar-sheet').html(app.methods.genEmoji());
+                $$('.messagebar-sheet-image').on('click', function () {
+                    $$('#chat-messagebar .content').val($$('#chat-messagebar .content').val() + app.data.emojis[$$(this).dataset().idx]);
+                });
+
+                self.messages = app.messages.create({
+                    el: page.$el.find('.messages'),
+                    firstMessageRule: function (message, previousMessage, nextMessage) {
+                        if (message.isTitle) return false;
+                        if (!previousMessage || previousMessage.type !== message.type ||
+                            previousMessage.name !== message.name) return true;
+                        return false;
+                    },
+                    lastMessageRule: function (message, previousMessage, nextMessage) {
+                        if (message.isTitle) return false;
+                        if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+                            message.name) return true;
+                        return false;
+                    },
+                    tailMessageRule: function (message, previousMessage, nextMessage) {
+                        if (message.isTitle) return false;
+                        if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+                            message.name) return true;
+                        return false;
+                    }
+                });
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+                var self = this;
+                if (self.messagebar)
+                    self.messagebar.destroy();
+            },
+        }
+    }
+</script>

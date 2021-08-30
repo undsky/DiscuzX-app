@@ -1,0 +1,249 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
+			"path": "pages/topic/topic",
+			"style": {
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"type": "menu"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/login/login",
+			"style": {}
+		}, {
+			"path": "pages/register/register",
+			"style": {}
+		}, {
+			"path": "pages/search/search",
+			"style": {}
+		}, {
+			"path": "pages/pub/pub",
+			"style": {}
+		}, {
+			"path": "pages/chat/chat",
+			"style": {}
+		}, {
+			"path": "pages/jubao/jubao",
+			"style": {}
+		}, {
+			"path": "pages/reply/reply",
+			"style": {}
+		}, {
+			"path": "pages/self/self",
+			"style": {}
+		}, {
+			"path": "pages/ta/ta",
+			"style": {}
+		}, {
+			"path": "pages/wv/wv",
+			"style": {
+				"app-plus": {
+					"subNVues": [{
+						"id": "back",
+						"path": "pages//wv/subnvue/back",
+						"style": {
+							"position": "absolute",
+							"width": "100rpx",
+							"height": "100rpx",
+							"bottom": "70rpx",
+							"right": "70rpx",
+							"zindex": 999
+						}
+					}]
+				}
+			}
+		}, {
+			"path": "pages/board/list/list",
+			"style": {
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"fontSrc": "/static/colorui.ttf",
+							"text": "\ue65c",
+							"fontSize": "23px"
+						}, {
+							"fontSrc": "/static/colorui.ttf",
+							"text": "\ue649",
+							"fontSize": "23px",
+							"width": "35px"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/find/recommend/recommend",
+			"style": {}
+		}, {
+			"path": "pages/find/setting/setting",
+			"style": {}
+		}, {
+			"path": "pages/find/rounduser/rounduser",
+			"style": {}
+		}, {
+			"path": "pages/find/roundtopic/roundtopic",
+			"style": {}
+		}, {
+			"path": "pages/message/friend/friend",
+			"style": {}
+		}, {
+			"path": "pages/message/pinglun/pinglun",
+			"style": {}
+		}, {
+			"path": "pages/message/tiwo/tiwo",
+			"style": {}
+		}, {
+			"path": "pages/message/tixing/tixing",
+			"style": {}
+		}, {
+			"path": "pages/message/xiaoxi/xiaoxi",
+			"style": {}
+		}, {
+			"path": "pages/find/searchuser/searchuser",
+			"style": {}
+		}, {
+			"path": "pages/self/xiangce/xiangce",
+			"style": {
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "上传",
+							"fontSize": "16px"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/self/xiangce/upload",
+			"style": {}
+		}, {
+			"path": "pages/self/xiangce/show",
+			"style": {}
+		}, {
+			"path": "pages/self/ziliao/ziliao",
+			"style": {
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "16px"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/self/haoyou/haoyou",
+			"style": {}
+		}, {
+			"path": "pages/self/guanzhu/guanzhu",
+			"style": {}
+		}, {
+			"path": "pages/self/fensi/fensi",
+			"style": {}
+		}, {
+			"path": "pages/self/fabiao/fabiao",
+			"style": {}
+		}, {
+			"path": "pages/self/huifu/huifu",
+			"style": {}
+		}, {
+			"path": "pages/self/shoucang/shoucang",
+			"style": {}
+		}, {
+			"path": "pages/self/pwd/pwd",
+			"style": {}
+		}, {
+			"path": "pages/ta/ziliao/ziliao",
+			"style": {}
+		}, {
+			"path": "pages/ta/xiangce/xiangce",
+			"style": {}
+		}, {
+			"path": "pages/ta/fabiao/fabiao",
+			"style": {}
+		}, {
+			"path": "pages/ta/huifu/huifu",
+			"style": {}
+		}, {
+			"path": "pages/ta/xiangce/show",
+			"style": {}
+		}, {
+			"path": "pages/ta/guanzhu/guanzhu",
+			"style": {}
+		}, {
+			"path": "pages/ta/fensi/fensi",
+			"style": {}
+		}, {
+			"path": "pages/about/about",
+			"style": {}
+		}, {
+			"path": "pages/self/edit/edit",
+			"style": {}
+		}, {
+			"path": "pages/find/setting/feedback/feedback",
+			"style": {}
+		}, {
+			"path": "pages/login/reg/reg",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "食品论坛",
+		"navigationBarBackgroundColor": "#39b54a"
+		// "backgroundColor": "#39b54a"
+	},
+	// "tabBar": {
+	// 	"color": "#929292",
+	// 	"selectedColor": "#007aff",
+	// 	"backgroundColor": "#f7f7f8",
+	// 	"list": [{
+	// 		"pagePath": "pages/home/home",
+	// 		"text": "首页",
+	// 		"iconPath": "static/img/home.png",
+	// 		"selectedIconPath": "static/img/home_selected.png"
+	// 	}, {
+	// 		"pagePath": "pages/board/board",
+	// 		"text": "板块",
+	// 		"iconPath": "static/img/board.png",
+	// 		"selectedIconPath": "static/img/board_selected.png"
+	// 	}, {
+	// 		"pagePath": "pages/message/message",
+	// 		"text": "消息",
+	// 		"iconPath": "static/img/message.png",
+	// 		"selectedIconPath": "static/img/message_selected.png"
+	// 	}, {
+	// 		"pagePath": "pages/find/find",
+	// 		"text": "发现",
+	// 		"iconPath": "static/img/find.png",
+	// 		"selectedIconPath": "static/img/find_selected.png"
+	// 	}]
+	// },
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+				"name": "pinglun", //模式名称
+				"path": "pages/message/pinglun/pinglun", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "topic", //模式名称
+				"path": "pages/topic/topic", //启动页面，必选
+				"query": "topicId=1134724" //启动参数，在页面的onLoad函数里面得到
+			}
+
+		]
+	}
+}

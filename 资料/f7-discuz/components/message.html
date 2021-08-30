@@ -1,0 +1,109 @@
+<template>
+    <div class="page">
+        <div class="page-content">
+            <div class="list no-margin">
+                <ul>
+                    <li>
+                        <a href="{{#if @global.user.uid}}/message/tiwo/{{else}}/login/{{/if}}" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/message_aite.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">提到我的</div>
+                                {{#if heart}}
+                                {{#if heart.atMeInfo.count}}
+                                <div class="item-after"> <span class="badge bg-color-red">{{heart.atMeInfo.count}}</span></div>
+                                {{/if}}
+                                {{/if}}
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{#if @global.user.uid}}/message/pinglun/{{else}}/login/{{/if}}" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/message_pinglun.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">评论</div>
+                                {{#if heart}}
+                                {{#if heart.replyInfo.count}}
+                                <div class="item-after"> <span class="badge bg-color-red">{{heart.replyInfo.count}}</span></div>
+                                {{/if}}
+                                {{/if}}
+                            </div>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="{{#if @global.user.uid}}/message/haoyou/{{else}}/login/{{/if}}" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/message_haoyou.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">好友</div>
+                                {{#if heart}}
+                                {{#if heart.friendInfo.count}}
+                                <div class="item-after"> <span class="badge bg-color-red">{{heart.friendInfo.count}}</span></div>
+                                {{/if}}
+                                {{/if}}
+                            </div>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a href="{{#if @global.user.uid}}/message/xiaoxi/{{else}}/login/{{/if}}" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/message_xiaoxi.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">私信</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{#if @global.user.uid}}/message/tixing/{{else}}/login/{{/if}}" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/message_tixing.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">系统提醒</div>
+                                {{#if heart}}
+                                {{#if heart.systemInfo.count}}
+                                <div class="item-after"> <span class="badge bg-color-red">{{heart.systemInfo.count}}</span></div>
+                                {{/if}}
+                                {{/if}}
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+
+            }
+        },
+        methods: {
+
+        },
+        on: {
+            'tab:mounted': function () {
+
+            },
+            'tab:init': function () {
+
+            },
+            'tab:beforeremove': function () {
+
+            },
+        }
+    }
+</script>

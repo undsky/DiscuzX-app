@@ -1,0 +1,209 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">个人主页</div>
+                <div class="right">
+                    <a class="link popover-open" data-popover=".popover-menu">
+                        <img src="./img/more.svg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="popover popover-menu">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a href="/self/pwd/" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">修改密码</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a @click="logout()" href="#" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">注销</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="list media-list no-margin">
+                <ul>
+                    <li>
+                        <!-- <a @click="selfEdit" href="#" class="item-link item-content"> -->
+                        <a href="#" class="item-content">
+                            <div class="item-media">
+                                <img class="lazy max-80" data-src="{{user.icon}}" />
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{user.name}}</div>
+                                </div>
+                                <div class="item-text">
+                                    <span class="margin-right">积分：{{user.credits}}</span>金币：{{user.gold_num}}</div>
+                                <div class="item-subtitle text-color-orange">
+                                    {{user.userTitle}}
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a href="/self/ziliao/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/ziliao.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的资料</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/self/xiangce/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/xiangce.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的相册</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a href="/self/haoyou/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/haoyou.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的好友</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/self/guanzhu/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/guanzhu.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的关注</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/self/fensi/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/fensi.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的粉丝</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a href="/self/fabiao/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/fabiao.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的发表</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/self/huifu/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/huifu.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的回复</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/self/shoucang/" class="item-link item-content">
+                            <div class="item-media">
+                                <img src="./img/shoucang.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">我的收藏</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+
+            }
+        },
+        methods: {
+            selfEdit: function () {
+                var self = this;
+                if (app.device.cordova) {
+                    self.$router.navigate('/self/edit/');
+                }
+            },
+            logout: function () {
+                var self = this;
+                app.f7Storage.removeCache(app.name + 'user', function () {
+                    Template7.global.user = {};
+                    app.data.cache.user = null;
+                    app.methods.heart();
+                    self.$router.back();
+                });
+            }
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+
+            },
+        }
+    }
+</script>

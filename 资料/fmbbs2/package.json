@@ -1,0 +1,16 @@
+{
+  "name": "uni-discuz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clipboard": "^2.0.6",
+    "timeago.js": "^4.0.2"
+  }
+}

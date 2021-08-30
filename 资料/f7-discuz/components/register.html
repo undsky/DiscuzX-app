@@ -1,0 +1,148 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">注册</div>
+            </div>
+        </div>
+        <div id="register" class="page-content">
+            <div class="list no-hairline-bottom no-hairline-top">
+                <ul>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">用户名<span class="text-color-red">*</span></div>
+                            <div class="item-input-wrap">
+                                <input type="text" name="username" class="username" placeholder="请输入用户名">
+                                <span class="input-clear-button"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">密码<span class="text-color-red">*</span></div>
+                            <div class="item-input-wrap">
+                                <input type="password" name="password" class="password" placeholder="请输入密码">
+                                <span class="input-clear-button"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">确认密码<span class="text-color-red">*</span></div>
+                            <div class="item-input-wrap">
+                                <input type="password" name="confirm-password" class="confirm-password" placeholder="请输入确认密码">
+                                <span class="input-clear-button"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">邮箱<span class="text-color-red">*</span></div>
+                            <div class="item-input-wrap">
+                                <input type="text" name="email" class="email" placeholder="请输入邮箱">
+                                <span class="input-clear-button"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">手机号</div>
+                            <div class="item-input-wrap">
+                                <input type="text" name="mobile" class="mobile" placeholder="请输入手机号">
+                                <span class="input-clear-button"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="block">
+                <div class="row">
+                    <button class="col button button-fill" @click="signIn">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+
+            }
+        },
+        methods: {
+            signIn: function () {
+                var self = this;
+                var username = $$('#register .username').val();
+                if (!username) {
+                    app.dialog.alert('请输入用户名');
+                    return;
+                }
+                var password = $$('#register .password').val();
+                if (!password) {
+                    app.dialog.alert('请输入密码');
+                    return;
+                }
+                var confirmPassword = $$('#register .confirm-password').val();
+                if (password != confirmPassword) {
+                    app.dialog.alert('两次输入密码不一致');
+                    return;
+                }
+                var email = $$('#register .email').val();
+                if (!email) {
+                    app.dialog.alert('请输入邮箱');
+                    return;
+                }
+                var mobile = $$('#register .mobile').val();
+
+                app.f7Net.json(api, {
+                    r: 'user/register',
+                    username: username,
+                    password: password,
+                    email: email,
+                    mobile: mobile,
+                    isValidation: 0,
+                }, function (data) {
+                    var err = app.methods.resError(data);
+                    if (err) {
+                        app.dialog.alert(err);
+                    } else {
+                        app.dialog.alert('注册成功', function () {
+                            self.$router.back();
+                        });
+                    }
+                });
+            }
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+
+            },
+        }
+    }
+</script>

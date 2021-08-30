@@ -1,0 +1,157 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">{{board.forumInfo.title}}</div>
+            </div>
+        </div>
+        {{#if board.classificationType_list.length}}
+        <div class="fab fab-right-bottom">
+            <a class="fab-class" href="#">
+                <i class="icon">
+                    <img src="./img/fab_add.svg" />
+                </i>
+                <i class="icon">
+                    <img src="./img/fab_close.svg" />
+                </i>
+            </a>
+            <div class="fab-buttons fab-buttons-top">
+                {{#each board.classificationType_list}}
+                <a @click="loadSubBoard({{classificationType_id}},'{{classificationType_name}}')" href="#" class="fab-close">{{classificationType_name}}</a>
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+        <div class="page-content ptr-content infinite-scroll-content">
+            <div class="list media-list virtual-list no-margin no-hairlines">
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+    .fab div.fab-buttons a {
+        text-align: center;
+    }
+
+    .fab a.fab-class {
+        width: 42px;
+        height: 42px;
+    }
+
+    .fab a.fab-class .icon {
+        width: 21px;
+        height: 21px;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                itemTemplate: app.methods.getTemplate('topic'),
+                emptyTemplate: app.methods.getTemplate('empty'),
+                allowLoad: true,
+                hasMore: true,
+                page: 1,
+            }
+        },
+        methods: {
+            loadSubBoard: function (id, name) {
+                var self = this;
+                app.data.cache.boardListFilterId = id;
+                self.reload();
+            },
+            reload: function (id, name) {
+                var self = this;
+                if (self.allowLoad) {
+                    self.allowLoad = false;
+                    self.page = 1;
+                    app.f7Net.json(api, {
+                        r: 'forum/topiclist',
+                        boardId: self.$route.query.board_id,
+                        filterType: 'typeid',
+                        filterId: app.data.cache.boardListFilterId,
+                        page: self.page,
+                        pageSize: app.data.pageSize,
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                    }, function (data) {
+                        self.allowLoad = true;
+                        self.hasMore = data.list.length == app.data.pageSize;
+                        self.vl.deleteAllItems();
+                        self.vl.appendItems(data.list);
+                    }, function () {
+                        self.allowLoad = true;
+                    });
+                }
+            },
+        },
+        on: {
+            'ptr:refresh': function (e, done) {
+                var self = this;
+                self.reload();
+                done();
+            },
+            'infinite': function () {
+                var self = this;
+                if (self.allowLoad && self.hasMore) {
+                    self.allowLoad = false;
+                    self.page += 1;
+                    app.f7Net.json(api, {
+                        r: 'forum/topiclist',
+                        boardId: self.$route.query.board_id,
+                        filterType: 'typeid',
+                        filterId: app.data.cache.boardListFilterId,
+                        page: self.page,
+                        pageSize: app.data.pageSize,
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                    }, function (data) {
+                        self.allowLoad = true;
+                        self.hasMore = data.list.length == app.data.pageSize;
+                        self.vl.appendItems(data.list);
+                    }, function () {
+                        self.allowLoad = true;
+                    });
+
+                }
+            },
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                var vlEl = self.$el.find('.virtual-list');
+                self.vl = self.$app.virtualList.create({
+                    el: vlEl,
+                    items: [],
+                    rowsBefore: app.data.pageSize,
+                    rowsAfter: app.data.pageSize,
+                    itemTemplate: self.itemTemplate,
+                    emptyTemplate: self.emptyTemplate,
+                    height: app.data.tmpTopicH,
+                });
+                self.reload();
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+
+            },
+        }
+    }
+</script>

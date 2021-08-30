@@ -1,0 +1,34 @@
+<template>
+	<view @click="goback" class="back">
+		<text class="back-text">返回</text>
+	</view>
+</template>
+
+<script>
+	export default {
+		methods: {
+			goback() {
+				uni.navigateBack({
+					delta: 1
+				});
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.back {
+		background-color: #39b54a;
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.back-text {
+		font-size: 30rpx;
+		color: #FFFFFF;
+	}
+</style>

@@ -1,0 +1,682 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">{{topic.forumName}}</div>
+                <div class="right">
+                    <a class="link popover-open" data-popover=".popover-topic">
+                        <img src="./img/more.svg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="toolbar messagebar">
+            <div class="toolbar-inner">
+                {{#js_if "app.device.cordova"}}
+                <a @click="replyMore" class="link icon-only" style="padding-right: 0;">
+                    <img src="./img/replymore.svg" alt="">
+                </a>
+                {{/js_if}}
+                <a class="link icon-only" @click="sheetToggle">
+                    <img src="./img/biaoqing.svg" alt="">
+                </a>
+                <div class="messagebar-area">
+                    <textarea name="content" class="topic-content resizable" placeholder=""></textarea>
+                </div>
+                <a class="link icon-only demo-send-message-link" @click="send">
+                    <img src="./img/send.svg" alt="">
+                </a>
+            </div>
+            <div class="messagebar-sheet"></div>
+        </div>
+        <div class="popover popover-topic">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a @click="handleOrder()" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/daoxu.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title topic-order">倒序查看</div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a href="#" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/tiaozhuan.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">跳转页面</div>
+                                </div>
+                            </a>
+                        </li> -->
+                        <li>
+                            <a @click="shoucang()" href="#" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/shoucang_.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">收藏</div>
+                                </div>
+                            </a>
+                        </li>
+                        {{#js_if "app.device.cordova"}}
+                        <li>
+                            <a @click="share" href="#" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/fenxiang.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">分享</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="app.f7Device.clipboard.copy('{{topic.forumTopicUrl}}',function(){app.f7Popup.toast('复制成功')})"
+                                href="#" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/fuzhi.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">复制链接</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="app.f7Browser.system('{{topic.forumTopicUrl}}')" href="#" class="item-link item-content popover-close">
+                                <div class="item-media">
+                                    <img src="./img/liulanqi.svg" alt="">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">浏览器打开</div>
+                                </div>
+                            </a>
+                        </li>
+                        {{/js_if}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="popover popover-user">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a @click="handleReply()" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title user-reply">只看Ta的评论</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a @click="handleChat()" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">聊天</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a @click="handleTa()" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">Ta的主页</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="popover popover-jb-reply">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a @click="jbReplyUser()" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">举报用户</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a @click="jbReplyPost()" class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">举报回复</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="popover popover-jb-topic">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a href="{{#if @global.user.uid}}/jubao/?type=user&id={{topic.topic.user_id}}{{else}}/login/{{/if}}"
+                                class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">举报用户</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{#if @global.user.uid}}/jubao/?type=thread&id={{topic.topic.topic_id}}{{else}}/login/{{/if}}"
+                                class="item-link item-content popover-close">
+                                <div class="item-inner">
+                                    <div class="item-title">举报帖子</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="page-content messages-content ptr-content infinite-scroll-content">
+            <div class="list media-list no-margin padding-bottom">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link no-ripple item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-title text-full">{{topic.topic.title}}</div>
+                                </div>
+                                <div class="item-text item-footer margin-top display-flex justify-content-space-between">
+                                    <div>
+                                        <i class="iconfont icon-see" style="font-size: 14px;"></i>
+                                        <span>
+                                            {{topic.topic.hits}}</span>
+                                        <i class="iconfont icon-chat" style="font-size: 14px;"></i>
+                                        <span>
+                                            {{topic.topic.replies}}</span>
+                                    </div>
+                                    <div>
+                                        <span class="margin-right">
+                                            {{js "timeago.format(this.topic.topic.create_date)"}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link no-ripple item-content">
+                            <div @click="handleUser()" class="item-media popover-open" data-popover=".popover-user">
+                                <img class="lazy max-50" data-src="{{topic.topic.icon}}" />
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title-row" style="background: inherit;">
+                                    <div class="item-title">{{topic.topic.user_nick_name}}</div>
+                                    <div class="item-after text-color-blue">楼主</div>
+                                </div>
+                                <div class="item-subtitle text-color-orange">{{topic.topic.userTitle}}</div>
+                                <div class="item-text item-footer margin-top display-flex justify-content-space-between">
+                                    <div></div>
+                                    <div>
+                                        <span @click="zan('thread')" class="margin-right">
+                                            <img class="text-icon" src="./img/zan.svg" alt="">
+                                        </span>
+                                        <span class="popover-open" data-popover=".popover-jb-topic">
+                                            <img class="text-icon" src="./img/gongneng.svg" alt="">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="block">
+                {{#each topic.topic.content}}
+                <!-- 0：文本；1：图片；2：视频；3：音频; 4:链接; 5：附件 -->
+                {{#js_if "this.type == 0"}}
+                {{js "app.methods.mobcentPhiz(this.infor)"}}
+                {{/js_if}}
+                {{#js_if "this.type == 1"}}
+                <img onclick="app.f7Media.showImg('{{infor}}')" class="lazy infor-img max-width-100" data-src="{{infor}}" />
+                {{/js_if}}
+                {{#js_if "this.type == 2"}}
+                <video controls src="{{infor}}"></video>
+                {{/js_if}}
+                {{#js_if "this.type == 3"}}
+                <br>
+                <audio controls src="{{infor}}"></audio>
+                <br> {{/js_if}}
+                {{#js_if "this.type == 4"}}
+                <a onclick="app.f7Browser.system('{{url}}')" href="#" class="link">{{infor}}</a>
+                {{/js_if}}
+                {{#js_if "this.type == 5"}}
+                <a onclick="app.f7Browser.system('{{url}}')" href="#" class="link">{{infor}}</a>
+                {{/js_if}}
+                {{/each}}
+            </div>
+            {{#js_if "app.device.cordova"}}
+            {{#js_if "this.topic.topic.poll_info"}}
+            <div class="block">
+                <div class="block-header">
+                    投票（最多可选择{{topic.topic.poll_info.type}}项）
+                </div>
+            </div>
+            <div class="list">
+                <ul>
+                    {{#each topic.topic.poll_info.poll_item_list}}
+                    <li>
+                        <label class="item-checkbox item-content">
+                            <input type="checkbox" name="poll" value="{{poll_item_id}}" />
+                            <i class="icon icon-checkbox"></i>
+                            <div class="item-inner">
+                                <div class="item-title">{{name}}（{{total_num}}）</div>
+                                <div class="item-after">{{percent}}</div>
+                            </div>
+                        </label>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="block">
+                <div class="row">
+                    <button class="col button button-fill" @click="toupiao">投票</button>
+                </div>
+            </div>
+            {{/js_if}}
+            {{#if topic.topic.rateList.showAllUrl}}
+            <div class="block">
+                <div class="block-header">
+                    评分
+                </div>
+            </div>
+            <div class="data-table card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="label-cell">参与人数</th>
+                            <th class="label-cell">粮票</th>
+                            <th class="label-cell">金币</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{topic.topic.rateList.total.field1}}</td>
+                            <td>{{topic.topic.rateList.total.field2}}</td>
+                            <td>{{topic.topic.rateList.total.field3}}</td>
+                        </tr>
+                        {{#each topic.topic.rateList.body}}
+                        <tr>
+                            <td>{{field1}}</td>
+                            <td>{{field2}}</td>
+                            <td>{{field3}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="block">
+                <div class="row">
+                    <button @click="pingfen()" class="col button button-fill">我要评分</button>
+                    <button onclick="app.f7Browser.blank('{{topic.topic.rateList.showAllUrl}}','returnmobileview')"
+                        class="col button button-fill">更多评分</button>
+                </div>
+            </div>
+            {{/if}}
+            {{/js_if}}
+            <div class="list media-list virtual-list no-margin no-hairlines">
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped>
+    .virtual-list li:last-child {
+        padding-bottom: 48px;
+    }
+
+    .messagebar-sheet-image,
+    .messagebar-sheet-item {
+        width: 32px;
+        height: 32px;
+        margin: 15px;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                itemTemplate: app.methods.getTemplate('reply'),
+                emptyTemplate: app.methods.getTemplate('empty'),
+                allowLoad: true,
+                // hasMore: true,
+                page: 1,
+                authorId: 0,
+                order: 0,
+                replyUid: 0,
+                replyPid: 0,
+            }
+        },
+        methods: {
+            jbReplyUser: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    self.$router.navigate('/jubao/?type=user&id=' + self.replyUid);
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            jbReplyPost: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    self.$router.navigate('/jubao/?type=post&id=' + self.replyPid);
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            handleUser: function () {
+                var self = this;
+                self.replyUid = self.topic.topic.user_id;
+            },
+            toupiao: function () {
+                var self = this;
+                var poll = $$('input[name="poll"]');
+                var options = [];
+                for (var i = 0; i < poll.length; i++) {
+                    var el = poll[i];
+                    if ($$(el).prop('checked')) {
+                        options.push($$(el).val());
+                    }
+                }
+
+                if (options.length == 0) {
+                    app.dialog.alert('您没有选择投票项');
+                } else if (options.length > parseInt(self.topic.topic.poll_info.type)) {
+                    app.dialog.alert('最多可选择' + self.topic.topic.poll_info.type + '项');
+                } else {
+                    app.f7Net.post(api, {
+                        r: 'forum/vote',
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                        tid: self.topic.topic.topic_id,
+                        options: options.join(),
+                    }, function (data) {
+                        var err = app.methods.resError(data);
+                        app.dialog.alert(err || '投票成功');
+                    });
+                }
+            },
+            zan: function (type) {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    app.f7Net.json(api, {
+                        r: 'forum/support',
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                        tid: self.topic.topic.topic_id,
+                        pid: 'thread' == type ? 0 : self.replyPid,
+                        type: type,
+                    }, function (data) {
+                        app.f7Popup.toast(data.head.errInfo);
+                    });
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            pingfen: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    app.f7Browser.blank(api + '?' + app.utils.serializeObject({
+                        r: 'forum/topicrate',
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                        tid: self.topic.topic.topic_id,
+                        pid: self.topic.topic.reply_posts_id,
+                        type: 'view',
+                    }), 'returnmobileview');
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            share: function () {
+                var self = this;
+                app.f7Share.open(self.topic.topic.title, '', self.topic.forumTopicUrl);
+            },
+            shoucang: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    app.f7Net.json(api, {
+                        r: 'user/userfavorite',
+                        accessToken: Template7.global.user.token,
+                        accessSecret: Template7.global.user.secret,
+                        id: self.topic.topic.topic_id,
+                        idType: 'tid',
+                        action: 'favorite',
+                    }, function (data) {
+                        var err = app.methods.resError(data);
+                        app.f7Popup.toast(err || '收藏成功');
+                    });
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            replyMore: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    self.$router.navigate('/reply/?fid=' + self.topic.boardId + '&tid=' + self.topic.topic.topic_id +
+                        '&replyId=' + self.topic.topic.reply_posts_id);
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            send: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    var content = $$('.page-current .topic-content').val();
+                    if (content) {
+                        var body = [];
+                        body.push({
+                            type: 0,
+                            infor: content
+                        });
+                        app.f7Net.post(api, {
+                            r: 'forum/topicadmin',
+                            act: 'reply',
+                            platType: Framework7.device.ios ? 5 : 1,
+                            accessToken: Template7.global.user.token,
+                            accessSecret: Template7.global.user.secret,
+                            json: JSON.stringify({
+                                body: {
+                                    json: {
+                                        isQuote: 0,
+                                        isAnonymous: 0,
+                                        isOnlyAuthor: 0,
+                                        fid: self.topic.boardId,
+                                        tid: self.topic.topic.topic_id,
+                                        replyId: self.topic.topic.reply_posts_id,
+                                        isShowPostion: 1,
+                                        location: Template7.global.position.address,
+                                        longitude: Template7.global.position.longitude,
+                                        latitude: Template7.global.position.latitude,
+                                        content: JSON.stringify(body)
+                                    }
+                                }
+                            })
+                        }, function (data) {
+                            var err = app.methods.resError(data);
+                            if (err) {
+                                app.dialog.alert(err);
+                            } else {
+                                app.dialog.alert('回复成功', function () {
+                                    self.messagebar.clear();
+                                    self.messagebar.sheetHide();
+                                    self.reload();
+                                });
+                            }
+                        });
+                    } else {
+                        app.dialog.alert('回复内容不能为空');
+                    }
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            sheetToggle: function () {
+                var self = this;
+                self.messagebar.sheetToggle();
+            },
+            reload: function () {
+                var self = this;
+                if (self.allowLoad) {
+                    self.allowLoad = false;
+                    self.page = 1;
+                    app.f7Net.json(api, {
+                        r: 'forum/postlist',
+                        topicId: self.topic.topic.topic_id,
+                        authorId: self.authorId,
+                        order: self.order,
+                        page: self.page,
+                        pageSize: app.data.pageSize
+                    }, function (data) {
+                        self.allowLoad = true;
+                        self.hasMore = data.list.length == app.data.pageSize;
+                        self.vl.deleteAllItems();
+                        self.vl.appendItems(data.list);
+                    }, function () {
+                        self.allowLoad = true;
+                    });
+                }
+            },
+            handleOrder: function () {
+                var self = this;
+                self.order = (self.order == 0 ? 1 : 0);
+                $$('.topic-order').text(self.order == 0 ? '倒序查看' : '正序查看');
+                self.reload();
+            },
+            handleReply: function () {
+                var self = this;
+                self.authorId = self.authorId == 0 ? self.replyUid : 0;
+                $$('.user-reply').text(self.authorId == 0 ? '只看Ta的评论' : '查看全部');
+                self.reload();
+            },
+            handleChat: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    self.$router.navigate('/chat/?fromUid=' + self.replyUid);
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+            handleTa: function () {
+                var self = this;
+                if (Template7.global.user.uid) {
+                    self.$router.navigate('/ta/?uid=' + self.replyUid);
+                } else {
+                    self.$router.navigate('/login/');
+                }
+            },
+        },
+        on: {
+            'ptr:refresh': function (e, done) {
+                var self = this;
+                self.reload();
+                done();
+            },
+            'infinite': function () {
+                var self = this;
+                if (self.allowLoad && self.hasMore) {
+                    self.allowLoad = false;
+                    self.page += 1;
+                    app.f7Net.json(api, {
+                        r: 'forum/postlist',
+                        topicId: self.topic.topic.topic_id,
+                        authorId: self.authorId,
+                        order: self.order,
+                        page: self.page,
+                        pageSize: app.data.pageSize
+                    }, function (data) {
+                        self.allowLoad = true;
+                        self.hasMore = data.list.length == app.data.pageSize;
+                        self.vl.appendItems(data.list);
+                    }, function () {
+                        self.allowLoad = true;
+                    });
+                }
+            },
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                self.messagebar = app.messagebar.create({
+                    el: self.$el.find('.messagebar'),
+                });
+                $$('.messagebar-sheet').html(app.methods.genEmoji());
+                $$('.messagebar-sheet-image').on('click', function () {
+                    $$('.page-current .topic-content').val($$('.page-current .topic-content').val() + app.data
+                        .emojis[$$(this).dataset().idx]);
+                });
+
+                var vlEl = self.$el.find('.virtual-list');
+                self.vl = self.$app.virtualList.create({
+                    el: vlEl,
+                    items: self.topic.list,
+                    rowsBefore: app.data.pageSize,
+                    rowsAfter: app.data.pageSize,
+                    itemTemplate: self.itemTemplate,
+                    emptyTemplate: self.emptyTemplate,
+                    height: 145,
+                });
+
+                vlEl.on('click', '.handle-user,.handle-more', function () {
+                    self.replyPid = $$(this).dataset().pid;
+                    self.replyUid = $$(this).dataset().uid;
+                });
+
+                vlEl.on('click', '.handle-zan', function () {
+                    self.replyPid = $$(this).dataset().pid;
+                    self.replyUid = $$(this).dataset().uid;
+                    self.zan('post');
+                });
+
+                vlEl.on('click', '.handle-reply', function () {
+                    self.replyPid = $$(this).dataset().pid;
+                    self.replyUid = $$(this).dataset().uid;
+
+                    if (Template7.global.user.uid) {
+                        self.$router.navigate('/reply/?isQuote=1&fid=' + self.topic.boardId + '&tid=' +
+                            self.topic.topic
+                            .topic_id +
+                            '&replyId=' + self.replyPid);
+                    } else {
+                        self.$router.navigate('/login/');
+                    }
+                });
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+                var self = this;
+                if ('/reply/' == self.$router.previousRoute.path) {
+                    self.reload();
+                }
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+                app.f7Share.destroy();
+            },
+        }
+    }
+</script>

@@ -1,0 +1,247 @@
+{
+    "name" : "食品论坛",
+    "appid" : "__UNI__A9383EF",
+    "description" : "食品论坛，食品行业社区，关注食品安全、食品技术、食品质量、检测技术等",
+    "versionName" : "2.0.13",
+    "versionCode" : 2013,
+    "transformPx" : false,
+    /* 5+App特有相关 */
+    "app-plus" : {
+        "compatible" : {
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+        },
+        "kernel" : {
+            "ios" : "UIWebview" //或者 "WKWebview"  
+        },
+        "usingComponents" : true,
+        "nvueCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        /* 模块配置 */
+        "modules" : {
+            "Push" : {},
+            "Share" : {},
+            "VideoPlayer" : {},
+            "Maps" : {},
+            "UIWebview" : {},
+            "Statistic" : {},
+            "Webview-x5" : {}
+        },
+        /* 应用发布信息 */
+        "distribute" : {
+            /* android打包配置 */
+            "android" : {
+                "permissions" : [
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.INSTALL_PACKAGES\"/>",
+                    "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>",
+                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+                    "<uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\"/>"
+                ],
+                "schemes" : "fmbbs",
+                "abiFilters" : [ "armeabi-v7a" ],
+                "targetSdkVersion" : 26
+            },
+            /* ios打包配置 */
+            "ios" : {
+                "urltypes" : "fmbbs",
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "请允许食品论坛访问相册，以便您发帖时上传图片",
+                    "NSPhotoLibraryAddUsageDescription" : "请允许食品论坛访问相册，以便您发帖时上传图片",
+                    "NSCameraUsageDescription" : "请允许食品论坛访问摄像头，以便您发帖时拍摄图片",
+                    "NSMicrophoneUsageDescription" : "请允许食品论坛访问麦克风，以便您发帖时发送语音",
+                    "NSLocationWhenInUseUsageDescription" : "请允许食品论坛访问您的位置，以便您查找周边用户和周边帖子",
+                    "NSLocationAlwaysUsageDescription" : "请允许食品论坛访问您的位置，以便您查找周边用户和周边帖子",
+                    "NSLocationAlwaysAndWhenInUseUsageDescription" : "请允许食品论坛访问您的位置，以便您查找周边用户和周边帖子",
+                    "NSCalendarsUsageDescription" : "请允许食品论坛访问您的日历",
+                    "NSContactsUsageDescription" : "请允许食品论坛访问您的通讯录",
+                    "NSSpeechRecognitionUsageDescription" : "请允许食品论坛访问您的语音识别",
+                    "NSRemindersUsageDescription" : "请允许食品论坛访问您的提醒事项",
+                    "NSAppleMusicUsageDescription" : "请允许食品论坛访问您的媒体资料库",
+                    "NSSiriUsageDescription" : "请允许食品论坛访问您的Siri",
+                    "NSFaceIDUsageDescription" : "请允许食品论坛访问您的Face ID"
+                }
+            },
+            /* SDK配置 */
+            "sdkConfigs" : {
+                "statics" : {
+                    "umeng" : {
+                        "appkey_ios" : "55668a6967e58e06f9000e14",
+                        "channelid_ios" : "uni-ios",
+                        "appkey_android" : "55668a2967e58e6c7b0031e7",
+                        "channelid_android" : "uni-android"
+                    }
+                },
+                "share" : {
+                    "qq" : {
+                        "appid" : "1104792472"
+                    },
+                    "weixin" : {
+                        "appid" : "wx0e93f5da1ee43be6",
+                        "UniversalLinks" : "https://app.foodmate.net/fmbbs/"
+                    },
+                    "sina" : {
+                        "appkey" : "4267472569",
+                        "appsecret" : "e7854b4ef2ebd9424d3a17c7b9283b90",
+                        "redirect_uri" : "http://sns.whalecloud.com/sina2/callback"
+                    }
+                },
+                "ad" : {},
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "e59082e2954e8cc564a68668c482e913",
+                        "appkey_android" : "736c80f3ec828af9198da47d1949ee08"
+                    }
+                },
+                "push" : {
+                    "unipush" : {}
+                }
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "unpackage/res/icons/72x72.png",
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
+                    "xxhdpi" : "unpackage/res/icons/144x144.png",
+                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
+                },
+                "ios" : {
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "ipad" : {
+                        "app" : "unpackage/res/icons/76x76.png",
+                        "app@2x" : "unpackage/res/icons/152x152.png",
+                        "notification" : "unpackage/res/icons/20x20.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "proapp@2x" : "unpackage/res/icons/167x167.png",
+                        "settings" : "unpackage/res/icons/29x29.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "spotlight" : "unpackage/res/icons/40x40.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
+                    },
+                    "iphone" : {
+                        "app@2x" : "unpackage/res/icons/120x120.png",
+                        "app@3x" : "unpackage/res/icons/180x180.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "notification@3x" : "unpackage/res/icons/60x60.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "settings@3x" : "unpackage/res/icons/87x87.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
+                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
+                    }
+                }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "resources/30d930389739bdfad7e5bdff05b5c4cd/480_762_30d930389739bdfad7e5bdff05b5c4cd.png",
+                    "xhdpi" : "resources/30d930389739bdfad7e5bdff05b5c4cd/720_1242_30d930389739bdfad7e5bdff05b5c4cd.png",
+                    "xxhdpi" : "resources/30d930389739bdfad7e5bdff05b5c4cd/1080_1882_30d930389739bdfad7e5bdff05b5c4cd.png"
+                },
+                "ios" : {
+                    "iphone" : {
+                        "portrait-896h@3x" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1242_2688_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "portrait-896h@2x" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/828_1792_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "iphonex" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1125_2436_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina55" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1242_2208_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina47" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/750_1334_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina40" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/640_1136_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina35" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/640_960_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "landscape-896h@3x" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/2688_1242_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "landscape-896h@2x" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1792_828_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina55l" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/2208_1242_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina47l" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1334_750_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "retina40l" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/1136_640_30d930389739bdfad7e5bdff05b5c4cd.png",
+                        "iphonexl" : "/Users/jyx/project/discuz-app/30d930389739bdfad7e5bdff05b5c4cd/2436_1125_30d930389739bdfad7e5bdff05b5c4cd.png"
+                    },
+                    "storyboard" : "resources/CustomStoryboard/归档.zip"
+                },
+                "iosStyle" : "storyboard"
+            }
+        },
+        "nvueLaunchMode" : "fast",
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    /* 快应用特有相关 */
+    "quickapp" : {},
+    /* 小程序特有相关 */
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : false
+        },
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-alipay" : {
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-baidu" : {
+        "usingComponents" : true,
+        "setting" : {
+            "urlCheck" : false
+        },
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "h5" : {
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "uniStatistics" : {
+            "enable" : false
+        },
+        "router" : {
+            "mode" : "hash"
+        }
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "mp-qq" : {
+        "uniStatistics" : {
+            "enable" : false
+        }
+    }
+}

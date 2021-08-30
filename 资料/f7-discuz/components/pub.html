@@ -1,0 +1,633 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title">发帖</div>
+                <div class="right">
+                    <a @click="pub()" href="#" class="link">发表</a>
+                </div>
+            </div>
+        </div>
+        <div id="pub" class="page-content">
+            <div class="list no-margin no-hairlines">
+                <div class="row">
+                    <div class="col-50 item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-input-wrap">
+                                <input type="text" placeholder="请选择板块" readonly="readonly" class="selboard" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-50 item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-input-wrap">
+                                <input type="text" placeholder="请选择分类" readonly="readonly" class="selclass" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-input-wrap">
+                                <input name="title" class="title" type="text" placeholder="标题">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-input-wrap">
+                                <textarea name="content" class="content" placeholder="内容"></textarea>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="item-input item-content">
+                            <div class="item-inner">
+                                <div class="item-input-wrap">
+                                    <input type="text" placeholder="可见设置" readonly="readonly" class="selsee" />
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{#js_if "app.device.cordova"}}
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">添加照片</div>
+                            <div class="item-input-wrap">
+                                <div class="imgs row block justify-content-flex-start img-content no-margin">
+                                    <a @click="addImg()" href="#" class="col-25 margin">
+                                        <img src="./img/addimg.svg" alt="" width="100%">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="audioBar">
+                        <div class="item-content">
+                            <div class="item-media">
+                                <img src="./img/yuyin.svg" alt="">
+                            </div>
+                            <div @click="recordAudio" class="item-inner">
+                                <div class="item-title text-color-blue">附加语音</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="audioBar display-none">
+                        <div class="item-content">
+                            <div class="item-media">
+                                <img src="./img/audio.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="range-slider">
+                                </div>
+                            </div>
+                            <div @click="playAudio()" class="item-media">
+                                <img class="audioStatus" src="./img/play.svg" alt="">
+                            </div>
+                            <div @click="deleteAudio()" class="item-media">
+                                <img src="./img/delete.svg" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="videoBar">
+                        <div class="item-content">
+                            <div class="item-media">
+                                <img src="./img/shipin.svg" alt="">
+                            </div>
+                            <div @click="addVideo()" class="item-inner">
+                                <div class="item-title text-color-blue">附加视频</div>
+                            </div>
+                            <div @click="deleteVideo()" class="delete-video item-media display-none">
+                                <img src="./img/delete.svg" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content no-padding">
+                        <video class="show-video display-none" controls></video>
+                    </li>
+                    <li class="margin-top">
+                        <div class="item-content">
+                            <div class="item-media">
+                                <img src="./img/weizhi.svg" alt="">
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title text-full">{{@global.position.address}}</div>
+                            </div>
+                        </div>
+                    </li>
+                    {{/js_if}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<style>
+    .img-content {
+        padding: 0;
+    }
+
+    video {
+        width: 100%;
+    }
+
+    .range-knob {
+        display: none;
+    }
+
+    .font-size-13 .picker-columns {
+        font-size: 15px;
+    }
+</style>
+<script>
+    return {
+        data: function () {
+            return {
+                addImgTemplates: Template7.compile(app.methods.getTemplate('addimg')),
+                cameraTemplates: app.methods.getTemplate('camera'),
+                photolibTemplates: app.methods.getTemplate('photolib'),
+                recorder: null,
+                recordTimer: 0,
+                audioStatus: 'play',
+                audioSlider: null,
+                playStep: 0,
+                recordPath: null,
+                imgs: [],
+                video: null,
+            }
+        },
+        methods: {
+            pub: function () {
+                var self = this;
+                var topic = {};
+                var body = [];
+                var aid = [];
+
+                if (self.pickerBoard.getValue()) {
+                    topic.fid = self.pickerBoard.getValue()[1];
+                } else {
+                    app.dialog.alert('请选择板块');
+                    return;
+                }
+
+                if ($$('#pub .title').val()) {
+                    topic.title = $$('#pub .title').val();
+                } else {
+                    app.dialog.alert('请填写标题');
+                    return;
+                }
+
+                if ($$('#pub .content').val()) {
+                    body.push({
+                        type: 0,
+                        infor: $$('#pub .content').val()
+                    });
+                } else {
+                    app.dialog.alert('请填写内容');
+                    return;
+                }
+
+                if (self.pickerClass.getValue()) {
+                    var selTypeId = self.pickerClass.getValue()[0];
+                    if (selTypeId != -1) {
+                        topic.typeId = selTypeId;
+                    }
+                }
+
+                app.f7Popup.loading();
+
+                async.parallel([
+                        function (callback) {
+                            if (self.recordPath) {
+                                var options = new FileUploadOptions();
+                                options.fileKey = "uploadFile[]";
+                                options.fileName = self.recordPath.substr(self.recordPath.lastIndexOf('/') + 1,
+                                    self.recordPath.lastIndexOf('.')) + '.mp3';
+                                options.mimeType = "audio/mp3";
+                                options.params = {
+                                    r: 'forum/sendattachmentex',
+                                    type: 'audio',
+                                    module: 'forum',
+                                    accessToken: Template7.global.user.token,
+                                    accessSecret: Template7.global.user.secret,
+                                };
+
+                                var ft = new FileTransfer();
+                                ft.upload(self.recordPath, mobcent, function (r) {
+                                        var res = JSON.parse(r['response']);
+                                        if (res['rs'] && res['body']['attachment']['length'] > 0) {
+                                            body.push({
+                                                type: 3,
+                                                infor: res['body']['attachment'][0]['urlName']
+                                            });
+                                            aid.push(res['body']['attachment'][0]['id']);
+                                        }
+                                        callback(null);
+                                    },
+                                    function (err) {
+                                        console.log(err);
+                                        callback(null);
+                                    },
+                                    options);
+                            } else {
+                                callback(null);
+                            }
+                        },
+                        function (callback) {
+                            if (self.video) {
+                                var options = new FileUploadOptions();
+                                options.fileKey = "uploadFile[]";
+                                options.fileName = self.video.substr(self.video.lastIndexOf('/') + 1,
+                                    self.video.lastIndexOf('.')) + '.mp4';
+                                options.mimeType = "video/mp4";
+                                options.params = {
+                                    r: 'forum/sendattachmentex',
+                                    type: 'video',
+                                    module: 'forum',
+                                    accessToken: Template7.global.user.token,
+                                    accessSecret: Template7.global.user.secret,
+                                };
+                                var ft = new FileTransfer();
+                                ft.upload(self.video, mobcent, function (r) {
+                                        var res = JSON.parse(r['response']);
+                                        if (res['rs'] && res['body']['attachment']['length'] > 0) {
+                                            body.push({
+                                                type: 2,
+                                                infor: res['body']['attachment'][0]['urlName']
+                                            });
+                                            aid.push(res['body']['attachment'][0]['id']);
+                                        }
+                                        callback(null);
+                                    },
+                                    function (err) {
+                                        console.log(err);
+                                        callback(null);
+                                    },
+                                    options);
+                            } else {
+                                callback(null);
+                            }
+                        },
+                        function (callback) {
+                            if (self.imgs.length > 0) {
+                                var options = new FileUploadOptions();
+                                options.fileKey = "uploadFile[]";
+                                options.mimeType = "image/jpeg";
+                                options.params = {
+                                    r: 'forum/sendattachmentex',
+                                    type: 'image',
+                                    module: 'forum',
+                                    accessToken: Template7.global.user.token,
+                                    accessSecret: Template7.global.user.secret,
+                                };
+                                async.each(self.imgs, function (img, callback) {
+                                    options.fileName = img.substr(img.lastIndexOf('/') + 1, img.lastIndexOf(
+                                        '.')) + '.jpeg';
+                                    var ft = new FileTransfer();
+                                    ft.upload(img, mobcent, function (r) {
+                                            var res = JSON.parse(r['response']);
+                                            if (res['rs'] && res['body']['attachment']['length'] >
+                                                0) {
+                                                body.push({
+                                                    type: 1,
+                                                    infor: res['body']['attachment'][0][
+                                                        'urlName'
+                                                    ]
+                                                });
+                                                aid.push(res['body']['attachment'][0]['id']);
+                                            }
+                                            callback(null);
+                                        },
+                                        function (err) {
+                                            console.log(err);
+                                            callback(null);
+                                        },
+                                        options);
+                                }, function (err) {
+                                    callback(err);
+                                });
+                            } else {
+                                callback(null);
+                            }
+                        }
+                    ],
+                    function (err, results) {
+                        topic.isShowPostion = 1;
+                        topic.location = Template7.global.position.address;
+                        topic.longitude = Template7.global.position.longitude;
+                        topic.latitude = Template7.global.position.latitude;
+                        topic.isOnlyAuthor = self.pickerSee.getValue() ? self.pickerSee.getValue()[0] : 0;
+                        topic.aid = aid.join();
+                        topic.isHidden = 0;
+                        topic.isAnonymous = 0;
+                        topic.content = JSON.stringify(body);
+
+                        app.f7Net.post(api, {
+                            r: 'forum/topicadmin',
+                            act: 'new',
+                            platType: Framework7.device.ios ? 5 : 1,
+                            accessToken: Template7.global.user.token,
+                            accessSecret: Template7.global.user.secret,
+                            json: JSON.stringify({
+                                body: {
+                                    json: topic
+                                }
+                            })
+                        }, function (data) {
+                            var err = app.methods.resError(data);
+                            if (err) {
+                                app.dialog.alert(err);
+                            } else {
+                                app.dialog.alert('发帖成功', function () {
+                                    self.$router.back();
+                                });
+                            }
+                        });
+                    });
+            },
+            recordAudio: function () {
+                var self = this;
+                app.f7Media.recordAudio(function (path, timer) {
+                    self.recordPath = path;
+                    self.recordTimer = timer;
+
+                    if (self.recordTimer < 3) {
+                        app.f7Media.destroyAudio();
+                        self.recordPath = null;
+                        self.recordTimer = 0;
+                        app.dialog.alert('录音时间太短');
+                    } else {
+                        if (self.audioSlider)
+                            self.audioSlider.destroy();
+
+                        self.audioSlider = app.range.create({
+                            el: '.range-slider',
+                            min: 0,
+                            max: self.recordTimer,
+                            step: 1,
+                            value: 0,
+                        });
+                        self.playStep = 0;
+
+                        $$('.audioBar').toggleClass('display-none');
+                    }
+                });
+            },
+            playAudio: function () {
+                var self = this;
+                if ('play' == self.audioStatus) {
+                    app.f7Media.playAudio(self.recordPath);
+                    self.audioStatus = 'stop';
+                    self.playInterval = setInterval(function () {
+                        if (self.playStep == self.recordTimer) {
+                            self.playStep = 0;
+                            clearInterval(self.playInterval);
+                            self.audioStatus = 'play';
+                            $$('#pub .audioStatus').attr('src', './img/' + self.audioStatus + '.svg');
+                        } else {
+                            self.playStep++;
+                            self.audioSlider.setValue(self.playStep);
+                        }
+                    }, 1000);
+                } else {
+                    clearInterval(self.playInterval);
+                    app.f7Media.pauseAudio();
+                    self.audioStatus = 'play';
+                }
+                $$('#pub .audioStatus').attr('src', './img/' + self.audioStatus + '.svg');
+            },
+            deleteAudio: function () {
+                var self = this;
+                app.f7Media.releaseAudio();
+                app.f7Media.destroyAudio();
+                self.recordPath = null;
+                $$('.audioBar').toggleClass('display-none');
+            },
+            addImg: function () {
+                var self = this;
+                self.chooseImg.open();
+            },
+            reImg: function () {
+                var self = this;
+                self.imgsEl.find('.add-img').remove();
+
+                var h = '';
+                for (var i = 0; i < self.imgs.length; i++) {
+                    h += self.addImgTemplates({
+                        img: self.imgs[i],
+                        idx: i
+                    });
+                }
+                self.imgsEl.prepend(h);
+            },
+            addVideo: function () {
+                var self = this;
+                app.f7Media.getVideoFromCamera(function (mediaFile) {
+                    self.deleteVideo();
+                    self.video = mediaFile.fullPath;
+                    resolveLocalFileSystemURL(mediaFile.localURL, function (entry) {
+                        self.videoNativePath = entry.toURL();
+                        $$('#pub .show-video').attr('src', self.video).click(function (e) {
+                            window.plugins.streamingMedia.playVideo(self.videoNativePath);
+                        });
+                    });
+                }, function (error) {
+                    console.log(error);
+                });
+            },
+            deleteVideo: function () {
+                var self = this;
+                self.video = null;
+                $$('#pub .delete-video').toggleClass('display-none');
+                $$('#pub .show-video').toggleClass('display-none');
+            }
+        },
+        on: {
+            pageMounted: function (e, page) {
+
+            },
+            pageInit: function (e, page) {
+                var self = this;
+                self.chooseImg = app.actions.create({
+                    buttons: [{
+                            text: self.photolibTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromPhotoLib(function (img) {
+                                    self.imgs.push(img);
+                                    self.reImg();
+                                });
+                            }
+                        },
+                        {
+                            text: self.cameraTemplates,
+                            onClick: function (actions, e) {
+                                app.f7Media.getImgFromCamera(function (img) {
+                                    self.imgs.push(img);
+                                    self.reImg();
+                                });
+                            }
+                        },
+                    ]
+                });
+
+                self.imgsEl = self.$el.find('#pub .imgs');
+                self.imgsEl.on('click', '.remove-img', function (e) {
+                    var idx = $$(this).data('idx');
+                    self.imgs.splice(idx, 1);
+                    self.reImg();
+                });
+
+                var boardlist = {};
+                var boardVal = [];
+                var boardDisVal = [];
+                var boardShow = null;
+
+                for (var i = 0; i < self.boards.length; i++) {
+                    var board = self.boards[i];
+
+                    if (i == 0)
+                        boardShow = board.board_category_id;
+
+                    boardVal.push(board.board_category_id);
+                    boardDisVal.push(board.board_category_name);
+
+                    if (board.board_list && board.board_list.length > 0) {
+                        var boardItemVal = [];
+                        var boardItemDisVal = [];
+                        for (var j = 0; j < board.board_list.length; j++) {
+                            var boardItem = board.board_list[j];
+
+                            boardItemVal.push(boardItem.board_id);
+                            boardItemDisVal.push(boardItem.board_name);
+                        }
+
+                        boardlist[board.board_category_id] = {
+                            values: boardItemVal,
+                            displayValues: boardItemDisVal
+                        }
+                    }
+                }
+                self.pickerBoard = app.picker.create({
+                    inputEl: '#pub .selboard',
+                    openIn: 'sheet',
+                    cssClass: 'font-size-13',
+                    formatValue: function (values, displayValues) {
+                        return displayValues[1];
+                    },
+                    cols: [{
+                            textAlign: 'left',
+                            values: boardVal,
+                            displayValues: boardDisVal,
+                            onChange: function (picker, value, displayValue) {
+                                if (picker.cols[1].replaceValues) {
+                                    picker.cols[1].replaceValues(boardlist[value].values, boardlist[
+                                            value]
+                                        .displayValues);
+                                }
+                            }
+                        },
+                        {
+                            values: boardlist[boardShow].values,
+                            displayValues: boardlist[boardShow].displayValues,
+                        },
+                    ],
+                    on: {
+                        closed: function () {
+                            if (self.pickerClass)
+                                self.pickerClass.destroy();
+
+                            app.f7Net.json(api, {
+                                r: 'forum/topiclist',
+                                boardId: self.pickerBoard.getValue()[1],
+                                pageSize: 0,
+                            }, function (data) {
+                                var classVal = [-1];
+                                var classDisVal = ['无'];
+
+                                for (var i = 0; i < data.classificationType_list.length; i++) {
+                                    var classItem = data.classificationType_list[i];
+
+                                    classVal.push(classItem.classificationType_id);
+                                    classDisVal.push(classItem.classificationType_name);
+                                }
+
+                                self.pickerClass = app.picker.create({
+                                    inputEl: '#pub .selclass',
+                                    formatValue: function (values, displayValues) {
+                                        return displayValues[0];
+                                    },
+                                    cols: [{
+                                        textAlign: 'center',
+                                        values: classVal,
+                                        displayValues: classDisVal,
+                                    }]
+                                });
+                            });
+                        }
+                    }
+                });
+
+                self.pickerSee = app.picker.create({
+                    inputEl: '#pub .selsee',
+                    formatValue: function (values, displayValues) {
+                        return displayValues[0];
+                    },
+                    cols: [{
+                        textAlign: 'center',
+                        values: ['0', '1'],
+                        displayValues: ['所有人可见', '回帖仅作者可见'],
+                    }]
+                });
+
+                switch (self.action) {
+                    case 'tupian':
+                        app.f7Media.getImgFromPhotoLib(function (img) {
+                            self.imgs.push(img);
+                            self.reImg();
+                        });
+                        break;
+                    case 'paizhao':
+                        app.f7Media.getImgFromCamera(function (img) {
+                            self.imgs.push(img);
+                            self.reImg();
+                        });
+                        break;
+                    case 'yuyin':
+                        self.recordAudio();
+                        break;
+                    case 'shipin':
+                        self.addVideo();
+                        break;
+                    default:
+                        break;
+                }
+            },
+            pageBeforeIn: function (e, page) {
+
+            },
+            pageAfterIn: function (e, page) {
+
+            },
+            pageBeforeOut: function (e, page) {
+
+            },
+            pageAfterOut: function (e, page) {
+
+            },
+            pageBeforeRemove: function (e, page) {
+                var self = this;
+                if (navigator.camera)
+                    app.f7Media.destroyCamera();
+                if (self.playInterval)
+                    clearInterval(self.playInterval);
+                if (self.audioSlider)
+                    self.audioSlider.destroy();
+            },
+        }
+    }
+</script>
