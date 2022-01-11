@@ -1,5 +1,5 @@
 export default {
-	base: 'https://bbsapi.foodmate.net/app/web/index.php', //'http://w.foodmate.net/discuz/mobcent/app/web/index.php',
+	base: 'https://bbs.undsky.com/mobcent/app/web/index.php',//'https://bbsapi.foodmate.net/app/web/index.php', //'http://w.foodmate.net/discuz/mobcent/app/web/index.php',
 	login: 'user/login', // 登录
 	phonecode: 'user/getCode',
 	reg: 'user/register',

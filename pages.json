@@ -143,5 +143,14 @@
 			}
 
 		}
-	]
+	    ,{
+            "path" : "pages/user/album/album",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ]
 }
