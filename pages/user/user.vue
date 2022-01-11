@@ -3,7 +3,17 @@
 		<dx-navbar title="我的" :showUser="false"></dx-navbar>
 		<scroll-view scroll-y="true" class="wrapper">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
-				<view class="u-m-r-10"><u-avatar :src="user ? user.avatar : ''" size="140"></u-avatar></view>
+				<view class="u-m-r-10">
+					<u-avatar
+						@click="editAvatar"
+						:show-sex="!!user && 0 != user.gender"
+						:sex-icon="1 == user.gender ? 'man' : 'woman'"
+						:show-level="!!user"
+						level-icon="edit-pen-fill"
+						:src="user ? user.avatar : ''"
+						size="140"
+					></u-avatar>
+				</view>
 				<view class="u-flex-1 margin-left-sm">
 					<template v-if="user">
 						<view class="u-font-18 u-p-b-20">{{ user.userName }}</view>
@@ -25,6 +35,7 @@
 					<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表"></u-cell-item>
 					<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
 					<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
+					<u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item>
 				</u-cell-group>
 			</view>
 
@@ -52,6 +63,11 @@ export default {
 		})
 	},
 	methods: {
+		editAvatar() {
+			if (this.user) {
+				this.$util.helper.goto('./editAvatar/editAvatar', true);
+			}
+		},
 		qiandao: async function() {
 			const result = await this.$http.post({
 				r: 'user/sign'

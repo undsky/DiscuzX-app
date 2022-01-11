@@ -128,6 +128,20 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/user/setting/setting",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/editAvatar/editAvatar",
+			"style": {
+				"navigationBarTitleText": "个人设置",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	]
 }

@@ -23,7 +23,8 @@
 								<view class="text-cut text-green">{{ item.user_nick_name || item.reply_nick_name }}</view>
 								<view class="text-gray margin-left-xs">{{ $u.timeFrom(item.last_reply_date || item.replied_date) }}</view>
 							</view>
-							<view class="text-gray">
+							<view class="text-gray">								
+								{{item.board_name}}
 								<text class="cuIcon-attentionfill margin-lr-xs"></text>
 								{{ item.hits || 0 }}
 								<text class="cuIcon-messagefill margin-lr-xs"></text>
