@@ -51,7 +51,7 @@
 							<view class="flex">
 								<view @click="zan(item.reply_posts_id)" class="cuIcon-appreciatefill text-gray margin-right-sm"></view>
 								<view @click="zan(item.reply_posts_id)" class="cuIcon-messagefill text-gray margin-right-sm"></view>
-								<view @click="zan(item.reply_posts_id)" class="cuIcon-settingsfill text-gray"></view>
+								<view @click="manage(item.reply_posts_id, item.reply_id)" class="cuIcon-settingsfill text-gray"></view>
 							</view>
 						</view>
 					</view>
@@ -81,6 +81,7 @@ export default {
 			firstLoaded: false,
 			topic: {},
 			boardId: 0,
+			order: 1,
 			forumName: '',
 			forumTopicUrl: '',
 			commentList: [],
@@ -145,7 +146,7 @@ export default {
 					r: 'forum/postlist',
 					topicId: _id,
 					authorId: 0,
-					order: 1,
+					order: this.order,
 					page,
 					pageSize
 				},
@@ -175,9 +176,35 @@ export default {
 				title: result.errcode
 			});
 		},
+		manage(reply_posts_id, reply_id) {
+			if (this.user) {
+				uni.showActionSheet({
+					itemList: [reply_posts_id ? '举报回帖' : '举报帖子', '举报用户'],
+					success: res => {
+						uni.navigateTo({
+							url: `../feedback/feedback?type=${0 == res.tapIndex ? 'post' : 'user'}&id=${
+								0 == res.tapIndex ? reply_posts_id || this.topic.topic_id : reply_id || this.topic.user_id
+							}`,
+							success: res => {},
+							fail: () => {},
+							complete: () => {}
+						});
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+			} else {
+				uni.navigateTo({
+					url: '../auth/auth',
+					success: res => {},
+					fail: () => {},
+					complete: () => {}
+				});
+			}
+		},
 		showAction: async function() {
 			uni.showActionSheet({
-				itemList: ['收藏', '分享', '复制链接', '倒序查看'],
+				itemList: ['收藏', '分享', '复制链接', 1 == this.order ? '倒序查看' : '正序查看'],
 				success: async res => {
 					switch (res.tapIndex) {
 						case 0:
@@ -214,6 +241,10 @@ export default {
 									title: '复制失败'
 								});
 							}
+							break;
+						case 3:
+							this.order = 1 == this.order ? 0 : 1;
+							this.$refs.paging.reload();
 							break;
 					}
 				},
