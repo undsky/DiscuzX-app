@@ -136,15 +136,141 @@
 			}
 
 		}, {
-			"path": "pages/user/editAvatar/editAvatar",
+			"path": "pages/user/album/album",
+			"style": {
+				"navigationBarTitleText": "相册",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/edit/edit",
 			"style": {
 				"navigationBarTitleText": "个人设置",
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/user/info",
+			"style": {
+				"navigationBarTitleText": "主页",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/friend/friend",
+			"style": {
+				"navigationBarTitleText": "好友",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/followers/followers",
+			"style": {
+				"navigationBarTitleText": "粉丝",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/following/following",
+			"style": {
+				"navigationBarTitleText": "关注",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/password/password",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/rounduser/rounduser",
+			"style": {
+				"navigationBarTitleText": "周边用户",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/roundtopic/roundtopic",
+			"style": {
+				"navigationBarTitleText": "周边帖子",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/recommend/recommend",
+			"style": {
+				"navigationBarTitleText": "推荐用户",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索用户",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/message/friend/friend",
+			"style": {
+				"navigationBarTitleText": "好友申请",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": "聊天",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/message/system/system",
+			"style": {
+				"navigationBarTitleText": "系统消息",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/message/list/list",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "举报",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/detail/replay/replay",
+			"style": {
+				"navigationBarTitleText": "回复",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/album/upload/upload",
+			"style": {
+				"navigationBarTitleText": "上传",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/album/show/show",
+			"style": {
+				"navigationBarTitleText": "照片",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	    ,{
-            "path" : "pages/user/album/album",
+            "path" : "pages/wv/wv",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

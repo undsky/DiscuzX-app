@@ -7,10 +7,10 @@
 					<u-avatar
 						@click="editAvatar"
 						:show-sex="!!user && 0 != user.gender"
-						:sex-icon="1 == user.gender ? 'man' : 'woman'"
+						:sex-icon="!!user && 1 == user.gender ? 'man' : 'woman'"
 						:show-level="!!user"
 						level-icon="edit-pen-fill"
-						:src="user ? user.avatar : ''"
+						:src="!!user ? user.avatar : ''"
 						size="140"
 					></u-avatar>
 				</view>
@@ -28,17 +28,16 @@
 					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>
 			</view>
-
-			<view class="u-m-t-20">
-				<u-cell-group :border="false">
-					<u-cell-item @click="qiandao" icon="edit-pen" :arrow="false" title="签到"></u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表"></u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
-					<u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item>
-				</u-cell-group>
-			</view>
-
+			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
+			<u-cell-group :border="false">
+				<u-cell-item @click="qiandao" icon="edit-pen" :arrow="false" title="签到"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./info/info', true)" icon="account" title="我的主页"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item>
+			</u-cell-group>
+			<view class="u-m-t-20 flex justify-center"><u-link href="https://www.undsky.com" :under-line="true">联系作者</u-link></view>
 			<view v-if="user" class="margin-top-lg padding"><u-button @click="logout">退出登录</u-button></view>
 		</scroll-view>
 		<dx-tabbar :currentTab="4"></dx-tabbar>

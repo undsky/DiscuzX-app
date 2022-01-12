@@ -1,9 +1,14 @@
 <template>
 	<view class="padding-lr-sm">
 		<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-			<u-form-item :label-position="labelPosition" label="板块" label-width="100" prop="board">
-				<u-input :border="border" type="select" :select-open="boardShow" v-model="model.board" placeholder="请选择板块" @click="boardShow = true"></u-input>
-			</u-form-item>
+			<view class="flex">
+				<u-form-item :label-position="labelPosition" label="板块" label-width="100" prop="board">
+					<u-input :border="border" type="select" :select-open="boardShow" v-model="model.board" placeholder="请选择板块" @click="boardShow = true"></u-input>
+				</u-form-item>
+				<u-form-item :label-position="labelPosition" label="分类" label-width="100" prop="board">
+					<u-input :border="border" type="select" :select-open="classShow" v-model="model.class" placeholder="请选择分类" @click="classShow = true"></u-input>
+				</u-form-item>
+			</view>
 			<u-form-item label-width="100" :label-position="labelPosition" label="标题" prop="title">
 				<u-input :border="border" placeholder="请输入标题" v-model="model.title" type="text"></u-input>
 			</u-form-item>
@@ -16,6 +21,7 @@
 		</u-form>
 		<view class="margin-top-lg"><u-button type="warning" @click="submit">发布</u-button></view>
 		<u-select mode="mutil-column-auto" v-model="boardShow" :list="boardList" @confirm="boardConfirm"></u-select>
+		<u-select v-model="classShow" :list="classList" @confirm="classConfirm"></u-select>
 	</view>
 </template>
 
@@ -23,6 +29,7 @@
 import { mapState } from 'vuex';
 
 let _boardId = 0;
+let _classId = 0;
 
 export default {
 	data() {
@@ -30,17 +37,27 @@ export default {
 			action: '',
 			formData: {},
 			boardShow: false,
+			classShow: false,
 			boardList: [],
+			classList: [],
 			model: {
 				title: '',
 				content: '',
-				board: null
+				board: null,
+				class: null
 			},
 			rules: {
 				board: [
 					{
 						required: true,
 						message: '请选择板块',
+						trigger: ['change', 'blur']
+					}
+				],
+				class: [
+					{
+						required: true,
+						message: '请选择分类',
 						trigger: ['change', 'blur']
 					}
 				],
@@ -84,7 +101,7 @@ export default {
 		const result = await this.$http.get({
 			r: 'forum/forumlist'
 		});
-		let _boarderList = [];
+		let _boardList = [];
 		for (let item of result.list) {
 			let _board = {
 				value: item.board_category_id,
@@ -97,16 +114,38 @@ export default {
 					label: item2.board_name
 				});
 			}
-			_boarderList.push(_board);
+			_boardList.push(_board);
 		}
-		this.boardList = _boarderList;
+		this.boardList = _boardList;
 	},
 	methods: {
 		boardConfirm(e) {
 			this.model.board = '';
-			e.map((val, index) => {
+			_classId = 0;
+			this.model.class = '';
+			e.map(async (val, index) => {
 				_boardId = val.value;
 				this.model.board += this.model.board == '' ? val.label : '-' + val.label;
+
+				const result = await this.$http.post({
+					r: 'forum/topiclist',
+					boardId: _boardId
+				});
+				let _classList = [];
+				for (let item of result.classificationType_list) {
+					_classList.push({
+						value: item.classificationType_id,
+						label: item.classificationType_name
+					});
+				}
+				this.classList = _classList;
+			});
+		},
+		classConfirm(e) {
+			this.model.class = '';
+			e.map((val, index) => {
+				_classId = val.value;
+				this.model.class = val.label;
 			});
 		},
 		submit: async function() {
@@ -122,6 +161,7 @@ export default {
 					let topic = {
 						title: this.model.title,
 						fid: _boardId,
+						typeId: _classId,
 						isOnlyAuthor: 0,
 						isHidden: 0,
 						isAnonymous: 0
