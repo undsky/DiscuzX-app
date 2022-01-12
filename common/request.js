@@ -1,8 +1,11 @@
 import Request from '@/js_sdk/luch-request/luch-request'
 import store from '../store/index.js'
 
+const mobcentURL = 'https://bbs.undsky.com/mobcent/'
+
 const config = {
-	baseURL: 'https://bbs.undsky.com/mobcent/app/web/index.php',
+	mobcentURL,
+	baseURL: mobcentURL + 'app/web/index.php',
 	withCredentials: false,
 	header: {
 		"content-type": "application/x-www-form-urlencoded"

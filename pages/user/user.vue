@@ -31,17 +31,14 @@
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 			<u-cell-group :border="false">
 				<u-cell-item @click="qiandao" icon="edit-pen" :arrow="false" title="签到"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./info/info', true)" icon="account" title="我的主页"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./info', true)" icon="home" title="我的主页"></u-cell-item>
 			</u-cell-group>
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 			<u-cell-group :border="false">
-				<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
-			</u-cell-group>
-			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
-			<u-cell-group :border="false">
-				<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./roundtopic/roundtopic', true)" icon="file-text" title="周边帖子"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./rounduser/rounduser', true)" icon="account" title="周边用户"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./recommend/recommend', true)" icon="man-add" title="推荐用户"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./search/search', true)" icon="search" title="搜索用户"></u-cell-item>
 			</u-cell-group>
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 			<u-cell-group :border="false"><u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item></u-cell-group>

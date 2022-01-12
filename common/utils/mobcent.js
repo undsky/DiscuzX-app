@@ -1,9 +1,109 @@
+import request from "../request.js"
+
+const emojis = [
+	'[泪]',
+	'[哈哈]',
+	'[抓狂]',
+	'[嘻嘻]',
+	'[偷笑]',
+	'[怒]',
+	'[鼓掌]',
+	'[心]',
+	'[心碎了]',
+	'[生病]',
+	'[爱你]',
+	'[害羞]',
+	'[馋嘴]',
+	'[可怜]',
+	'[晕]',
+	'[花心]',
+	'[太开心]',
+	'[亲亲]',
+	'[鄙视]',
+	'[呵呵]',
+	'[挖鼻屎]',
+	'[衰]',
+	'[兔子]',
+	'[good]',
+	'[来]',
+	'[威武]',
+	'[围观]',
+	'[萌]',
+	'[送花]',
+	'[囧]',
+	'[酷]',
+	'[糗大了]',
+	'[撇嘴]',
+	'[发呆]',
+	'[汗]',
+	'[睡]',
+	'[吃惊]',
+	'[白眼]',
+	'[疑问]',
+	'[阴险]',
+	'[左哼哼]',
+	'[右哼哼]',
+	'[敲打]',
+	'[委屈]',
+	'[嘘]',
+	'[吐]',
+	'[做鬼脸]',
+	'[ByeBye]',
+	'[要哭了]',
+	'[傲慢]',
+	'[月亮]',
+	'[太阳]',
+	'[耶]',
+	'[握手]',
+	'[ok]',
+	'[饭]',
+	'[咖啡]',
+	'[礼物]',
+	'[猪头]',
+	'[抱抱]',
+	'[赞]',
+	'[Hold]',
+	'[神马]',
+	'[坑爹]',
+	'[有木有]',
+	'[谢谢]',
+	'[蓝心]',
+	'[外星人]',
+	'[魔鬼]',
+	'[紫心]',
+	'[绿心]',
+	'[黄心]',
+	'[音符]',
+	'[闪烁]',
+	'[星星]',
+	'[雨滴]',
+	'[火焰]',
+	'[便便]',
+	'[踩一脚]',
+	'[下雨]',
+	'[多云]',
+	'[闪电]',
+	'[雪花]',
+	'[旋风]',
+	'[包]',
+	'[房子]',
+	'[烟花]'
+];
+
 function phiz(content) {
 	content = content.replace(/\n/g, '<br/>')
 	content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
 		'<img src="$1"/>');
 	content = content.replace(/\[video\](.*?)\[\/video\]/g,
 		'<video controls controlslist="nodownload" src="$1"></video>')
+	for (var i = 0; i < emojis.length; i++) {
+		var emoji = emojis[i];
+		content = content.replace(new RegExp('\\' + emoji.substring(0, emoji.length - 1) + '\\]', 'g'),
+			'<img style="width: 22px !important;height: 22px !important;" src="' + request.config.mobcentURL +
+			'app/data/phiz/default/' +
+			(i < 10 ? '0' +
+				i : i) + '.png"/>');
+	}
 	return content;
 }
 
@@ -35,6 +135,7 @@ function content(content) {
 }
 
 export default {
+	emojis,
 	phiz,
 	content
 }
