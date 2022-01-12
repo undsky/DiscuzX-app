@@ -177,7 +177,7 @@ export default {
 		},
 		showAction: async function() {
 			uni.showActionSheet({
-				itemList: ['收藏', '分享', '复制链接'],
+				itemList: ['收藏', '分享', '复制链接', '倒序查看'],
 				success: async res => {
 					switch (res.tapIndex) {
 						case 0:
