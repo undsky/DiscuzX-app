@@ -32,13 +32,21 @@
 			<u-cell-group :border="false">
 				<u-cell-item @click="qiandao" icon="edit-pen" :arrow="false" title="签到"></u-cell-item>
 				<u-cell-item @click="$util.helper.goto('./info/info', true)" icon="account" title="我的主页"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表"></u-cell-item>
+			</u-cell-group>
+			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
+			<u-cell-group :border="false">
 				<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
 				<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item>
 			</u-cell-group>
+			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
+			<u-cell-group :border="false">
+				<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="heart" title="我的收藏"></u-cell-item>
+			</u-cell-group>
+			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
+			<u-cell-group :border="false"><u-cell-item @click="$util.helper.goto('./setting/setting', false)" icon="setting" title="设置"></u-cell-item></u-cell-group>
 			<view class="u-m-t-20 flex justify-center"><u-link href="https://www.undsky.com" :under-line="true">联系作者</u-link></view>
-			<view v-if="user" class="margin-top-lg padding"><u-button @click="logout">退出登录</u-button></view>
+			<view v-if="user" class="margin-top-lg padding"><u-button type="warning" @click="logout">退出登录</u-button></view>
 		</scroll-view>
 		<dx-tabbar :currentTab="4"></dx-tabbar>
 	</view>
