@@ -1,4 +1,6 @@
 <script>
+import store from './store/index.js';
+
 export default {
 	onLaunch: function() {
 		let systemInfo = uni.getSystemInfoSync();
@@ -32,10 +34,38 @@ export default {
 		// #endif
 		systemInfo.platType = 'ios' == systemInfo.platform ? 5 : 'android' == systemInfo.platform ? 1 : 0;
 		this.globalData.systemInfo = systemInfo;
-		console.log(systemInfo);
+
 		console.log('App Launch');
 	},
 	onShow: function() {
+		try {
+			const location = uni.getStorageSync('location');
+			if (false !== location) {
+				uni.getLocation({
+					geocode: true,
+					success: res => {
+						this.globalData.location = res;
+						if (res.address) {
+							const { province, city, district, street } = res.address;
+							this.globalData.location.position = (province || '') + (city || '') + (district || '') + (street || '');
+						}
+						this.$nextTick(async () => {
+							if (store.state.auth.user) {
+								await this.$http.post({
+									r: 'user/location',
+									longitude: res.longitude,
+									latitude: res.latitude,
+									location: this.globalData.location.position || ''
+								});
+							}
+						});
+					}
+				});
+			}
+		} catch (e) {
+			//TODO handle the exception
+		}
+
 		console.log('App Show');
 	},
 	onHide: function() {

@@ -112,7 +112,7 @@ export default {
 						}
 					}
 				);
-				list = res.list;
+				list = res.list || res.pois;
 			} catch (e) {
 				//TODO handle the exception
 			} finally {

@@ -66,6 +66,17 @@ export default {
 						}
 					);
 					this.$store.commit('setUser', result);
+
+					const { location } = getApp().globalData;
+					if (location) {
+						await this.$http.post({
+							r: 'user/location',
+							longitude: location.longitude,
+							latitude: location.latitude,
+							location: location.position || ''
+						});
+					}
+
 					uni.showModal({
 						title: '',
 						content: '登录成功',

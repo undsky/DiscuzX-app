@@ -14,24 +14,24 @@
 				<view
 					v-for="(item, index) in zList"
 					:key="index"
-					:data-id="item.authorId || item.toUserId"
+					:data-id="item.authorId || item.toUserId || item.uid"
 					:data-plid="item.plid"
 					:data-pmid="item.pmid"
 					@click="gotoInfo"
 					class="cu-item cur"
 				>
 					<view v-if="hasAvatar" class="cu-avatar">
-						<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'" :src="item.authorAvatar || item.toUserAvatar"></u-avatar>
+						<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'" :src="item.authorAvatar || item.toUserAvatar || item.icon"></u-avatar>
 					</view>
 					<view class="content  flex-sub justify-center">
-						<view class="text-cut">{{ item.author || item.toUserName }}</view>
+						<view class="text-cut">{{ item.author || item.toUserName || item.nickname || item.name }}</view>
 						<view class="text-gray text-sm flex">
-							<view class="text-cut">{{ item.note || item.lastSummary }}</view>
+							<view class="text-cut">{{ item.note || item.lastSummary || item.location }}</view>
 						</view>
 					</view>
 					<view class="action text-gray" style="width: 70px;">
 						<view class="cuIcon-right"></view>
-						<view class="text-xs">{{ $u.timeFrom(item.dateline || item.lastDateline) }}</view>
+						<view v-if="item.dateline || item.lastDateline" class="text-xs">{{ $u.timeFrom(item.dateline || item.lastDateline) }}</view>
 					</view>
 				</view>
 			</view>
@@ -118,7 +118,7 @@ export default {
 						}
 					}
 				);
-				list = res.body.list || res.body.data;
+				list = res.body.list || res.body.data || res.pois || res.list;
 			} catch (e) {
 				//TODO handle the exception
 			} finally {
