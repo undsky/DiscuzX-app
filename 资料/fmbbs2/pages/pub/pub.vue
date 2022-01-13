@@ -36,7 +36,7 @@
 				</view>
 			</uni-collapse-item>
 		</uni-collapse>
-		<!-- #ifndef H5 -->
+		<!-- #ifdef H5 -->
 		<uni-collapse>
 			<uni-collapse-item :open="openRecord" title="录音">
 				<view class="uni-padding-wrap voice-box">

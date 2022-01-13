@@ -59,7 +59,7 @@
 			</view>
 		</z-paging>
 		<view class="cu-tabbar-height"></view>
-		<dx-chatbar ref="chatbar"></dx-chatbar>
+		<dx-chatbar ref="chatbar" :showImg="false"></dx-chatbar>
 		<u-popup v-model="showShare" mode="bottom" safe-area-inset-bottom><dx-share></dx-share></u-popup>
 	</view>
 </template>
@@ -197,7 +197,7 @@ export default {
 								break;
 							case 2:
 								uni.navigateTo({
-									url: '../user/info?uid=' + uid,
+									url: '../user/home?uid=' + uid,
 									success: res => {},
 									fail: () => {},
 									complete: () => {}

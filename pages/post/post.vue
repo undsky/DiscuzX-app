@@ -14,14 +14,17 @@
 			</u-form-item>
 			<u-form-item :label-position="labelPosition" label="内容" prop="content">
 				<u-input type="textarea" :border="border" height="230" placeholder="请填写内容" v-model="model.content" />
+				<view @click="chooseEmoji" class="choose-emoji"><text class="cuIcon-emojifill text-grey"></text></view>
 			</u-form-item>
 			<u-form-item :label-position="labelPosition" label="上传图片" prop="photo" label-width="150">
 				<u-upload ref="upload" :action="action" :form-data="formData" name="uploadFile[]" width="160" height="160"></u-upload>
 			</u-form-item>
+			
 		</u-form>
 		<view class="margin-top-lg"><u-button type="warning" @click="submit">发布</u-button></view>
 		<u-select mode="mutil-column-auto" v-model="boardShow" :list="boardList" @confirm="boardConfirm"></u-select>
 		<u-select v-model="classShow" :list="classList" @confirm="classConfirm"></u-select>
+		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji></dx-emoji></uni-popup>
 	</view>
 </template>
 
@@ -78,7 +81,8 @@ export default {
 			},
 			border: false,
 			labelPosition: 'left',
-			errorType: ['message']
+			errorType: ['message'],
+			showEmoji: false
 		};
 	},
 	computed: {
@@ -90,6 +94,10 @@ export default {
 		this.$refs.uForm.setRules(this.rules);
 	},
 	onLoad: async function(options) {
+		uni.$on('tapemoji', data => {
+			this.model.content += data.emoji;
+		});
+
 		this.action = this.$http.config.baseURL;
 		this.formData = {
 			r: 'forum/sendattachmentex',
@@ -206,9 +214,30 @@ export default {
 					});
 				}
 			});
+		},
+		chooseEmoji: function() {
+			if (this.showEmoji) {
+				this.showEmoji = false;
+				this.$refs.emoji.close();
+			} else {
+				this.showEmoji = true;
+				this.$refs.emoji.open();
+			}
+		},
+		handlePopupChange: function(e) {
+			if (!e.show) {
+				this.showEmoji = false;
+			}
 		}
 	}
 };
 </script>
 
-<style></style>
+<style scoped>
+.choose-emoji {
+	position: absolute;
+	right: 15px;
+	bottom: 15px;
+	font-size: 23px;
+}
+</style>

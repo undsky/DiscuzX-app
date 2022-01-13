@@ -150,7 +150,7 @@
 			}
 
 		}, {
-			"path": "pages/user/info",
+			"path": "pages/user/home",
 			"style": {
 				"navigationBarTitleText": "主页",
 				"enablePullDownRefresh": false
@@ -227,13 +227,6 @@
 			}
 
 		}, {
-			"path": "pages/message/system/system",
-			"style": {
-				"navigationBarTitleText": "系统消息",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/message/list/list",
 			"style": {
 				"navigationBarTitleText": "消息",
@@ -264,6 +257,13 @@
 			"path": "pages/wv/wv",
 			"style": {
 				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/info/info",
+			"style": {
+				"navigationBarTitleText": "资料",
 				"enablePullDownRefresh": false
 			}
 

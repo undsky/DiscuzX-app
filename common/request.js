@@ -1,7 +1,7 @@
 import Request from '@/js_sdk/luch-request/luch-request'
 import store from '../store/index.js'
 
-const mobcentURL = 'https://bbs.undsky.com/mobcent/'
+const mobcentURL = 'https://bbsapi.foodmate.net/' //'https://bbs.undsky.com/mobcent/'
 
 const config = {
 	mobcentURL,

@@ -11,28 +11,27 @@
 			:enable-back-to-top="currentIndex === tabIndex"
 		>
 			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
-				<view v-for="(item, index) in zList" :key="item.topic_id" class="cu-item cur post-item" :data-id="item.topic_id" @click="gotoDetail">
+				<view
+					v-for="(item, index) in zList"
+					:key="index"
+					:data-id="item.authorId || item.toUserId"
+					:data-plid="item.plid"
+					:data-pmid="item.pmid"
+					@click="gotoInfo"
+					class="cu-item cur"
+				>
 					<view v-if="hasAvatar" class="cu-avatar">
-						<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'" :src="item.userAvatar || item.icon"></u-avatar>
+						<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'" :src="item.authorAvatar || item.toUserAvatar"></u-avatar>
 					</view>
-					<view class="content flex-sub justify-center">
-						<view>
-							<view class="text-cut">{{ item.title || item.topic_subject }}</view>
+					<view class="content  flex-sub justify-center">
+						<view class="text-cut">{{ item.author || item.toUserName }}</view>
+						<view class="text-gray text-sm flex">
+							<view class="text-cut">{{ item.note || item.lastSummary }}</view>
 						</view>
-						<view class="text-cut text-grey text-sm">{{ item.subject || item.reply_content }}</view>
-						<view class="text-xs flex justify-between">
-							<view class="flex">
-								<view class="text-cut text-green">{{ item.user_nick_name || item.reply_nick_name }}</view>
-								<view class="text-gray margin-left-xs">{{ $u.timeFrom(item.last_reply_date || item.replied_date) }}</view>
-							</view>
-							<view class="text-gray">
-								{{ item.board_name }}
-								<text class="cuIcon-attentionfill margin-lr-xs"></text>
-								{{ item.hits || 0 }}
-								<text class="cuIcon-messagefill margin-lr-xs"></text>
-								{{ item.replies || 0 }}
-							</view>
-						</view>
+					</view>
+					<view class="action text-gray" style="width: 70px;">
+						<view class="cuIcon-right"></view>
+						<view class="text-xs">{{ $u.timeFrom(item.dateline || item.lastDateline) }}</view>
 					</view>
 				</view>
 			</view>
@@ -42,7 +41,7 @@
 
 <script>
 export default {
-	name: 'dx-post-paging',
+	name: 'dx-user-paging',
 	props: {
 		params: Object,
 		reload: {
@@ -102,17 +101,24 @@ export default {
 			let list = [];
 			try {
 				const res = await this.$http[this.method](
-					Object.assign(this.params, {
-						page,
-						pageSize
-					}),
+					Object.assign(
+						this.params,
+						'message/pmsessionlist' == this.params.r
+							? {
+									json: "{'page':" + page + ",'pageSize': " + pageSize + '}'
+							  }
+							: {
+									page,
+									pageSize
+							  }
+					),
 					{
 						custom: {
 							auth: this.auth
 						}
 					}
 				);
-				list = res.list;
+				list = res.body.list || res.body.data;
 			} catch (e) {
 				//TODO handle the exception
 			} finally {
@@ -120,18 +126,20 @@ export default {
 				this.firstLoaded = true;
 			}
 		},
-		gotoDetail(e) {
-			this.$util.helper.goto('/pages/detail/detail?id=' + e.currentTarget.dataset.id);
+		gotoInfo(e) {
+			const { id, plid, pmid } = e.currentTarget.dataset;
+			uni.navigateTo({
+				url: 'message/pmsessionlist' == this.params.r ? `/pages/chat/chat?plid=${plid}&pmid=${pmid}&fromUid=${id}` : `/pages/user/home?uid=${id}`,
+				success: res => {},
+				fail: () => {},
+				complete: () => {}
+			});
 		}
 	}
 };
 </script>
 
 <style scoped>
-.post-item {
-	height: 80px !important;
-}
-
 .content {
 	height: 100%;
 	display: flex;

@@ -3,18 +3,15 @@
 		<dx-navbar title="我的" :showUser="false"></dx-navbar>
 		<scroll-view scroll-y="true" class="wrapper">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
-				<view class="u-m-r-10">
+				<view @click="$util.helper.goto('./home', true)" class="u-m-r-10">
 					<u-avatar
-						@click="editAvatar"
 						:show-sex="!!user && 0 != user.gender"
 						:sex-icon="!!user && 1 == user.gender ? 'man' : 'woman'"
-						:show-level="!!user"
-						level-icon="edit-pen-fill"
 						:src="!!user ? user.avatar : ''"
 						size="140"
 					></u-avatar>
 				</view>
-				<view class="u-flex-1 margin-left-sm">
+				<view @click="$util.helper.goto('./home', true)" class="u-flex-1 margin-left-sm">
 					<template v-if="user">
 						<view class="u-font-18 u-p-b-20">{{ user.userName }}</view>
 						<view class="margin-bottom-xs text-gray text-sm">
@@ -27,12 +24,9 @@
 					</template>
 					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>
+				<view v-if="user" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" color="#2979ff" label-color="#2979ff" size="47"></u-icon></view>
+				<view v-if="user" @click="$util.helper.goto('./home', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
 			</view>
-			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
-			<u-cell-group :border="false">
-				<u-cell-item @click="qiandao" icon="edit-pen" :arrow="false" title="签到"></u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./info', true)" icon="home" title="我的主页"></u-cell-item>
-			</u-cell-group>
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 			<u-cell-group :border="false">
 				<u-cell-item @click="$util.helper.goto('./roundtopic/roundtopic', true)" icon="file-text" title="周边帖子"></u-cell-item>
@@ -67,11 +61,6 @@ export default {
 		})
 	},
 	methods: {
-		editAvatar() {
-			if (this.user) {
-				this.$util.helper.goto('./editAvatar/editAvatar', true);
-			}
-		},
 		qiandao: async function() {
 			const result = await this.$http.post({
 				r: 'user/sign'

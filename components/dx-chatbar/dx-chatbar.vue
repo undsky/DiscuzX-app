@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="cu-bar foot input" :style="[{ bottom: InputBottom + 'px' }]">
-			<view @click="chooseImg" class="action"><text class="cuIcon-pic text-grey"></text></view>
+			<view v-if="showImg" @click="chooseImg" class="action"><text class="cuIcon-pic text-grey"></text></view>
 			<textarea
 				class="margin-left-sm"
 				:value="replytext"
@@ -14,7 +14,7 @@
 				@focus="InputFocus"
 				@blur="InputBlur"
 			></textarea>
-			<view @click="popupEmoji" class="action"><text class="cuIcon-emojifill text-grey"></text></view>
+			<view @click="chooseEmoji" class="action"><text class="cuIcon-emojifill text-grey"></text></view>
 			<button style="width: 70px;" @click="$u.throttle(send)" class="cu-btn bg-green shadow margin-left-sm">发送</button>
 		</view>
 		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji></dx-emoji></uni-popup>
@@ -24,6 +24,12 @@
 <script>
 export default {
 	name: 'dx-chatbar',
+	props: {
+		showImg: {
+			type: Boolean,
+			default: true
+		}
+	},
 	data() {
 		return {
 			replytext: '',
@@ -59,7 +65,7 @@ export default {
 			this.InputBottom = 0;
 			this.focus = false;
 		},
-		popupEmoji: function() {
+		chooseEmoji: function() {
 			if (this.showEmoji) {
 				this.InputBottom = 0;
 				this.showEmoji = false;
