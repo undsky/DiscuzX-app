@@ -19,8 +19,8 @@
 		</view>
 		<view class="cu-list menu-avatar">
 			<view class="cu-item cur">
-				<view class="cu-avatar round lg" :style="'background-image:url(' + topic.icon + ');'"></view>
-				<view class="content">
+				<view @click="userSheet()" class="cu-avatar round lg" :style="'background-image:url(' + topic.icon + ');'"></view>
+				<view @click="userSheet()" class="content">
 					<view>
 						<view class="text-cut flex">{{ topic.user_nick_name }}</view>
 					</view>
@@ -30,7 +30,7 @@
 					<view class="text-blue text-xs">楼主</view>
 					<view class="flex justify-around align-center">
 						<view @click="zan(0)" class="cuIcon-appreciatefill text-gray"></view>
-						<view @click="manage()" class="cuIcon-settingsfill text-gray margin-0"></view>
+						<view @click="manageSheet()" class="cuIcon-settingsfill text-gray margin-0"></view>
 					</view>
 				</view>
 			</view>
@@ -39,9 +39,9 @@
 		<z-paging ref="paging" use-page-scroll v-model="commentList" autowire-query-name="zQuery">
 			<view class="cu-list menu-avatar comment">
 				<view v-for="(item, index) in commentList" :key="item.reply_posts_id" class="cu-item">
-					<view class="cu-avatar round" :style="'background-image:url(' + item.icon + ');'"></view>
+					<view @click="userSheet(item.reply_id)" class="cu-avatar round" :style="'background-image:url(' + item.icon + ');'"></view>
 					<view class="content">
-						<view class="text-grey">{{ item.reply_name }}</view>
+						<view @click="userSheet(item.reply_id)" class="text-grey">{{ item.reply_name }}</view>
 						<view class="text-gray text-content text-df"><mp-html lazy-load :content="$util.mobcent.content(item.reply_content)" /></view>
 						<view v-if="item.quote_content" class="bg-grey padding-sm radius margin-top-sm  text-sm">
 							<mp-html lazy-load :content="$util.mobcent.phiz(item.quote_content)" />
@@ -50,8 +50,8 @@
 							<view class="text-gray text-df">{{ $u.timeFrom(item.posts_date) }}</view>
 							<view class="flex">
 								<view @click="zan(item.reply_posts_id)" class="cuIcon-appreciatefill text-gray margin-right-sm"></view>
-								<view @click="zan(item.reply_posts_id)" class="cuIcon-messagefill text-gray margin-right-sm"></view>
-								<view @click="manage(item.reply_posts_id, item.reply_id)" class="cuIcon-settingsfill text-gray"></view>
+								<view @click="reply()" class="cuIcon-messagefill text-gray margin-right-sm"></view>
+								<view @click="manageSheet(item.reply_posts_id, item.reply_id)" class="cuIcon-settingsfill text-gray"></view>
 							</view>
 						</view>
 					</view>
@@ -81,6 +81,7 @@ export default {
 			firstLoaded: false,
 			topic: {},
 			boardId: 0,
+			authorId: 0,
 			order: 1,
 			forumName: '',
 			forumTopicUrl: '',
@@ -145,7 +146,7 @@ export default {
 				{
 					r: 'forum/postlist',
 					topicId: _id,
-					authorId: 0,
+					authorId: this.authorId,
 					order: this.order,
 					page,
 					pageSize
@@ -165,6 +166,48 @@ export default {
 			this.$refs.paging.complete(result.list);
 			this.firstLoaded = true;
 		},
+		userSheet(reply_id) {
+			if (this.user) {
+				uni.showActionSheet({
+					itemList: [0 == this.authorId ? '只看他的' : '查看全部', '发送消息', '查看主页'],
+					success: res => {
+						const uid = reply_id || this.topic.user_id;
+						console.log(uid)
+						switch (res.tapIndex) {
+							case 0:
+								this.authorId = this.authorId == 0 ? uid : 0;
+								this.$refs.paging.reload();
+								break;
+							case 1:
+								uni.navigateTo({
+									url: '../chat/chat?fromUid=' + uid,
+									success: res => {},
+									fail: () => {},
+									complete: () => {}
+								});
+								break;
+							case 2:
+								uni.navigateTo({
+									url: '../user/info?uid=' + uid,
+									success: res => {},
+									fail: () => {},
+									complete: () => {}
+								});
+								break;
+						}
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+			} else {
+				uni.navigateTo({
+					url: '../auth/auth',
+					success: res => {},
+					fail: () => {},
+					complete: () => {}
+				});
+			}
+		},
 		zan: async function(pid) {
 			const result = await this.$http.post({
 				r: 'forum/support',
@@ -176,7 +219,7 @@ export default {
 				title: result.errcode
 			});
 		},
-		manage(reply_posts_id, reply_id) {
+		manageSheet(reply_posts_id, reply_id) {
 			if (this.user) {
 				uni.showActionSheet({
 					itemList: [reply_posts_id ? '举报回帖' : '举报帖子', '举报用户'],
