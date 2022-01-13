@@ -183,6 +183,7 @@ export default {
 					const result = await this.$http.post({
 						r: 'forum/topicadmin',
 						act: 'new',
+						platType: getApp().globalData.systemInfo.platType,
 						json: JSON.stringify({
 							body: {
 								json: topic

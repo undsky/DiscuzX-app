@@ -8,7 +8,7 @@
 				placeholder="请输入内容"
 				auto-height
 				:adjust-position="false"
-				:focus="false"
+				:focus="focus"
 				maxlength="300"
 				cursor-spacing="10"
 				@focus="InputFocus"
@@ -27,11 +27,15 @@ export default {
 	data() {
 		return {
 			replytext: '',
+			focus: false,
 			InputBottom: 0,
 			showEmoji: false
 		};
 	},
 	methods: {
+		getFocus() {
+			this.focus = true;
+		},
 		send: async function() {
 			if (this.replytext) {
 				uni.$emit('reply', this.replytext);
@@ -53,6 +57,7 @@ export default {
 		InputBlur(e) {
 			this.replytext = e.detail.value;
 			this.InputBottom = 0;
+			this.focus = false;
 		},
 		popupEmoji: function() {
 			if (this.showEmoji) {

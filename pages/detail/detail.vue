@@ -50,7 +50,7 @@
 							<view class="text-gray text-df">{{ $u.timeFrom(item.posts_date) }}</view>
 							<view class="flex">
 								<view @click="zan(item.reply_posts_id)" class="cuIcon-appreciatefill text-gray margin-right-sm"></view>
-								<view @click="reply()" class="cuIcon-messagefill text-gray margin-right-sm"></view>
+								<view @click="reply(item.reply_posts_id)" class="cuIcon-messagefill text-gray margin-right-sm"></view>
 								<view @click="manageSheet(item.reply_posts_id, item.reply_id)" class="cuIcon-settingsfill text-gray"></view>
 							</view>
 						</view>
@@ -82,6 +82,7 @@ export default {
 			topic: {},
 			boardId: 0,
 			authorId: 0,
+			replyId: null,
 			order: 1,
 			forumName: '',
 			forumTopicUrl: '',
@@ -102,19 +103,27 @@ export default {
 
 		uni.$on('reply', async data => {
 			if (this.user) {
+				let isQuote = 0;
+				let replyId = this.topic.reply_posts_id;
+				if (this.replyId) {
+					isQuote = 1;
+					replyId = this.replyId;
+					this.replyId = null;
+				}
 				const result = await this.$http.post({
 					r: 'forum/topicadmin',
 					act: 'reply',
+					platType: getApp().globalData.systemInfo.platType,
 					json: JSON.stringify({
 						body: {
 							json: {
 								isHidden: 0,
-								isQuote: 0,
+								isQuote,
 								isAnonymous: 0,
 								isOnlyAuthor: 0,
 								fid: this.boardId,
 								tid: _id,
-								replyId: this.topic.reply_posts_id,
+								replyId,
 								content: JSON.stringify([
 									{
 										type: 0,
@@ -172,7 +181,7 @@ export default {
 					itemList: [0 == this.authorId ? '只看他的' : '查看全部', '发送消息', '查看主页'],
 					success: res => {
 						const uid = reply_id || this.topic.user_id;
-						console.log(uid)
+						console.log(uid);
 						switch (res.tapIndex) {
 							case 0:
 								this.authorId = this.authorId == 0 ? uid : 0;
@@ -218,6 +227,10 @@ export default {
 			uni.showToast({
 				title: result.errcode
 			});
+		},
+		reply(reply_posts_id) {
+			this.replyId = reply_posts_id;
+			this.$refs.chatbar.getFocus();
 		},
 		manageSheet(reply_posts_id, reply_id) {
 			if (this.user) {

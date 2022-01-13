@@ -30,11 +30,9 @@ export default {
 		// #ifdef MP-WEIXIN
 		systemInfo.env = 'weixin';
 		// #endif
+		systemInfo.platType = 'ios' == systemInfo.platform ? 5 : 'android' == systemInfo.platform ? 1 : 0;
 		this.globalData.systemInfo = systemInfo;
 		console.log(systemInfo);
-		this.$AppReady.then(() => {
-			this.globalData.launchPage = this.$Route.path;
-		});
 		console.log('App Launch');
 	},
 	onShow: function() {
