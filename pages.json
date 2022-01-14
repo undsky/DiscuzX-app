@@ -139,7 +139,8 @@
 			"path": "pages/user/album/album",
 			"style": {
 				"navigationBarTitleText": "相册",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {

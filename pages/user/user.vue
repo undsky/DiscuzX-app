@@ -5,26 +5,26 @@
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 				<view @click="$util.helper.goto('./home', true)" class="u-m-r-10">
 					<u-avatar
-						:show-sex="!!user && 0 != user.gender"
-						:sex-icon="!!user && 1 == user.gender ? 'man' : 'woman'"
-						:src="!!user ? user.avatar : ''"
+						:show-sex="!!user && 0 != userInfo.gender"
+						:sex-icon="!!user && 1 == userInfo.gender ? 'man' : 'woman'"
+						:src="!!user ? userInfo.icon : ''"
 						size="140"
 					></u-avatar>
 				</view>
 				<view @click="$util.helper.goto('./home', true)" class="u-flex-1 margin-left-sm">
 					<template v-if="user">
-						<view class="u-font-18 u-p-b-20">{{ user.userName }}</view>
+						<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 						<view class="margin-bottom-xs text-gray text-sm">
-							<text v-for="item in user.creditShowList" :key="item.type">
+							<text v-for="item in userInfo.body.creditShowList" :key="item.type">
 								{{ item.title }}:
 								<text class="text-green margin-lr-xs">{{ item.data }}</text>
 							</text>
 						</view>
-						<view class="text-sm text-orange">{{ user.userTitle }}</view>
+						<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
 					</template>
 					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>
-				<view v-if="user" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" color="#2979ff" label-color="#2979ff" size="47"></u-icon></view>
+				<view v-if="user" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" size="47"></u-icon></view>
 				<view v-if="user" @click="$util.helper.goto('./home', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
 			</view>
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
@@ -49,6 +49,7 @@ import { mapState } from 'vuex';
 export default {
 	data() {
 		return {
+			userInfo: null,
 			titleStyle: {
 				fontWeight: 'bold',
 				fontSize: '32rpx'
@@ -79,6 +80,11 @@ export default {
 		logout() {
 			this.$store.commit('clearUser');
 		}
+	},
+	onLoad: async function() {
+		this.userInfo = await this.$http.post({
+			r: 'user/userinfo'
+		});
 	}
 };
 </script>
