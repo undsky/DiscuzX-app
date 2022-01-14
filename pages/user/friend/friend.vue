@@ -1,22 +1,18 @@
 <template>
-	<view>
-		
-	</view>
+	<view style="height: 100vh;"><dx-user-paging auth :params="params"></dx-user-paging></view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
+export default {
+	data() {
+		return {
+			params: {
+				r: 'user/userlist',
+				type: 'friend'
 			}
-		},
-		methods: {
-			
-		}
+		};
 	}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
