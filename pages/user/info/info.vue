@@ -1,12 +1,12 @@
 <template>
 	<form>
 		<view v-for="item in userInfo.body.profileList" :key="item.type" class="info-group cu-form-group">
-			<view class="title" :class="[fonttitle]">{{ item.title }}</view>
-			<view class="text-grey" :class="[fontcontent]">{{ item.data }}</view>
+			<view class="title">{{ item.title }}</view>
+			<view class="text-grey">{{ item.data }}</view>
 		</view>
 		<view v-for="item in userInfo.body.creditList" :key="item.type" class="info-group cu-form-group">
-			<view class="title" :class="[fonttitle]">{{ item.title }}</view>
-			<view class="text-grey" :class="[fontcontent]">{{ item.data }}</view>
+			<view class="title">{{ item.title }}</view>
+			<view class="text-grey">{{ item.data }}</view>
 		</view>
 	</form>
 </template>

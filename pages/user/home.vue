@@ -3,13 +3,13 @@
 		<view @click="$util.helper.goto('./edit/edit', true)" class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 			<view class="u-m-r-10">
 				<u-avatar
-					:show-sex="!!user && 0 != userInfo.gender"
-					:sex-icon="!!user && 1 == userInfo.gender ? 'man' : 'woman'"
-					:src="!!user ? userInfo.icon : ''"
+					:show-sex="!!userInfo && 0 != userInfo.gender"
+					:sex-icon="!!userInfo && 1 == userInfo.gender ? 'man' : 'woman'"
+					:src="!!userInfo ? userInfo.icon : ''"
 					size="140"
 				></u-avatar>
 			</view>
-			<view class="u-flex-1 margin-left-sm">
+			<view v-if="userInfo" class="u-flex-1 margin-left-sm">
 				<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 				<view class="margin-bottom-xs text-gray text-sm">
 					<text v-for="item in userInfo.body.creditShowList" :key="item.type">

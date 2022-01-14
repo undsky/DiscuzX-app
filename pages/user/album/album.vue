@@ -8,7 +8,7 @@
 				<navigator hover-class="none" open-type="navigate" :url="'/pages/user/album/show/show?album_id=' + item.album_id" class="cu-item shadow">
 					<view class="bg-img flex align-end" style="height: 414upx;" :style="{ backgroundImage: 'url(' + item.thumb_pic + ')' }">
 						<view class="padding text-white">
-							<view class="album-title text-df text-grey" :class="[fonttitle]">{{ item.title }}</view>
+							<view class="album-title text-df text-grey">{{ item.title }}</view>
 						</view>
 					</view>
 				</navigator>

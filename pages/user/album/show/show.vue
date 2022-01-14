@@ -1,5 +1,5 @@
 <template>
-	<z-paging ref="paging" :use-page-scroll="usePageScroll" v-model="photos" autowire-query-name="zQuery">
+	<z-paging ref="paging" v-model="photos" autowire-query-name="zQuery">
 		<view class="grid col-2 padding-sm">
 			<view v-for="item in photos" :key="item.pic_id" class="cu-card case">
 				<view class="cu-item shadow">
@@ -44,7 +44,6 @@ export default {
 	},
 	onLoad: function(options) {
 		this.album_id = options.album_id;
-		this.$refs.paging.reload();
 	}
 };
 </script>

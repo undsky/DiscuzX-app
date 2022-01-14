@@ -5,14 +5,14 @@
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 				<view @click="$util.helper.goto('./home', true)" class="u-m-r-10">
 					<u-avatar
-						:show-sex="!!user && 0 != userInfo.gender"
-						:sex-icon="!!user && 1 == userInfo.gender ? 'man' : 'woman'"
-						:src="!!user ? userInfo.icon : ''"
+						:show-sex="!!userInfo && 0 != userInfo.gender"
+						:sex-icon="!!userInfo && 1 == userInfo.gender ? 'man' : 'woman'"
+						:src="!!userInfo ? userInfo.icon : ''"
 						size="140"
 					></u-avatar>
 				</view>
 				<view @click="$util.helper.goto('./home', true)" class="u-flex-1 margin-left-sm">
-					<template v-if="user">
+					<template v-if="userInfo">
 						<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 						<view class="margin-bottom-xs text-gray text-sm">
 							<text v-for="item in userInfo.body.creditShowList" :key="item.type">
@@ -22,10 +22,10 @@
 						</view>
 						<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
 					</template>
-					<u-cell-item v-else @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
+					<u-cell-item v-if="!user" @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>
-				<view v-if="user" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" size="47"></u-icon></view>
-				<view v-if="user" @click="$util.helper.goto('./home', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
+				<view v-if="userInfo" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" size="47"></u-icon></view>
+				<view v-if="userInfo" @click="$util.helper.goto('./home', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
 			</view>
 			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 			<u-cell-group :border="false">
