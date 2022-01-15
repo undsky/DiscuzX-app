@@ -19,9 +19,8 @@
 			<u-form-item :label-position="labelPosition" label="上传图片" prop="photo" label-width="150">
 				<u-upload ref="upload" :action="action" :form-data="formData" name="uploadFile[]" width="160" height="160"></u-upload>
 			</u-form-item>
-			
 		</u-form>
-		<view class="margin-top-lg"><u-button type="warning" @click="submit">发布</u-button></view>
+		<view class="margin-top-lg"><u-button throttleTime="1000" type="warning" @click="submit">发布</u-button></view>
 		<u-select mode="mutil-column-auto" v-model="boardShow" :list="boardList" @confirm="boardConfirm"></u-select>
 		<u-select v-model="classShow" :list="classList" @confirm="classConfirm"></u-select>
 		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji></dx-emoji></uni-popup>
@@ -159,6 +158,10 @@ export default {
 		submit: async function() {
 			this.$refs.uForm.validate(async valid => {
 				if (valid) {
+					uni.showLoading({
+						mask: true
+					});
+					
 					let aid = [];
 					let body = [
 						{
@@ -198,6 +201,9 @@ export default {
 							}
 						})
 					});
+					
+					uni.hideLoading()
+					
 					uni.showModal({
 						title: '',
 						content: '发帖成功',

@@ -269,5 +269,14 @@
 			}
 
 		}
-	]
+	    ,{
+            "path" : "pages/message/system/system",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "系统消息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ]
 }

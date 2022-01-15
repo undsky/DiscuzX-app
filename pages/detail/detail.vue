@@ -103,6 +103,10 @@ export default {
 
 		uni.$on('reply', async data => {
 			if (this.user) {
+				uni.showLoading({
+					mask: true
+				});
+				
 				let isQuote = 0;
 				let replyId = this.topic.reply_posts_id;
 				if (this.replyId) {
@@ -134,6 +138,9 @@ export default {
 						}
 					})
 				});
+				
+				uni.hideLoading()
+				
 				this.$refs.chatbar.replytext = '';
 				uni.showToast({
 					title: result.errcode

@@ -1,8 +1,12 @@
 <template>
 	<view>
 		<u-cell-group>
-			<u-cell-item hover-class="none" title="允许访问位置" icon="map" :arrow="false"><u-switch slot="right-icon" v-model="locationChecked"></u-switch></u-cell-item>
-			<u-cell-item hover-class="none" title="消息通知" icon="volume-up" :arrow="false"><u-switch slot="right-icon" v-model="locationChecked"></u-switch></u-cell-item>
+			<u-cell-item hover-class="none" title="允许访问位置" icon="map" :arrow="false">
+				<u-switch slot="right-icon" v-model="locationChecked" @change="locationChange"></u-switch>
+			</u-cell-item>
+			<u-cell-item hover-class="none" title="消息通知" icon="volume-up" :arrow="false">
+				<u-switch slot="right-icon" v-model="noticeChecked" @change="noticeChange"></u-switch>
+			</u-cell-item>
 			<u-cell-item icon="share" title="分享"></u-cell-item>
 			<u-cell-item icon="question-circle" title="意见反馈"></u-cell-item>
 		</u-cell-group>
@@ -23,7 +27,10 @@ export default {
 			noticeChecked: true
 		};
 	},
-	methods: {}
+	methods: {
+		locationChange(e) {},
+		noticeChange(e) {}
+	}
 };
 </script>
 

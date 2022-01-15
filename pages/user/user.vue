@@ -78,7 +78,10 @@ export default {
 			});
 		},
 		logout() {
+			clearInterval(getApp().globalData.heartInterval);
+			getApp().globalData.heartInterval = null;
 			this.$store.commit('clearUser');
+			this.$store.commit('clearHeart');
 		}
 	},
 	onLoad: async function() {

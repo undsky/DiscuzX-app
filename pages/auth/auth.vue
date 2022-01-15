@@ -77,6 +77,13 @@ export default {
 						});
 					}
 
+					getApp().globalData.heartInterval = setInterval(async () => {
+						const result = await this.$http.get({
+							r: 'message/heart'
+						});
+						this.$store.commit('setHeart', result);
+					}, 120000);
+
 					uni.showModal({
 						title: '',
 						content: '登录成功',

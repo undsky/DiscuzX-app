@@ -66,6 +66,15 @@ export default {
 			//TODO handle the exception
 		}
 
+		if (store.state.auth.user) {
+			this.globalData.heartInterval = setInterval(async () => {
+				const result = await this.$http.get({
+					r: 'message/heart'
+				});
+				store.commit('setHeart', result);
+			}, 120000);
+		}
+
 		console.log('App Show');
 	},
 	onHide: function() {

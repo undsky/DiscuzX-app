@@ -31,7 +31,11 @@ export default {
 
 	},
 	mutations: {
-
+		setMessageCount(state, count) {
+			const _tabbar = JSON.parse(JSON.stringify(state.tabbar))
+			_tabbar[3].count = count
+			state.tabbar = _tabbar
+		}
 	},
 	actions: {
 
