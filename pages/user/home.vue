@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view @click="$util.helper.goto('./edit/edit', true)" class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
+		<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
 			<view class="u-m-r-10">
 				<u-avatar
 					:show-sex="!!userInfo && 0 != userInfo.gender"
@@ -19,8 +19,10 @@
 				</view>
 				<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
 			</view>
-			<view class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
-			<view class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
+			<template v-if="!uid">
+				<view class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
+				<view class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
+			</template>
 		</view>
 		<u-cell-group :border="false">
 			<u-cell-item @click="$util.helper.goto('./info/info', true)" icon="account" title="我的资料"></u-cell-item>
@@ -49,6 +51,8 @@ import { mapState } from 'vuex';
 export default {
 	data() {
 		return {
+			uid: null,
+			role: '我',
 			userInfo: null
 		};
 	},
@@ -58,9 +62,20 @@ export default {
 		})
 	},
 	methods: {},
-	onLoad: async function() {
-		this.userInfo = await this.$http.post({
-			r: 'user/userinfo'
+	onLoad: async function(options) {
+		const { uid } = options;
+		if (uid) {
+			this.role = '他';
+			this.uid = uid;
+		}
+
+		uni.setNavigationBarTitle({
+			title: this.role + '的主页'
+		});
+
+		this.userInfo = await this.$http.get({
+			r: 'user/userinfo',
+			userId: this.uid
 		});
 	}
 };

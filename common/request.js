@@ -26,8 +26,9 @@ http.interceptors.request.use(async config => {
 			})
 			return Promise.reject(config)
 		} else {
-			Object.assign('GET' == config.method ? config.params : config.data, {
-				uid: user.uid,
+			const _data = 'GET' == config.method ? config.params : config.data
+			Object.assign(_data, {
+				uid: _data.uid || user.uid,
 				accessToken: user.token,
 				accessSecret: user.secret
 			})
