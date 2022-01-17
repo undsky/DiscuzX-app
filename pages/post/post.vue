@@ -16,8 +16,14 @@
 				<u-input type="textarea" :border="border" height="230" placeholder="请填写内容" v-model="model.content" />
 				<view @click="chooseEmoji" class="choose-emoji"><text class="cuIcon-emojifill text-grey"></text></view>
 			</u-form-item>
-			<u-form-item :label-position="labelPosition" label="上传图片" prop="photo" label-width="150">
+			<u-form-item label-position="top" label="上传图片" prop="photo" label-width="150">
 				<u-upload ref="upload" :action="action" :form-data="formData" name="uploadFile[]" width="160" height="160"></u-upload>
+			</u-form-item>
+			<u-form-item label-position="top" label="上传音频" prop="audio" label-width="150">
+				
+			</u-form-item>
+			<u-form-item label-position="top" label="上传视频" prop="video" label-width="150">
+				
 			</u-form-item>
 		</u-form>
 		<view class="margin-top-lg"><u-button throttleTime="1000" type="warning" @click="submit">发布</u-button></view>

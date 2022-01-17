@@ -17,7 +17,7 @@
 			<view @click="chooseEmoji" class="action"><text class="cuIcon-emojifill text-grey"></text></view>
 			<button style="width: 70px;" @click="$u.throttle(send, 1000)" class="cu-btn bg-green shadow margin-left-sm">发送</button>
 		</view>
-		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji></dx-emoji></uni-popup>
+		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji :parent="parent"></dx-emoji></uni-popup>
 	</view>
 </template>
 
@@ -25,6 +25,10 @@
 export default {
 	name: 'dx-chatbar',
 	props: {
+		parent: {
+			type: String,
+			default: ''
+		},
 		showImg: {
 			type: Boolean,
 			default: true
@@ -94,7 +98,7 @@ export default {
 	},
 	mounted() {
 		uni.$on('tapemoji', data => {
-			this.replytext += data.emoji;
+			if (data.parent == this.parent) this.replytext += data.emoji;
 		});
 	}
 };

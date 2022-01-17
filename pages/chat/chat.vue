@@ -31,7 +31,7 @@
 			</block>
 		</scroll-view>
 		<view class="cu-tabbar-height"></view>
-		<dx-chatbar ref="chatbar"></dx-chatbar>
+		<dx-chatbar ref="chatbar" parent="chat"></dx-chatbar>
 	</view>
 </template>
 
@@ -62,36 +62,42 @@ export default {
 			});
 		},
 		sendMessage: async function(type, content) {
-			const res = await this.$tool.getData(
-				{
-					r: this.$api.pmadmin,
-					json: encodeURIComponent(
-						JSON.stringify({
-							toUid: this.fromUid,
-							plid: this.plid,
-							pmid: this.pmid,
-							msg: {
-								type: type,
-								content: content
-							}
-						})
-					)
-				},
-				'post'
-			);
-			console.log(res);
-			if (res) {
-				this.messages.push({
-					sender: this.user.uid,
-					type: type,
-					content: content,
-					time: res.body.sendTime,
-					mid: res.body.pmid
-				});
-				this.$tool.modal('发送成功', () => {
+			uni.showLoading({
+				mask: true
+			});
+
+			const result = await this.$http.post({
+				r: 'message/pmadmin',
+				json: encodeURIComponent(
+					JSON.stringify({
+						toUid: this.fromUid,
+						plid: this.plid,
+						pmid: this.pmid,
+						msg: {
+							type: type,
+							content: content
+						}
+					})
+				)
+			});
+
+			this.messages.push({
+				sender: this.user.uid,
+				type: type,
+				content: content,
+				time: result.body.sendTime,
+				mid: result.body.pmid
+			});
+
+			uni.hideLoading();
+
+			this.$refs.chatbar.replytext = '';
+			uni.showToast({
+				title: '发送成功',
+				success: () => {
 					this.gotoView = 'chat_' + this.messages[this.messages.length - 1].mid;
-				});
-			}
+				}
+			});
 		},
 		mobcent: function(content) {
 			return this.$util.mobcent.phiz((content || '').replace(/http(.*?) /g, '<a href="http$1">http$1</a>'));
@@ -106,15 +112,14 @@ export default {
 			await this.sendMessage('text', data);
 		});
 		uni.$on('replyImg', async data => {
-			
-			// const res = await this.$tool.upload(path);
-			// if (null == res[0]) {
-			// 	if (200 == res[1].statusCode) {
-			// 		const data = JSON.parse(res[1].data);
-			// 		const img = data.body.attachment[0].urlName;
-			// 		await this.sendMessage('image', img);
-			// 	}
-			// }
+			const result = await this.$http.uploadAttachment(data);
+			if (null == res[0]) {
+				if (200 == res[1].statusCode) {
+					const data = JSON.parse(res[1].data);
+					const img = data.body.attachment[0].urlName;
+					await this.sendMessage('image', img);
+				}
+			}
 		});
 
 		const pmlist = {

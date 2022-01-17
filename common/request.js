@@ -26,7 +26,7 @@ http.interceptors.request.use(async config => {
 			})
 			return Promise.reject(config)
 		} else {
-			const _data = 'GET' == config.method ? config.params : config.data
+			const _data = ('GET' == config.method ? config.params : config.data) || {}
 			Object.assign(_data, {
 				uid: _data.uid || user.uid,
 				accessToken: user.token,
@@ -141,8 +141,32 @@ function _compressImg(img) {
 	})
 }
 
-function uploadAttachment(path, module, type) {
+async function uploadAttachment(path, module, type) {
+	// #ifdef APP
+	try {
+		if (!type || 'image' == type)
+			await _compressImg(path)
+	} catch (e) {
 
+	}
+	// #endif
+
+	const {
+		token: accessToken,
+		secret: accessSecret
+	} = store.state.auth.user
+
+	return http.upload('', {
+		filePath: path,
+		name: 'uploadFile[]',
+		formData: {
+			r: 'forum/sendattachmentex',
+			module: module || 'forum',
+			type: type || 'image',
+			accessToken,
+			accessSecret,
+		}
+	})
 }
 
 export default {
@@ -150,5 +174,6 @@ export default {
 	get,
 	post,
 	upload,
-	download
+	download,
+	uploadAttachment
 }

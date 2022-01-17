@@ -91,9 +91,7 @@ export default {
 						cancelText: '',
 						confirmText: '确定',
 						success: res => {
-							uni.navigateBack({
-								delta: 1
-							});
+							uni.navigateBack();
 						},
 						fail: () => {},
 						complete: () => {}

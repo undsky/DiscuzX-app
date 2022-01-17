@@ -16,6 +16,12 @@
 <script>
 export default {
 	name: 'dx-emoji',
+	props: {
+		parent: {
+			type: String,
+			default: ''
+		}
+	},
 	data() {
 		return {
 			emojis: []
@@ -24,7 +30,8 @@ export default {
 	methods: {
 		handleEmoji: function(e) {
 			uni.$emit('tapemoji', {
-				emoji: e.target.dataset.emoji
+				emoji: e.target.dataset.emoji,
+				parent: this.parent
 			});
 		}
 	},

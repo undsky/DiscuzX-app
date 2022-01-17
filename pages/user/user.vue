@@ -11,8 +11,8 @@
 						size="140"
 					></u-avatar>
 				</view>
-				<view @click="$util.helper.goto('./home', true)" class="u-flex-1 margin-left-sm">
-					<template v-if="userInfo">
+				<view class="u-flex-1 margin-left-sm">
+					<view v-if="userInfo" @click="$util.helper.goto('./home', true)">
 						<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 						<view class="margin-bottom-xs text-gray text-sm">
 							<text v-for="item in userInfo.body.creditShowList" :key="item.type">
@@ -21,7 +21,7 @@
 							</text>
 						</view>
 						<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
-					</template>
+					</view>
 					<u-cell-item v-if="!user" @click="$util.helper.goto('../auth/auth')" title="登录" :arrow="false" :title-style="titleStyle"></u-cell-item>
 				</view>
 				<view v-if="userInfo" class="u-m-l-10 u-p-10"><u-icon @click="qiandao()" name="edit-pen" label="签到" size="47"></u-icon></view>
@@ -78,16 +78,20 @@ export default {
 			});
 		},
 		logout() {
+			this.$store.commit('clearUser');
+			this.userInfo = null;
+
 			clearInterval(getApp().globalData.heartInterval);
 			getApp().globalData.heartInterval = null;
-			this.$store.commit('clearUser');
 			this.$store.commit('clearHeart');
 		}
 	},
-	onLoad: async function() {
-		this.userInfo = await this.$http.post({
-			r: 'user/userinfo'
-		});
+	onShow: async function() {
+		if (!this.userInfo && this.user) {
+			this.userInfo = await this.$http.post({
+				r: 'user/userinfo'
+			});
+		}
 	}
 };
 </script>

@@ -59,7 +59,7 @@
 			</view>
 		</z-paging>
 		<view class="cu-tabbar-height"></view>
-		<dx-chatbar ref="chatbar" :showImg="false"></dx-chatbar>
+		<dx-chatbar ref="chatbar" parent="detail" :showImg="false"></dx-chatbar>
 		<u-popup v-model="showShare" mode="bottom" safe-area-inset-bottom><dx-share></dx-share></u-popup>
 	</view>
 </template>
@@ -102,11 +102,16 @@ export default {
 		_id = options.id;
 
 		uni.$on('reply', async data => {
+			const pages = getCurrentPages();
+			if ('pages/detail/detail' != pages[pages.length - 1].route) {
+				return;
+			}
+
 			if (this.user) {
 				uni.showLoading({
 					mask: true
 				});
-				
+
 				let isQuote = 0;
 				let replyId = this.topic.reply_posts_id;
 				if (this.replyId) {
@@ -138,9 +143,9 @@ export default {
 						}
 					})
 				});
-				
-				uni.hideLoading()
-				
+
+				uni.hideLoading();
+
 				this.$refs.chatbar.replytext = '';
 				uni.showToast({
 					title: result.errcode
