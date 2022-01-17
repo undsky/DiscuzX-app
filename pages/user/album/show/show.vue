@@ -20,6 +20,7 @@
 export default {
 	data() {
 		return {
+			uid: null,
 			album_id: 0,
 			photos: []
 		};
@@ -29,6 +30,7 @@ export default {
 			const result = await this.$http.get({
 				r: 'user/photolist',
 				albumId: this.album_id,
+				uid: this.uid,
 				page,
 				pageSize
 			});
@@ -43,6 +45,7 @@ export default {
 		}
 	},
 	onLoad: function(options) {
+		this.uid = JSON.parse(options.uid);
 		this.album_id = options.album_id;
 	}
 };

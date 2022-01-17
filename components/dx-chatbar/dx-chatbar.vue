@@ -39,6 +39,15 @@ export default {
 		};
 	},
 	methods: {
+		chooseImg() {
+			uni.chooseImage({
+				count: 1,
+				sizeType: ['compressed'],
+				success: async images => {
+					uni.$emit('replyImg', images.tempFilePaths[0]);
+				}
+			});
+		},
 		getFocus() {
 			this.focus = true;
 		},

@@ -6,10 +6,14 @@
 export default {
 	data() {
 		return {
-			params: {
-				r: 'user/userlist',
-				type: 'follow'
-			}
+			params: null
+		};
+	},
+	onLoad: function(options) {
+		this.params = {
+			r: 'user/userlist',
+			type: 'follow',
+			uid: JSON.parse(options.uid)
 		};
 	}
 };

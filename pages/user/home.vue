@@ -25,23 +25,47 @@
 			</template>
 		</view>
 		<u-cell-group :border="false">
-			<u-cell-item @click="$util.helper.goto('./info/info', true)" icon="account" title="我的资料"></u-cell-item>
-			<u-cell-item @click="$util.helper.goto('./album/album', true)" icon="photo" title="我的相册"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./info/info?uid=' + uid, true)" icon="account" :title="role + '的资料'"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./album/album?uid=' + uid, true)" icon="photo" :title="role + '的相册'"></u-cell-item>
 		</u-cell-group>
 		<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 		<u-cell-group :border="false">
-			<u-cell-item @click="$util.helper.goto('./post/post', true)" icon="file-text" title="我的发表"></u-cell-item>
-			<u-cell-item @click="$util.helper.goto('./reply/reply', true)" icon="chat" title="我的回复"></u-cell-item>
-			<u-cell-item @click="$util.helper.goto('./star/star', true)" icon="star" title="我的收藏"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./post/post?uid=' + uid, true)" icon="file-text" :title="role + '的发表'"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./reply/reply?uid=' + uid, true)" icon="chat" :title="role + '的回复'"></u-cell-item>
+			<u-cell-item v-if="!uid" @click="$util.helper.goto('./star/star', true)" icon="star" title="我的收藏"></u-cell-item>
 		</u-cell-group>
 		<u-gap :bg-color="$u.color['infoLight']"></u-gap>
 		<u-cell-group :border="false">
-			<u-cell-item @click="$util.helper.goto('./friend/friend', true)" icon="man-add" title="我的好友"></u-cell-item>
-			<u-cell-item @click="$util.helper.goto('./following/following', true)" icon="eye" title="我的关注"></u-cell-item>
-			<u-cell-item @click="$util.helper.goto('./followers/followers', true)" icon="heart" title="我的粉丝"></u-cell-item>
+			<u-cell-item v-if="!uid" @click="$util.helper.goto('./friend/friend', true)" icon="man-add" title="我的好友"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./following/following?uid=' + uid, true)" icon="eye" :title="role + '的关注'"></u-cell-item>
+			<u-cell-item @click="$util.helper.goto('./followers/followers?uid=' + uid, true)" icon="heart" :title="role + '的粉丝'"></u-cell-item>
 		</u-cell-group>
-		<u-gap :bg-color="$u.color['infoLight']"></u-gap>
-		<u-cell-group :border="false"><u-cell-item @click="$util.helper.goto('./password/password', true)" icon="lock" title="修改密码"></u-cell-item></u-cell-group>
+		<template v-if="!uid">
+			<u-gap :bg-color="$u.color['infoLight']"></u-gap>
+			<u-cell-group :border="false"><u-cell-item @click="$util.helper.goto('./password/password', true)" icon="lock" title="修改密码"></u-cell-item></u-cell-group>
+		</template>
+		<view v-if="uid" class="cu-bar tabbar bg-white shadow foot">
+			<view @click="handleFriend" class="action" :class="[friend ? 'text-blue' : 'text-gray']">
+				<view class="cuIcon-friendfill"></view>
+				<view>{{ friend ? '删除好友' : '加好友' }}</view>
+			</view>
+			<view @click="handleFollow" class="action" :class="[follow ? 'text-blue' : 'text-gray']">
+				<view class="cuIcon-favorfill"></view>
+				<view>{{ follow ? '取消关注' : '关注' }}</view>
+			</view>
+			<view @click="handleBlack" class="action" :class="[black ? 'text-blue' : 'text-gray']">
+				<view class="cuIcon-attentionforbidfill"></view>
+				<view>{{ black ? '取消拉黑' : '拉黑' }}</view>
+			</view>
+			<navigator class="action text-gray" hover-class="none" open-type="navigate" :url="'/pages/chat/chat?fromUid=' + uid">
+				<view class="cuIcon-messagefill text-gray"></view>
+				<view>发送消息</view>
+			</navigator>
+			<navigator class="action text-gray" hover-class="none" open-type="navigate" :url="'/pages/feedback/feedback?type=user&id=' + uid">
+				<view class="cuIcon-dianhua text-gray"></view>
+				<view>举报</view>
+			</navigator>
+		</view>
 	</view>
 </template>
 
@@ -53,7 +77,10 @@ export default {
 		return {
 			uid: null,
 			role: '我',
-			userInfo: null
+			userInfo: null,
+			friend: false,
+			follow: false,
+			black: false
 		};
 	},
 	computed: {
@@ -61,7 +88,45 @@ export default {
 			user: state => state.auth.user
 		})
 	},
-	methods: {},
+	methods: {
+		handleFriend: function() {
+			uni.navigateTo({
+				url:
+					'/pages/wv/wv?url=' +
+					encodeURIComponent(
+						this.$http.config.baseURL +
+							this.$u.queryParams({
+								r: 'user/useradminview',
+								uid: this.uid,
+								act: this.friend ? 'ignore' : 'add',
+								accessToken: this.user.token,
+								accessSecret: this.user.secret
+							})
+					),
+				success: res => {},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		handleFollow: async function() {
+			const result = await this.$http.get({
+				r: 'user/useradmin',
+				uid: this.uid,
+				type: this.follow ? 'unfollow' : 'follow'
+			});
+
+			this.follow = !this.follow;
+		},
+		handleBlack: async function() {
+			const result = await this.$http.get({
+				r: 'user/useradmin',
+				uid: this.uid,
+				type: this.black ? 'delblack' : 'black'
+			});
+
+			this.black = !this.black;
+		}
+	},
 	onLoad: async function(options) {
 		const { uid } = options;
 		if (uid) {
@@ -77,6 +142,12 @@ export default {
 			r: 'user/userinfo',
 			userId: this.uid
 		});
+
+		if (uid) {
+			this.friend = !!this.userInfo.isFriend;
+			this.follow = !!this.userInfo.is_follow;
+			this.black = !!this.userInfo.is_black;
+		}
 	}
 };
 </script>

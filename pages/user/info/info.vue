@@ -12,9 +12,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
 	data() {
 		return {
+			uid: null,
 			userInfo: {
 				body: {
 					profileList: [],
@@ -23,10 +26,18 @@ export default {
 			}
 		};
 	},
+	computed: {
+		...mapState({
+			user: state => state.auth.user
+		})
+	},
 	methods: {},
-	onLoad: async function() {
+	onLoad: async function(options) {
+		this.uid = JSON.parse(options.uid);
+
 		this.userInfo = await this.$http.post({
-			r: 'user/userinfo'
+			r: 'user/userinfo',
+			userId: this.uid || this.user.uid
 		});
 	}
 };

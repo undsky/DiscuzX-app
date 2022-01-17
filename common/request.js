@@ -116,8 +116,39 @@ function post(data, options) {
 	return http.post('', data, options)
 }
 
+function upload(options) {
+	return http.upload('', options)
+}
+
+function download(options) {
+	return http.download('', options)
+}
+
+function _compressImg(img) {
+	return new Promise((resolve, reject) => {
+		plus.zip.compressImage({
+			src: img,
+			dst: img,
+			overwrite: true,
+			quality: 50,
+			width: '500px'
+		}, function() {
+			resolve()
+		}, function(error) {
+			console.log(error)
+			reject()
+		})
+	})
+}
+
+function uploadAttachment(path, module, type) {
+
+}
+
 export default {
 	config,
 	get,
-	post
+	post,
+	upload,
+	download
 }
