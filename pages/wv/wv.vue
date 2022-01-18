@@ -13,7 +13,7 @@ export default {
 	onLoad: function(options) {
 		this.url = decodeURIComponent(options.url);
 
-		const params = this.$tool.urlParse(this.url);
+		const params = this.$util.helper.urlParse(this.url);
 		const deltaNum = 'delete' == params.act || 'move' == params.act ? 2 : 1;
 
 		// #ifdef APP-PLUS
