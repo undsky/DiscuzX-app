@@ -61,7 +61,7 @@
 				<view class="cuIcon-messagefill text-gray"></view>
 				<view>发送消息</view>
 			</navigator>
-			<navigator class="action text-gray" hover-class="none" open-type="navigate" :url="'/pages/feedback/feedback?type=user&id=' + uid">
+			<navigator class="action text-gray" hover-class="none" open-type="navigate" :url="'/pages/report/report?type=user&id=' + uid">
 				<view class="cuIcon-dianhua text-gray"></view>
 				<view>举报</view>
 			</navigator>

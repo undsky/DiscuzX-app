@@ -235,7 +235,7 @@
 			}
 
 		}, {
-			"path": "pages/feedback/feedback",
+			"path": "pages/report/report",
 			"style": {
 				"navigationBarTitleText": "举报",
 				"enablePullDownRefresh": false
@@ -268,15 +268,20 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/message/system/system",
+			"style": {
+				"navigationBarTitleText": "系统消息",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "反馈",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/message/system/system",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "系统消息",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ]
+	]
 }

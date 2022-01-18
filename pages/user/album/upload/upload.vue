@@ -72,6 +72,29 @@ export default {
 					uni.showLoading({
 						mask: true
 					});
+
+					const images = this.$refs.upload.lists;
+					if (images && images.length > 0) {
+						const ids = images.map(img => img.response.body.attachment[0].id);
+
+						const result = await this.$http.post({
+							r: 'user/savealbum',
+							ids: ids.join(),
+							picDesc: this.model.content,
+							albumId
+						});
+					} else {
+						uni.showModal({
+							title: '',
+							content: '请选择图片',
+							showCancel: false,
+							cancelText: '',
+							confirmText: '确定',
+							success: res => {},
+							fail: () => {},
+							complete: () => {}
+						});
+					}
 				}
 			});
 		}

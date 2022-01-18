@@ -250,7 +250,7 @@ export default {
 					itemList: [reply_posts_id ? '举报回帖' : '举报帖子', '举报用户'],
 					success: res => {
 						uni.navigateTo({
-							url: `../feedback/feedback?type=${0 == res.tapIndex ? 'post' : 'user'}&id=${
+							url: `../report/report?type=${0 == res.tapIndex ? 'post' : 'user'}&id=${
 								0 == res.tapIndex ? reply_posts_id || this.topic.topic_id : reply_id || this.topic.user_id
 							}`,
 							success: res => {},
