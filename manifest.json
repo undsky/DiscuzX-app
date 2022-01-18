@@ -76,6 +76,11 @@
         "usingComponents" : true,
         "uniStatistics" : {
             "enable" : true
+        },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "授权本应用获取您的位置"
+            }
         }
     },
     "mp-alipay" : {

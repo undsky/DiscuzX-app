@@ -317,18 +317,23 @@ export default {
 
 					if (this.src) {
 						const videoResult = await this.$http.uploadAttachment(this.src, 'forum', 'video');
-						if (null == videoResult[0]) {
-							const videoData = JSON.parse(videoResult[1].data);
-							body.push({
-								type: 4,
-								infor: videoData.body.attachment[0].urlName
-							});
-							aid.push(videoData.body.attachment[0].id);
-						}
+						body.push({
+							type: 4,
+							infor: videoResult.body.attachment[0].urlName
+						});
+						aid.push(videoResult.body.attachment[0].id);
 					}
 
 					topic.content = JSON.stringify(body);
 					topic.aid = aid.join();
+
+					const { location } = getApp().globalData;
+					if (location) {
+						topic.isShowPostion = 1;
+						topic.longitude = location.longitude;
+						topic.latitude = location.latitude;
+						topic.location = location.position;
+					}
 
 					const result = await this.$http.post({
 						r: 'forum/topicadmin',
