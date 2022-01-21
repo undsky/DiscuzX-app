@@ -276,92 +276,96 @@ export default {
 						mask: true
 					});
 
-					let aid = [];
-					let body = [
-						{
-							type: 0,
-							infor: this.model.content
-						}
-					];
-					let topic = {
-						title: this.model.title,
-						fid: _boardId,
-						typeId: _classId,
-						isOnlyAuthor: 0,
-						isHidden: 0,
-						isAnonymous: 0
-					};
-					const images = this.$refs.upload.lists;
-					if (images && images.length > 0) {
-						images.forEach(res => {
-							const imgdata = res.response;
-							body.push({
-								type: 1,
-								infor: imgdata.body.attachment[0].urlName.replace('//forum', '/forum')
-							});
-							aid.push(imgdata.body.attachment[0].id);
-						});
-					}
-
-					if (this.tempFilePath) {
-						const audioResult = await this.$http.uploadAttachment(this.tempFilePath, 'forum', 'audio');
-						if (null == audioResult[0]) {
-							const audioData = JSON.parse(audioResult[1].data);
-							body.push({
-								type: 3,
-								infor: audioData.body.attachment[0].urlName
-							});
-							aid.push(audioData.body.attachment[0].id);
-						}
-					}
-
-					if (this.src) {
-						const videoResult = await this.$http.uploadAttachment(this.src, 'forum', 'video');
-						body.push({
-							type: 4,
-							infor: videoResult.body.attachment[0].urlName
-						});
-						aid.push(videoResult.body.attachment[0].id);
-					}
-
-					topic.content = JSON.stringify(body);
-					topic.aid = aid.join();
-
-					const { location } = getApp().globalData;
-					if (location) {
-						topic.isShowPostion = 1;
-						topic.longitude = location.longitude;
-						topic.latitude = location.latitude;
-						topic.location = location.position;
-					}
-
-					const result = await this.$http.post({
-						r: 'forum/topicadmin',
-						act: 'new',
-						platType: getApp().globalData.systemInfo.platType,
-						json: JSON.stringify({
-							body: {
-								json: topic
+					try {
+						let aid = [];
+						let body = [
+							{
+								type: 0,
+								infor: this.model.content
 							}
-						})
-					});
-
-					uni.hideLoading();
-
-					uni.showModal({
-						title: '',
-						content: '发帖成功',
-						showCancel: false,
-						cancelText: '',
-						confirmText: '确定',
-						success: res => {
-							uni.navigateBack({
-								delta: 1
+						];
+						let topic = {
+							title: this.model.title,
+							fid: _boardId,
+							typeId: _classId,
+							isOnlyAuthor: 0,
+							isHidden: 0,
+							isAnonymous: 0
+						};
+						const images = this.$refs.upload.lists;
+						if (images && images.length > 0) {
+							images.forEach(res => {
+								const imgdata = res.response;
+								body.push({
+									type: 1,
+									infor: imgdata.body.attachment[0].urlName.replace('//forum', '/forum')
+								});
+								aid.push(imgdata.body.attachment[0].id);
 							});
-						},
-						fail: () => {},
-						complete: () => {}
-					});
+						}
+
+						if (this.tempFilePath) {
+							const audioResult = await this.$http.uploadAttachment(this.tempFilePath, 'forum', 'audio');
+							if (null == audioResult[0]) {
+								const audioData = JSON.parse(audioResult[1].data);
+								body.push({
+									type: 3,
+									infor: audioData.body.attachment[0].urlName
+								});
+								aid.push(audioData.body.attachment[0].id);
+							}
+						}
+
+						if (this.src) {
+							const videoResult = await this.$http.uploadAttachment(this.src, 'forum', 'video');
+							body.push({
+								type: 4,
+								infor: videoResult.body.attachment[0].urlName
+							});
+							aid.push(videoResult.body.attachment[0].id);
+						}
+
+						topic.content = JSON.stringify(body);
+						topic.aid = aid.join();
+
+						const { location } = getApp().globalData;
+						if (location) {
+							topic.isShowPostion = 1;
+							topic.longitude = location.longitude;
+							topic.latitude = location.latitude;
+							topic.location = location.position;
+						}
+
+						const result = await this.$http.post({
+							r: 'forum/topicadmin',
+							act: 'new',
+							platType: getApp().globalData.systemInfo.platType,
+							json: JSON.stringify({
+								body: {
+									json: topic
+								}
+							})
+						});
+
+						uni.hideLoading();
+
+						uni.showModal({
+							title: '',
+							content: '发帖成功',
+							showCancel: false,
+							cancelText: '',
+							confirmText: '确定',
+							success: res => {
+								uni.navigateBack({
+									delta: 1
+								});
+							},
+							fail: () => {},
+							complete: () => {}
+						});
+					} catch (e) {
+						uni.hideLoading();
+					}
 				}
 			});
 		},

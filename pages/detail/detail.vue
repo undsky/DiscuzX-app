@@ -119,38 +119,43 @@ export default {
 					replyId = this.replyId;
 					this.replyId = null;
 				}
-				const result = await this.$http.post({
-					r: 'forum/topicadmin',
-					act: 'reply',
-					platType: getApp().globalData.systemInfo.platType,
-					json: JSON.stringify({
-						body: {
-							json: {
-								isHidden: 0,
-								isQuote,
-								isAnonymous: 0,
-								isOnlyAuthor: 0,
-								fid: this.boardId,
-								tid: _id,
-								replyId,
-								content: JSON.stringify([
-									{
-										type: 0,
-										infor: data
-									}
-								])
+
+				try {
+					const result = await this.$http.post({
+						r: 'forum/topicadmin',
+						act: 'reply',
+						platType: getApp().globalData.systemInfo.platType,
+						json: JSON.stringify({
+							body: {
+								json: {
+									isHidden: 0,
+									isQuote,
+									isAnonymous: 0,
+									isOnlyAuthor: 0,
+									fid: this.boardId,
+									tid: _id,
+									replyId,
+									content: JSON.stringify([
+										{
+											type: 0,
+											infor: data
+										}
+									])
+								}
 							}
-						}
-					})
-				});
+						})
+					});
 
-				uni.hideLoading();
+					uni.hideLoading();
 
-				this.$refs.chatbar.replytext = '';
-				uni.showToast({
-					title: result.errcode
-				});
-				this.$refs.paging.reload();
+					this.$refs.chatbar.replytext = '';
+					uni.showToast({
+						title: result.errcode
+					});
+					this.$refs.paging.reload();
+				} catch (e) {
+					uni.hideLoading();
+				}
 			} else {
 				uni.navigateTo({
 					url: '../auth/auth',

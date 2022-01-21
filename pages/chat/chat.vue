@@ -66,38 +66,42 @@ export default {
 				mask: true
 			});
 
-			const result = await this.$http.post({
-				r: 'message/pmadmin',
-				json: encodeURIComponent(
-					JSON.stringify({
-						toUid: this.fromUid,
-						plid: this.plid,
-						pmid: this.pmid,
-						msg: {
-							type: type,
-							content: content
-						}
-					})
-				)
-			});
+			try {
+				const result = await this.$http.post({
+					r: 'message/pmadmin',
+					json: encodeURIComponent(
+						JSON.stringify({
+							toUid: this.fromUid,
+							plid: this.plid,
+							pmid: this.pmid,
+							msg: {
+								type: type,
+								content: content
+							}
+						})
+					)
+				});
 
-			this.messages.push({
-				sender: this.user.uid,
-				type: type,
-				content: content,
-				time: result.body.sendTime,
-				mid: result.body.pmid
-			});
+				this.messages.push({
+					sender: this.user.uid,
+					type: type,
+					content: content,
+					time: result.body.sendTime,
+					mid: result.body.pmid
+				});
 
-			uni.hideLoading();
+				uni.hideLoading();
 
-			this.$refs.chatbar.replytext = '';
-			uni.showToast({
-				title: '发送成功',
-				success: () => {
-					this.gotoView = 'chat_' + this.messages[this.messages.length - 1].mid;
-				}
-			});
+				this.$refs.chatbar.replytext = '';
+				uni.showToast({
+					title: '发送成功',
+					success: () => {
+						this.gotoView = 'chat_' + this.messages[this.messages.length - 1].mid;
+					}
+				});
+			} catch (e) {
+				uni.hideLoading();
+			}
 		},
 		mobcent: function(content) {
 			return this.$util.mobcent.phiz((content || '').replace(/http(.*?) /g, '<a href="http$1">http$1</a>'));

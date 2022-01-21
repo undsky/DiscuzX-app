@@ -14,8 +14,8 @@
 				@focus="InputFocus"
 				@blur="InputBlur"
 			></textarea>
-			<view @click="chooseEmoji" class="action"><text class="cuIcon-emojifill text-grey"></text></view>
-			<button style="width: 70px;" @click="$u.throttle(send, 1000)" class="cu-btn bg-green shadow margin-left-sm">发送</button>
+			<view @click="chooseEmoji" class="action margin-right-sm"><text class="cuIcon-emojifill text-grey"></text></view>
+			<u-button throttleTime="1000" type="warning" @click="send">发送</u-button>
 		</view>
 		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom"><dx-emoji :parent="parent"></dx-emoji></uni-popup>
 	</view>
