@@ -7,7 +7,7 @@
 					<u-avatar
 						:show-sex="!!userInfo && 0 != userInfo.gender"
 						:sex-icon="!!userInfo && 1 == userInfo.gender ? 'man' : 'woman'"
-						:src="!!userInfo ? userInfo.icon : ''"
+						:src="!!userInfo ? userInfo.icon + '&t=' + new Date().getTime() : ''"
 						size="140"
 					></u-avatar>
 				</view>

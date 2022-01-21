@@ -421,7 +421,7 @@ export default {
 		},
 		end() {
 			music.stop();
-			recorderManager.stop();
+			if (this.hasRecord) recorderManager.stop();
 			clearInterval(recordTimeInterval);
 			clearInterval(playTimeInterval);
 			(this.recording = false), (this.playing = false), (this.hasRecord = false);

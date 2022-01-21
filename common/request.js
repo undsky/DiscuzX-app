@@ -158,9 +158,9 @@ async function uploadAttachment(path, module, type) {
 
 	return http.upload('', {
 		filePath: path,
-		name: 'uploadFile[]',
+		name: 'avatar' == module ? 'userAvatar' : 'uploadFile[]',
 		formData: {
-			r: 'forum/sendattachmentex',
+			r: 'avatar' == module ? 'user/uploadavatarex' : 'forum/sendattachmentex',
 			module: module || 'forum',
 			type: type || 'image',
 			accessToken,

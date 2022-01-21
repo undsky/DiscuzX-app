@@ -1,15 +1,17 @@
 <template>
 	<view>
-		<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
-			<view class="u-m-r-10">
+		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30 margin-top">
+			<view @click="uid ? void 0 : changeAvatar()" class="u-m-r-10">
 				<u-avatar
 					:show-sex="!!userInfo && 0 != userInfo.gender"
 					:sex-icon="!!userInfo && 1 == userInfo.gender ? 'man' : 'woman'"
-					:src="!!userInfo ? userInfo.icon : ''"
+					:show-level="!!userInfo"
+					level-icon="camera-fill"
+					:src="!!userInfo ? userInfo.icon + '&t=' + new Date().getTime() : ''"
 					size="140"
 				></u-avatar>
 			</view>
-			<view v-if="userInfo" class="u-flex-1 margin-left-sm">
+			<view v-if="userInfo" @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-flex-1 margin-left-sm">
 				<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 				<view class="margin-bottom-xs text-gray text-sm">
 					<text v-for="item in userInfo.body.creditShowList" :key="item.type">
@@ -19,10 +21,10 @@
 				</view>
 				<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
 			</view>
-			<template v-if="!uid">
-				<view class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
-				<view class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
-			</template>
+			<!-- <template v-if="!uid">
+				<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
+				<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
+			</template> -->
 		</view>
 		<u-cell-group :border="false">
 			<u-cell-item @click="$util.helper.goto('./info/info?uid=' + uid, true)" icon="account" :title="role + '的资料'"></u-cell-item>
@@ -89,6 +91,31 @@ export default {
 		})
 	},
 	methods: {
+		changeAvatar() {
+			uni.chooseImage({
+				count: 1,
+				sizeType: ['compressed'],
+				success: async res => {
+					uni.showLoading({
+						mask: true
+					});
+					try {
+						const result = await this.$http.uploadAttachment(res.tempFilePaths[0], 'avatar');
+						const newAvatar = result.pic_path + '&t=' + new Date().getTime();
+						this.userInfo.icon = newAvatar;
+						this.$store.commit(
+							'setUser',
+							Object.assign(this.user, {
+								avatar: newAvatar
+							})
+						);
+					} catch (e) {
+					} finally {
+						uni.hideLoading();
+					}
+				}
+			});
+		},
 		handleFriend: function() {
 			uni.navigateTo({
 				url:
