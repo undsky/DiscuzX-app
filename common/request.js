@@ -46,7 +46,8 @@ http.interceptors.response.use(async response => {
 	const data = response.data || {}
 	const head = data.head
 	if (head) {
-		if ('00000000' == head.errCode || '0000000' == head.errCode) {
+		const successCodes = ['00000000', '0000000', "02000023", '02000024']
+		if (successCodes.indexOf(head.errCode) > -1) {
 			return data
 		} else if ('50000000' == head.errCode) {
 			uni.showModal({
@@ -101,7 +102,8 @@ http.interceptors.response.use(async response => {
 			});
 		}
 	}
-	return Promise.reject(response)
+
+	return response
 }, async response => {
 	return Promise.reject(response)
 })

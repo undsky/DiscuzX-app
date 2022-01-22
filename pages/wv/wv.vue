@@ -11,7 +11,15 @@ export default {
 	},
 	methods: {},
 	onLoad: function(options) {
-		this.url = decodeURIComponent(options.url);
+		const { title, url } = options;
+
+		if (title) {
+			uni.setNavigationBarTitle({
+				title
+			});
+		}
+
+		this.url = decodeURIComponent(url);
 
 		const params = this.$util.helper.urlParse(this.url);
 		const deltaNum = 'delete' == params.act || 'move' == params.act ? 2 : 1;

@@ -1,22 +1,16 @@
 <template>
-	<view>
-		
-	</view>
+  <view></view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-			
-		}
-	}
+// TODO: user/updateuserinfo
+
+export default {
+  data() {
+    return {};
+  },
+  methods: {},
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -11,7 +11,7 @@
 					size="140"
 				></u-avatar>
 			</view>
-			<view v-if="userInfo" @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-flex-1 margin-left-sm">
+			<view v-if="userInfo" @click="edit" class="u-flex-1 margin-left-sm">
 				<view class="u-font-18 u-p-b-20">{{ userInfo.name }}</view>
 				<view class="margin-bottom-xs text-gray text-sm">
 					<text v-for="item in userInfo.body.creditShowList" :key="item.type">
@@ -22,8 +22,8 @@
 				<view class="text-sm text-orange">{{ userInfo.userTitle }}</view>
 			</view>
 			<!-- <template v-if="!uid">
-				<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
-				<view @click="uid ? void 0 : $util.helper.goto('./edit/edit', true)" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
+				<view @click="edit" class="u-m-l-10 u-p-10"><u-icon name="edit-pen" label="编辑" size="47"></u-icon></view>
+				<view @click="edit" class="u-m-l-10 u-p-10"><u-icon name="arrow-right" color="#969799" size="47"></u-icon></view>
 			</template> -->
 		</view>
 		<u-cell-group :border="false">
@@ -91,6 +91,16 @@ export default {
 		})
 	},
 	methods: {
+		edit() {
+			// if (!this.uid) {
+			// 	uni.navigateTo({
+			// 		url:
+			// 			'/pages/wv/wv?title=编辑&url=' +
+			// 			encodeURIComponent(`${this.$http.config.baseURL}?r=user/userinfoadminview&accessToken=${this.user.token}&accessSecret=${this.user.secret}`)
+			// 	});
+			// 	// this.$util.helper.goto('./edit/edit', true)
+			// }
+		},
 		changeAvatar() {
 			uni.chooseImage({
 				count: 1,
