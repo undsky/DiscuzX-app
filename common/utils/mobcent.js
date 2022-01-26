@@ -93,7 +93,7 @@ const emojis = [
 function phiz(content) {
 	content = content.replace(/\n/g, '<br/>')
 	content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
-		'<img src="$1"/>');
+		'<img style="width: 22px !important;height: 22px !important;" src="$1"/>');
 	content = content.replace(/\[video\](.*?)\[\/video\]/g,
 		'<video controls controlslist="nodownload" src="$1"></video>')
 	for (var i = 0; i < emojis.length; i++) {
