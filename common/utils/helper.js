@@ -6,6 +6,14 @@ function goto(url, auth) {
 	});
 }
 
+function checkAuth() {
+	if (store.state.auth.user) {
+		return true
+	} else {
+		goto(null, true)
+	}
+}
+
 function urlParse(url) {
 	var res = {};
 	if (url) {
@@ -24,5 +32,6 @@ function urlParse(url) {
 
 export default {
 	goto,
+	checkAuth,
 	urlParse
 }

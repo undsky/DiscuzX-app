@@ -42,7 +42,7 @@
 		},
 		methods: {
 			chooseImg() {
-				if (this.user) {
+				if (this.$util.helper.checkAuth()) {
 					uni.chooseImage({
 						count: 1,
 						sizeType: ['compressed'],
@@ -50,20 +50,13 @@
 							uni.$emit('replyImg', images.tempFilePaths[0]);
 						}
 					});
-				} else {
-					uni.navigateTo({
-						url: '/pages/auth/auth',
-						success: res => {},
-						fail: () => {},
-						complete: () => {}
-					});
 				}
 			},
 			getFocus() {
 				this.focus = true;
 			},
 			send: async function() {
-				if (this.user) {
+				if (this.$util.helper.checkAuth()) {
 					if (this.replytext) {
 						uni.$emit('reply', this.replytext);
 					} else {
@@ -71,13 +64,6 @@
 							title: '请输入内容'
 						});
 					}
-				} else {
-					uni.navigateTo({
-						url: '/pages/auth/auth',
-						success: res => {},
-						fail: () => {},
-						complete: () => {}
-					});
 				}
 			},
 			InputFocus(e) {

@@ -46,7 +46,7 @@ http.interceptors.response.use(async response => {
 	const data = response.data || {}
 	const head = data.head
 	if (head) {
-		const successCodes = ['00000000', '0000000', "02000023", '02000024']
+		const successCodes = ['00000000', '0000000', "02000023", '02000024', '06000007']
 		if (successCodes.indexOf(head.errCode) > -1) {
 			return data
 		} else if ('50000000' == head.errCode) {
