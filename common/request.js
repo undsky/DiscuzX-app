@@ -1,5 +1,6 @@
 import Request from '@/js_sdk/luch-request/luch-request'
 import store from '../store/index.js'
+import util from './util.js'
 
 const mobcentURL = 'https://bbs.undsky.com/mobcent/' //'https://bbsapi.foodmate.net/'
 
@@ -49,44 +50,30 @@ http.interceptors.response.use(async response => {
 		const successCodes = ['00000000', '0000000', "02000023", '02000024', '06000007']
 		if (successCodes.indexOf(head.errCode) > -1) {
 			return data
-		} else if ('50000000' == head.errCode) {
-			uni.showModal({
-				title: '',
-				content: '登录授权过期，请重新登录',
-				showCancel: false,
-				cancelText: '',
-				confirmText: '确定',
-				success: res => {
+		} else {
+			if ('50000000' == head.errCode) {
+				util.helper.modal('登录授权过期，请重新登录', res => {
 					uni.navigateTo({
 						url: '/pages/auth/auth'
 					})
-				},
-				fail: () => {},
-				complete: () => {}
-			});
-		} else if ('00100001' == head.errCode) {
-			uni.showModal({
-				content: head.errInfo,
-				success: function(res) {
-					if (res.confirm) {
-						uni.navigateTo({
-							url: '/pages/auth/auth'
-						})
-					} else if (res.cancel) {
-						uni.navigateBack({
-							delta: 1
-						});
+				})
+			} else if ('00100001' == head.errCode) {
+				uni.showModal({
+					content: head.errInfo,
+					success: function(res) {
+						if (res.confirm) {
+							uni.navigateTo({
+								url: '/pages/auth/auth'
+							})
+						} else if (res.cancel) {
+							uni.navigateBack({
+								delta: 1
+							});
+						}
 					}
-				}
-			});
-		} else {
-			uni.showModal({
-				title: '',
-				content: head.errInfo,
-				showCancel: false,
-				cancelText: '',
-				confirmText: '确定',
-				success: res => {
+				});
+			} else {
+				util.helper.modal(head.errInfo, res => {
 					if ('00300001' == head.errCode || '020000035' == head.errCode ||
 						'02000011' ==
 						head
@@ -96,10 +83,10 @@ http.interceptors.response.use(async response => {
 							delta: 1
 						});
 					}
-				},
-				fail: () => {},
-				complete: () => {}
-			});
+				})
+			}
+
+			return null
 		}
 	}
 

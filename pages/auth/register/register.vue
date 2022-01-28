@@ -120,20 +120,11 @@
 							}
 						})
 
-						uni.showModal({
-							title: '',
-							content: '注册成功！请返回登录',
-							showCancel: false,
-							cancelText: '',
-							confirmText: '确定',
-							success: res => {
-								uni.navigateBack({
-									delta: 1
-								});
-							},
-							fail: () => {},
-							complete: () => {}
-						});
+						this.$util.helper.modal('注册成功！请返回登录', res => {
+							uni.navigateBack({
+								delta: 1
+							});
+						})
 					}
 				});
 			},

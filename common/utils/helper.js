@@ -30,8 +30,22 @@ function urlParse(url) {
 	return res;
 }
 
+function modal(content, success, complete, fail) {
+	uni.showModal({
+		title: '',
+		content,
+		showCancel: false,
+		cancelText: '',
+		confirmText: '确定',
+		success,
+		fail,
+		complete
+	});
+}
+
 export default {
 	goto,
 	checkAuth,
-	urlParse
+	urlParse,
+	modal
 }
