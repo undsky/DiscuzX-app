@@ -14,7 +14,7 @@
 			</u-form-item>
 		</u-form>
 		<view class="margin-top-lg padding-bottom-lg">
-			<u-button throttleTime="1000" type="warning" @click="submit">保存</u-button>
+			<u-button type="warning" @click="submit">保存</u-button>
 		</view>
 		<u-select v-model="albumShow" :list="albumList" @confirm="albumConfirm"></u-select>
 	</view>

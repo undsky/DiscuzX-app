@@ -8,7 +8,7 @@ export default {
 		}, {
 			iconPath: "grid",
 			selectedIconPath: "grid-fill",
-			text: '板块',
+			text: '社区',
 			pagePath: "/pages/board/board"
 		}, {
 			iconPath: "plus-circle-fill",

@@ -6,7 +6,7 @@
 			</u-form-item>
 		</u-form>
 		<view class="margin-top-lg">
-			<u-button throttleTime="1000" type="warning" @click="submit">提交</u-button>
+			<u-button type="warning" @click="submit">提交</u-button>
 		</view>
 	</view>
 </template>

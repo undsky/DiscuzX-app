@@ -43,7 +43,7 @@
 		}, {
 			"path": "pages/board/board",
 			"style": {
-				"navigationBarTitleText": "板块",
+				"navigationBarTitleText": "社区",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
