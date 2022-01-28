@@ -91,20 +91,22 @@ const emojis = [
 ];
 
 function phiz(content) {
-	content = content.replace(/\n/g, '<br/>')
-	content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
-		'<img style="width: 22px !important;height: 22px !important;" src="$1"/>');
-	content = content.replace(/\[video\](.*?)\[\/video\]/g,
-		'<video controls controlslist="nodownload" src="$1"></video>')
-	for (var i = 0; i < emojis.length; i++) {
-		var emoji = emojis[i];
-		content = content.replace(new RegExp('\\' + emoji.substring(0, emoji.length - 1) + '\\]', 'g'),
-			'<img style="width: 22px !important;height: 22px !important;" src="' + request.config.mobcentURL +
-			'app/data/phiz/default/' +
-			(i < 10 ? '0' +
-				i : i) + '.png"/>');
+	if (content) {
+		content = content.replace(/\n/g, '<br/>')
+		content = content.replace(/\[mobcent_phiz=(.*?)\]/g,
+			'<img style="width: 22px !important;height: 22px !important;" src="$1"/>');
+		content = content.replace(/\[video\](.*?)\[\/video\]/g,
+			'<video controls controlslist="nodownload" src="$1"></video>')
+		for (var i = 0; i < emojis.length; i++) {
+			var emoji = emojis[i];
+			content = content.replace(new RegExp('\\' + emoji.substring(0, emoji.length - 1) + '\\]', 'g'),
+				'<img style="width: 22px !important;height: 22px !important;" src="' + request.config.mobcentURL +
+				'app/data/phiz/default/' +
+				(i < 10 ? '0' +
+					i : i) + '.png"/>');
+		}
 	}
-	return content;
+	return content || '';
 }
 
 function content(content) {

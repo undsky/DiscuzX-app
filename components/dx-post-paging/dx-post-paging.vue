@@ -113,7 +113,7 @@
 					if (res.list && res.list.length > 0) {
 						list = res.list;
 					} else if (res.pois && res.pois.length > 0) {
-						list = res.list;
+						list = res.pois;
 					} else if (res.body.data && res.body.data.length > 0) {
 						list = res.body.data;
 					}

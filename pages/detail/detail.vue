@@ -42,10 +42,11 @@
 		<view class="padding-sm">
 			<mp-html lazy-load :content="content" />
 		</view>
-		<block v-if="user && polls.length > 0">
+		<block v-if="polls.length > 0">
 			<view class="cu-bar bg-gray solid-bottom margin-top">
 				<view class="action">
-					投票{{ 2 == topic.poll_info.poll_status ? '（最多可选择' + topic.poll_info.type + '项）' : '结果' }}</view>
+					投票（最多可选择{{topic.poll_info.type}}项）
+				</view>
 			</view>
 			<checkbox-group class="block poll" @change="pollChange">
 				<label v-for="(item, index) in polls" :key="item.poll_item_id" class="cu-form-group">
@@ -60,7 +61,7 @@
 			<view style="padding: 0 15px !important;" class="flex flex-direction"><button @click="handlePoll"
 					class="cu-btn bg-green margin-tb-sm lg shadow">投票</button></view>
 		</block>
-		<view class="cu-bar bg-gray solid-bottom margin-top">
+		<view class="cu-bar bg-gray margin-top">
 			<view class="action">评分</view>
 			<view class="action"><button @click="handleRate" class="cu-btn bg-blue">我要评分</button></view>
 		</view>
@@ -78,8 +79,7 @@
 			</block>
 		</view>
 		<view v-else class="padding text-center text-grey">目前还没有人评分哦！</view>
-		<view v-if="topic.rateList && topic.rateList.showAllUrl"
-			class="padding bg-gray solid-bottom solid-top text-center text-blue">
+		<view v-if="topic.rateList && topic.rateList.showAllUrl" class="padding bg-gray text-center text-blue">
 			<text @click="moreRate" :data-url="topic.rateList.showAllUrl">更多评分</text>
 		</view>
 		<z-paging ref="paging" use-page-scroll v-model="commentList" autowire-query-name="zQuery">
@@ -236,7 +236,7 @@
 			},
 			moreRate: function(e) {
 				uni.navigateTo({
-					url: '/pages/wv/wv?url=' + encodeURIComponent(e.target.dataset.url)
+					url: '/pages/wv/wv?title=更多评分&url=' + encodeURIComponent(e.target.dataset.url)
 				});
 			},
 			sendMessage: async function(type, infor, aid) {
@@ -330,12 +330,12 @@
 						auth: false
 					}
 				});
+
 				if (!this.firstLoaded) {
 					this.boardId = result.boardId;
 					this.forumName = result.forumName;
 					this.forumTopicUrl = result.forumTopicUrl;
 					this.topic = result.topic;
-
 					if (result.topic.poll_info && result.topic.poll_info.poll_item_list) {
 						this.polls = result.topic.poll_info.poll_item_list.map(item => {
 							item.checked = false;
