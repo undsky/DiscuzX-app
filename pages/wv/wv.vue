@@ -26,7 +26,7 @@ export default {
 
 		// #ifdef APP-PLUS
 		const currentWebview = this.$scope.$getAppWebview();
-		// console.log(currentWebview.children());
+		
 		setTimeout(() => {
 			let wv = currentWebview.children()[0];
 			wv.setStyle({

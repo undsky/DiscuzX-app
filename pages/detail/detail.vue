@@ -73,9 +73,9 @@
 			<view class="padding-sm text-blue">{{ topic.rateList.total.field2 }}</view>
 			<view class="padding-sm text-blue">{{ topic.rateList.total.field3 }}</view>
 			<block v-for="(item, index) in topic.rateList.body" :key="index">
-				<view class="padding-sm text-green">{{ item.field1 }}</view>
-				<view class="padding-sm text-green">{{ item.field2 }}</view>
-				<view class="padding-sm text-green">{{ item.field3 }}</view>
+				<view class="padding-sm text-sm">{{ item.field1 }}</view>
+				<view class="padding-sm text-sm">{{ item.field2 }}</view>
+				<view class="padding-sm text-sm">{{ item.field3 }}</view>
 			</block>
 		</view>
 		<view v-else class="padding text-center text-grey">目前还没有人评分哦！</view>
@@ -219,7 +219,7 @@
 			handleRate: function() {
 				if (this.$util.helper.checkAuth()) {
 					uni.navigateTo({
-						url: '/pages/wv/wv?url=' +
+						url: '/pages/wv/wv?title=评分&url=' +
 							encodeURIComponent(
 								this.$http.config.baseURL +
 								this.$u.queryParams({
@@ -331,19 +331,21 @@
 					}
 				});
 
-				if (!this.firstLoaded) {
-					this.boardId = result.boardId;
-					this.forumName = result.forumName;
-					this.forumTopicUrl = result.forumTopicUrl;
-					this.topic = result.topic;
-					if (result.topic.poll_info && result.topic.poll_info.poll_item_list) {
-						this.polls = result.topic.poll_info.poll_item_list.map(item => {
-							item.checked = false;
-							return item;
-						});
+				if (result) {
+					if (!this.firstLoaded) {
+						this.boardId = result.boardId;
+						this.forumName = result.forumName;
+						this.forumTopicUrl = result.forumTopicUrl;
+						this.topic = result.topic;
+						if (result.topic.poll_info && result.topic.poll_info.poll_item_list) {
+							this.polls = result.topic.poll_info.poll_item_list.map(item => {
+								item.checked = false;
+								return item;
+							});
+						}
 					}
+					this.$refs.paging.complete(result.list);
 				}
-				this.$refs.paging.complete(result.list);
 				this.firstLoaded = true;
 			},
 			userSheet(reply_id) {

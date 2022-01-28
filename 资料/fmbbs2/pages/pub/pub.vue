@@ -2,36 +2,44 @@
 	<view>
 		<view class="grid col-2">
 			<view class="cu-form-group">
-				<picker mode="multiSelector" @change="multiChange" @columnchange="multiColumnChange" :value="multiIndex" :range="multiArray">
-					<view class="txt-left picker text-grey" :class=[fonttitle]>{{ multiIndex[0] > -1 ? multiArray[1][multiIndex[1]] : '请选择板块' }}</view>
+				<picker mode="multiSelector" @change="multiChange" @columnchange="multiColumnChange" :value="multiIndex"
+					:range="multiArray">
+					<view class="txt-left picker text-grey" :class=[fonttitle]>
+						{{ multiIndex[0] > -1 ? multiArray[1][multiIndex[1]] : '请选择板块' }}</view>
 				</picker>
 			</view>
 			<view class="cu-form-group">
 				<picker :disabled="multiIndex[0] == -1" @change="pickerChange" :value="index" :range="picker">
-					<view class="txt-left picker text-grey" :class=[fonttitle]>{{ index > -1 ? picker[index] : '请选择分类' }}</view>
+					<view class="txt-left picker text-grey" :class=[fonttitle]>
+						{{ index > -1 ? picker[index] : '请选择分类' }}</view>
 				</picker>
 			</view>
 		</view>
-		<view class="cu-form-group"><input :class=[fonttitle] @blur="handleBlurTitle" :value="title" placeholder="请输入标题" /></view>
+		<view class="cu-form-group"><input :class=[fonttitle] @blur="handleBlurTitle" :value="title"
+				placeholder="请输入标题" /></view>
 		<view class="cu-form-group" style="position: relative;">
-			<textarea :class=[fonttitle] @blur="handleBlurContent" :value="content" style="height: 150px;" maxlength="-1"
-			 placeholder="请输入内容"></textarea>
+			<textarea :class=[fonttitle] @blur="handleBlurContent" :value="content" style="height: 150px;"
+				maxlength="-1" placeholder="请输入内容"></textarea>
 			<view @click="addEmoji" class="pub-emoji"><text class="cuIcon-emojifill text-grey"></text></view>
 		</view>
 		<view class="cu-form-group">
 			<picker @change="seeChange" :value="seeIndex" :range="see">
-				<view class="txt-left picker text-grey" :class=[fonttitle]>{{ seeIndex > -1 ? see[seeIndex] : '可见性设置' }}</view>
+				<view class="txt-left picker text-grey" :class=[fonttitle]>{{ seeIndex > -1 ? see[seeIndex] : '可见性设置' }}
+				</view>
 			</picker>
 		</view>
 		<uni-collapse>
 			<uni-collapse-item :open="openAddImg" title="上传图片">
 				<view class="cu-form-group padding">
 					<view class="grid col-4 grid-square flex-sub">
-						<view class="bg-img" v-for="(item, index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
+						<view class="bg-img" v-for="(item, index) in imgList" :key="index" @tap="ViewImage"
+							:data-url="imgList[index]">
 							<image :src="imgList[index]" mode="aspectFill"></image>
-							<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index"><text class="cuIcon-close"></text></view>
+							<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index"><text
+									class="cuIcon-close"></text></view>
 						</view>
-						<view class="solids" @tap="ChooseImage" v-if="imgList.length < 4"><text class="cuIcon-cameraadd"></text></view>
+						<view class="solids" @tap="ChooseImage" v-if="imgList.length < 4"><text
+								class="cuIcon-cameraadd"></text></view>
 					</view>
 				</view>
 			</uni-collapse-item>
@@ -102,7 +110,8 @@
 			<text class="text-grey">{{ address }}</text>
 		</view>
 		<!-- #endif -->
-		<view class="padding flex flex-direction"><button @click="pub" class="cu-btn bg-blue margin-tb-sm lg" :class=[fonttitle]>发布</button></view>
+		<view class="padding flex flex-direction"><button @click="pub" class="cu-btn bg-blue margin-tb-sm lg"
+				:class=[fonttitle]>发布</button></view>
 		<uni-popup @change="handlePopupChange" ref="emoji" type="bottom">
 			<emoji></emoji>
 		</uni-popup>
@@ -173,26 +182,29 @@
 									this.$tool.loading()
 									let aid = [];
 									let body = [];
-									let newtopic = {
+									let json = {
 										title: this.title,
-										fid: 22 == _boardid ? 22 : this.boards[this.multiIndex[0]].board_list[this.multiIndex[1]].board_id,
-										typeId: 22 == _boardid ? 0 : this.classifys[this.index].classificationType_id,
+										fid: 22 == _boardid ? 22 : this.boards[this.multiIndex[0]].board_list[this
+											.multiIndex[1]].board_id,
+										typeId: 22 == _boardid ? 0 : this.classifys[this.index]
+											.classificationType_id,
 										isOnlyAuthor: this.seeIndex > -1 ? this.seeIndex : 0,
 										isHidden: 0,
 										isAnonymous: 0
 									};
 									if (this.location) {
-										newtopic.isShowPostion = 1;
-										newtopic.longitude = this.location.longitude;
-										newtopic.latitude = this.location.latitude;
-										newtopic.location = this.address;
+										json.isShowPostion = 1;
+										json.longitude = this.location.longitude;
+										json.latitude = this.location.latitude;
+										json.location = this.address;
 									}
 									body.push({
 										type: 0,
 										infor: this.content
 									});
 									if (this.tempFilePath) {
-										const audiores = await this.$tool.upload(this.tempFilePath, 'forum', 'audio', true);
+										const audiores = await this.$tool.upload(this.tempFilePath, 'forum', 'audio',
+											true);
 										if (null == audiores[0]) {
 											const audiodata = JSON.parse(audiores[1].data);
 											body.push({
@@ -202,29 +214,31 @@
 											aid.push(audiodata.body.attachment[0].id);
 										}
 									}
-									const imgres = await Promise.all(this.imgList.map(async img => await this.$tool.upload(img, 'forum', 'image',
-										true)));
+									const imgres = await Promise.all(this.imgList.map(async img => await this.$tool
+										.upload(img, 'forum', 'image',
+											true)));
 									imgres.forEach(res => {
 										if (null == res[0]) {
 											if (200 == res[1].statusCode) {
 												const imgdata = JSON.parse(res[1].data);
 												body.push({
 													type: 1,
-													infor: imgdata.body.attachment[0].urlName.replace('//forum', '/forum')
+													infor: imgdata.body.attachment[0].urlName.replace(
+														'//forum', '/forum')
 												});
 												aid.push(imgdata.body.attachment[0].id);
 											}
 										}
 									});
-									newtopic.content = JSON.stringify(body);
-									newtopic.aid = aid.join();
+									json.content = JSON.stringify(body);
+									json.aid = aid.join();
 									const pubres = await this.$tool.getData({
 											r: this.$api.topicadmin,
 											platType: 'ios' == this.sysinfo.platform ? 5 : 1,
 											act: 'new',
 											json: JSON.stringify({
 												body: {
-													json: newtopic
+													json
 												}
 											})
 										},
@@ -446,7 +460,8 @@
 			this.location = getApp().globalData.location;
 			if (this.location && this.location.address) {
 				this.address =
-					(this.location.address.province || '') + (this.location.address.city || '') + (this.location.address.district ||
+					(this.location.address.province || '') + (this.location.address.city || '') + (this.location
+						.address.district ||
 						'') + (this.location.address.street || '');
 			}
 

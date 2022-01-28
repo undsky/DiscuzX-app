@@ -16,10 +16,11 @@
 				longitude,
 				latitude
 			} = getApp().globalData.location
-			
+
 			this.params = {
 				r: 'square/surrounding',
 				poi: 'topic',
+				radius: 100000,
 				longitude,
 				latitude
 			}

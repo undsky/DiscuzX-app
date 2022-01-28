@@ -20,6 +20,7 @@
 			this.params = {
 				r: 'square/surrounding',
 				poi: 'user',
+				radius: 100000,
 				longitude,
 				latitude
 			}

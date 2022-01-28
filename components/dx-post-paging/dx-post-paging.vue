@@ -3,7 +3,7 @@
 		<z-paging :fixed="false" style="height: 100%;" ref="paging" v-model="zList" :use-page-scroll="usePageScroll"
 			autowire-query-name="zQuery" :auto="false" :enable-back-to-top="currentIndex === tabIndex">
 			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
-				<view v-for="(item, index) in zList" :key="item.topic_id + (item.replied_date || '')"
+				<view v-for="(item, index) in zList" :key="item.topic_id + (item.replied_date || item.dateline || '')"
 					class="cu-item cur post-item" :data-id="item.topic_id" :data-note="item.note" @click="gotoDetail">
 					<view v-if="hasAvatar" class="cu-avatar">
 						<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'"
@@ -14,7 +14,7 @@
 							<view class="text-cut">{{ item.title || item.topic_subject || item.note }}</view>
 						</view>
 						<view class="text-cut text-grey text-sm">
-							<mp-html lazy-load :content="$util.mobcent.phiz(item.subject || item.reply_content)" />
+							<mp-html lazy-load :preview-img="false" :content="$util.mobcent.phiz(item.subject || item.reply_content)" />
 						</view>
 						<view class="text-xs flex justify-between">
 							<view class="flex">
@@ -120,7 +120,7 @@
 				} catch (e) {
 					//TODO handle the exception
 				} finally {
-					this.$refs.paging.complete(list);
+					this.$refs.paging.complete(list || []);
 					this.firstLoaded = true;
 				}
 			},

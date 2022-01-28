@@ -82,7 +82,8 @@
 					r: 'user/sign'
 				});
 
-				this.$util.helper.modal(result.head.errInfo)
+				if (result)
+					this.$util.helper.modal(result.head.errInfo)
 			},
 			logout() {
 				this.$store.commit('clearUser');

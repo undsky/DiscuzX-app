@@ -120,11 +120,12 @@
 							}
 						})
 
-						this.$util.helper.modal('注册成功！请返回登录', res => {
-							uni.navigateBack({
-								delta: 1
-							});
-						})
+						if (result)
+							this.$util.helper.modal('注册成功！请返回登录', res => {
+								uni.navigateBack({
+									delta: 1
+								});
+							})
 					}
 				});
 			},

@@ -144,13 +144,6 @@
 			}
 
 		}, {
-			"path": "pages/user/edit/edit",
-			"style": {
-				"navigationBarTitleText": "个人设置",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/user/home",
 			"style": {
 				"navigationBarTitleText": "主页",
