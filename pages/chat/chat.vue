@@ -62,51 +62,38 @@ export default {
 			});
 		},
 		sendMessage: async function(type, content) {
-			const pages = getCurrentPages();
-			if ('pages/chat/chat' != pages[pages.length - 1].route) {
-				return;
-			}
+			const result = await this.$http.post({
+				r: 'message/pmadmin',
+				json: encodeURIComponent(
+					JSON.stringify({
+						toUid: this.fromUid,
+						plid: this.plid,
+						pmid: this.pmid,
+						msg: {
+							type: type,
+							content: content
+						}
+					})
+				)
+			});
 
-			try {
-				uni.showLoading({
-					mask: true
-				});
+			this.messages.push({
+				sender: this.user.uid,
+				type: type,
+				content: content,
+				time: result.body.sendTime,
+				mid: result.body.pmid
+			});
 
-				const result = await this.$http.post({
-					r: 'message/pmadmin',
-					json: encodeURIComponent(
-						JSON.stringify({
-							toUid: this.fromUid,
-							plid: this.plid,
-							pmid: this.pmid,
-							msg: {
-								type: type,
-								content: content
-							}
-						})
-					)
-				});
+			uni.hideLoading();
 
-				this.messages.push({
-					sender: this.user.uid,
-					type: type,
-					content: content,
-					time: result.body.sendTime,
-					mid: result.body.pmid
-				});
-
-				uni.hideLoading();
-
-				this.$refs.chatbar.replytext = '';
-				uni.showToast({
-					title: '发送成功',
-					success: () => {
-						this.gotoView = 'chat_' + this.messages[this.messages.length - 1].mid;
-					}
-				});
-			} catch (e) {
-				uni.hideLoading();
-			}
+			this.$refs.chatbar.replytext = '';
+			uni.showToast({
+				title: '发送成功',
+				success: () => {
+					this.gotoView = 'chat_' + this.messages[this.messages.length - 1].mid;
+				}
+			});
 		},
 		mobcent: function(content) {
 			return this.$util.mobcent.phiz((content || '').replace(/http(.*?) /g, '<a href="http$1">http$1</a>'));
@@ -118,14 +105,32 @@ export default {
 		this.pmid = options.pmid;
 
 		uni.$on('reply', async data => {
-			await this.sendMessage('text', data);
+			const pages = getCurrentPages();
+			if ('pages/chat/chat' != pages[pages.length - 1].route) {
+				return;
+			}
+
+			try {
+				await this.sendMessage('text', data);
+			} catch (e) {
+				//TODO handle the exception
+			} finally {
+				uni.hideLoading();
+			}
 		});
 		uni.$on('replyImg', async data => {
+			const pages = getCurrentPages();
+			if ('pages/chat/chat' != pages[pages.length - 1].route) {
+				return;
+			}
+
 			try {
 				const result = await this.$http.uploadAttachment(data);
 				await this.sendMessage('image', result.body.attachment[0].urlName);
 			} catch (e) {
 				//TODO handle the exception
+			} finally {
+				uni.hideLoading();
 			}
 		});
 
