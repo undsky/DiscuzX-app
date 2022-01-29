@@ -85,13 +85,22 @@
 				if (result)
 					this.$util.helper.modal(result.head.errInfo)
 			},
-			logout() {
+			logout: async function() {
 				this.$store.commit('clearUser');
 				this.userInfo = null;
 
 				clearInterval(getApp().globalData.heartInterval);
 				getApp().globalData.heartInterval = null;
 				this.$store.commit('clearHeart');
+
+				try {
+					await this.$http.get({
+						r: 'user/login',
+						type: 'logout'
+					});
+				} catch (e) {
+					//TODO handle the exception
+				}
 			}
 		},
 		onShow: async function() {

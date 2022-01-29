@@ -15,7 +15,10 @@
 				<u-cell-item @click="$util.helper.goto('./list/list', true)" icon="bell" title="消息">
 					<u-badge v-if="heart" :count="heart.systemInfo.count" :absolute="false" slot="right-icon"></u-badge>
 				</u-cell-item>
-				<u-cell-item @click="$util.helper.goto('./system/system', true)" icon="kefu-ermai" title="系统消息"></u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./system/system', true)" icon="kefu-ermai" title="系统消息">
+				</u-cell-item>
+				<u-cell-item @click="$util.helper.goto('./announcement/announcement')" icon="email" title="公告">
+				</u-cell-item>
 			</u-cell-group>
 		</view>
 		<dx-tabbar :currentTab="3"></dx-tabbar>
@@ -23,19 +26,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+	import {
+		mapState
+	} from 'vuex';
 
-export default {
-	data() {
-		return {};
-	},
-	computed: {
-		...mapState({
-			heart: state => state.heart.heart
-		})
-	},
-	methods: {}
-};
+	export default {
+		data() {
+			return {};
+		},
+		computed: {
+			...mapState({
+				heart: state => state.heart.heart
+			})
+		},
+		methods: {}
+	};
 </script>
 
 <style></style>

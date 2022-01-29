@@ -275,6 +275,13 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/message/announcement/announcement",
+			"style": {
+				"navigationBarTitleText": "公告",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	]
 }
