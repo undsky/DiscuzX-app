@@ -99,6 +99,10 @@ export default {
 			return this.$util.mobcent.phiz((content || '').replace(/http(.*?) /g, '<a href="http$1">http$1</a>'));
 		}
 	},
+	onUnload: function() {
+		uni.$off('replyImg');
+		uni.$off('reply');
+	},
 	onLoad: async function(options) {
 		this.fromUid = options.fromUid;
 		this.plid = options.plid;

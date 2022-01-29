@@ -171,6 +171,10 @@ export default {
 			}
 		});
 	},
+	onUnload: function() {
+		uni.$off('replyImg');
+		uni.$off('reply');
+	},
 	methods: {
 		handlePoll: async function() {
 			if (this.$util.helper.checkAuth()) {

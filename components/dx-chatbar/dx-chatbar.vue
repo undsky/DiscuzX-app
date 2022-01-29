@@ -113,6 +113,9 @@ export default {
 		uni.$on('tapemoji', data => {
 			if (data.parent == this.parent) this.replytext += data.emoji;
 		});
+	},
+	destroyed() {
+		uni.$off('tapemoji')
 	}
 };
 </script>

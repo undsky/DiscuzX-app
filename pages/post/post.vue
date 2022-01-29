@@ -236,6 +236,7 @@ export default {
 		});
 	},
 	onUnload: function() {
+		uni.$off('tapemoji');
 		this.end();
 		this.src = '';
 	},
