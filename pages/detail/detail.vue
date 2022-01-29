@@ -13,9 +13,9 @@
 					<view class="text-gray text-sm text-left">{{ $u.timeFrom(topic.create_date) }}</view>
 					<view class="text-gray text-sm text-right">
 						<text class="cuIcon-attentionfill margin-lr-xs"></text>
-						{{ topic.hits }}
+						{{ topic.hits || 0 }}
 						<text class="cuIcon-messagefill margin-lr-xs"></text>
-						{{ topic.replies }}
+						{{ topic.replies || 0 }}
 					</view>
 				</view>
 			</view>
@@ -23,7 +23,7 @@
 		<view class="cu-list menu-avatar">
 			<view class="cu-item cur">
 				<view @click="userSheet()" class="cu-avatar round lg"
-					:style="'background-image:url(' + topic.icon + ');'"></view>
+					:style="'background-image:url(' + (topic.icon || '') + ');'"></view>
 				<view @click="userSheet()" class="content">
 					<view>
 						<view class="text-cut flex">{{ topic.user_nick_name }}</view>
@@ -86,7 +86,7 @@
 			<view class="cu-list menu-avatar comment">
 				<view v-for="(item, index) in commentList" :key="item.reply_posts_id" class="cu-item">
 					<view @click="userSheet(item.reply_id)" class="cu-avatar round"
-						:style="'background-image:url(' + item.icon + ');'"></view>
+						:style="'background-image:url(' + (item.icon || '') + ');'"></view>
 					<view class="content">
 						<view @click="userSheet(item.reply_id)" class="text-grey">{{ item.reply_name }}</view>
 						<view class="text-gray text-content text-df">
