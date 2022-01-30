@@ -88,6 +88,9 @@ http.interceptors.response.use(async response => {
 
 			return null
 		}
+	} else if ('string' == typeof data && data.indexOf('Discuz! System Error') > -1) {
+		util.helper.modal('系统错误')
+		return null
 	}
 
 	return response

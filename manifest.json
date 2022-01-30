@@ -60,6 +60,15 @@
                         "appkey_ios" : "b3b7d545da3e866d2adeb419a0f3a582",
                         "appkey_android" : "43d23e32d6cdd37d04f5b6c905ca6d0c"
                     }
+                },
+                "ad" : {
+                    "360" : {},
+                    "csj" : {},
+                    "gdt" : {},
+                    "ks" : {},
+                    "ks-content" : {},
+                    "sigmob" : {},
+                    "BXM-AD" : {}
                 }
             }
         },
