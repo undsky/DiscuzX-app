@@ -6,13 +6,16 @@
 <!-- 滑动切换选项卡swiper，此组件支持easycom规范，可以在项目中直接引用 -->
 <template>
 	<view :class="fixed?'zp-swiper-container zp-swiper-container-fixed':'zp-swiper-container'" :style="[swiperStyle]">
-		<slot v-if="$slots.top" name="top"></slot>
+		<!-- #ifndef APP-PLUS -->
+		<view v-if="cssSafeAreaInsetBottom===-1" class="zp-safe-area-inset-bottom"></view>
+		<!-- #endif -->
+		<slot v-if="$slots.top" name="top" />
 		<view class="zp-swiper-super">
 			<view class="zp-swiper">
-				<slot/></slot>
+				<slot />
 			</view>
 		</view>
-		<slot v-if="$slots.bottom" name="bottom"></slot>
+		<slot v-if="$slots.bottom" name="bottom" />
 	</view>
 </template>
 
@@ -21,7 +24,8 @@
 		name: "z-paging-swiper",
 		data() {
 			return {
-				systemInfo: null
+				systemInfo: null,
+				cssSafeAreaInsetBottom: -1
 			};
 		},
 		props: {
@@ -40,6 +44,9 @@
 			this.$nextTick(() => {
 				this.systemInfo = uni.getSystemInfoSync();
 			})
+			// #ifndef APP-PLUS
+			this._getCssSafeAreaInsetBottom();
+			// #endif
 		},
 		computed: {
 			swiperStyle() {
@@ -60,22 +67,35 @@
 					if (this.safeAreaInsetBottom) {
 						bottom += this.safeAreaBottom;
 					}
-					swiperStyle.bottom = bottom + 'px';
+					if(bottom > 0){
+						swiperStyle.bottom = bottom + 'px';
+					}
 				}
 				return swiperStyle;
 			},
 			safeAreaBottom() {
-				if (!this.systemInfo) {
+				if(!this.systemInfo){
 					return 0;
 				}
 				let safeAreaBottom = 0;
-				// #ifdef MP-WEIXIN
-				safeAreaBottom = this.systemInfo.screenHeight - this.systemInfo.safeArea.bottom;
-				// #endif
-				// #ifdef APP-PLUS || H5
+				// #ifdef APP-PLUS
 				safeAreaBottom = this.systemInfo.safeAreaInsets.bottom || 0;
 				// #endif
-				return Math.abs(safeAreaBottom);
+				// #ifndef APP-PLUS
+				safeAreaBottom = this.cssSafeAreaInsetBottom === -1 ? 0 : this.cssSafeAreaInsetBottom;
+				// #endif
+				return safeAreaBottom;
+			}
+		},
+		methods: {
+			//通过获取css设置的底部安全区域占位view高度设置bottom距离
+			_getCssSafeAreaInsetBottom(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('.zp-safe-area-inset-bottom').boundingClientRect(res => {
+					if (res) {
+						this.cssSafeAreaInsetBottom = res.height;
+					}
+				}).exec();
 			}
 		}
 	}
@@ -100,6 +120,13 @@
 		left: 0;
 		bottom: 0;
 		right: 0;
+	}
+	
+	.zp-safe-area-inset-bottom {
+		position: absolute;
+		/* #ifndef APP-PLUS */
+		height: env(safe-area-inset-bottom);
+		/* #endif */
 	}
 
 	.zp-swiper-super {

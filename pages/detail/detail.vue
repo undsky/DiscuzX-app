@@ -136,6 +136,10 @@ export default {
 			return this.$util.mobcent.content(this.topic.content);
 		}
 	},
+	onPullDownRefresh: function() {
+		this.firstLoaded = false;
+		uni.stopPullDownRefresh();
+	},
 	onLoad: async function(options) {
 		_id = options.id;
 

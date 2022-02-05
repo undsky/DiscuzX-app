@@ -61,7 +61,6 @@
 	height: 0 !important;
 	background: transparent;
 }
-
 /* #endif */
 
 .zp-paging-touch-view {
@@ -172,8 +171,15 @@
 	justify-content: center;
 }
 
-.zp-loading-fixed{
+.zp-loading-fixed {
 	z-index: 9999;
+}
+
+.zp-safe-area-inset-bottom {
+	position: absolute;
+	/* #ifndef APP-PLUS */
+	height: env(safe-area-inset-bottom);
+	/* #endif */
 }
 
 .zp-n-refresh-container {

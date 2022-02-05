@@ -1,6 +1,7 @@
 // [z-paging]微信小程序、QQ小程序、app-vue、h5上使用wxs实现自定义下拉刷新，降低逻辑层与视图层的通信折损，提升性能
 
 var currentMoveDistance = 0;
+var isPCFlag = -1;
 
 function propObserver(newValue, oldValue, ownerInstance, instance) {
 	var state = ownerInstance.getState();
@@ -30,7 +31,7 @@ function touchstart(e, ownerInstance) {
 	var touch = _getCommonTouch(e);
 	var loading = _getIsTrue(dataset.loading);
 	state.startY = touch.touchY;
-	state.lastRefresherTouchmove = touch;
+	state.lastTouch = touch;
 	if (!loading && isTouchEnded) {
 		state.isTouchmoving = false;
 	}
@@ -43,6 +44,7 @@ function touchmove(e, ownerInstance) {
 	var instance = ownerInstance.getState().currentInstance;
 	var dataset = instance.getDataset();
 	var refresherThreshold = dataset.refresherthreshold;
+	var isIos = _getIsTrue(dataset.isios);
 	var state = instance.getState();
 	if (_getRefresherTouchDisabled(e, instance, 1)) {
 		_handleTouchMovePullingDown(state, ownerInstance, false);
@@ -61,9 +63,9 @@ function touchmove(e, ownerInstance) {
 		return true;
 	}
 	if (prevent && !state.disabledBounce) {
-		ownerInstance.callMethod('_handleScrollViewDisableBounce', {
-			bounce: false
-		});
+		if(isIos){
+		   ownerInstance.callMethod('_handleScrollViewDisableBounce', {bounce: false}); 
+		}
 		state.disabledBounce = true;
 		_handleTouchMovePullingDown(state, ownerInstance, prevent);
 		return !prevent;
@@ -72,6 +74,7 @@ function touchmove(e, ownerInstance) {
 	var oldRefresherStatus = state.refresherStatus;
 	var dataset = instance.getDataset();
 	var oldIsTouchmoving = _getIsTrue(dataset.oldistouchmoving);
+	var hasTouchmove = _getIsTrue(dataset.hastouchmove);
 	var isTouchmoving = state.isTouchmoving;
 	if (moveDistance >= refresherThreshold) {
 		state.refresherStatus = 1;
@@ -85,8 +88,10 @@ function touchmove(e, ownerInstance) {
 	if (state.isTouchEnded) {
 		state.isTouchEnded = false;
 	}
-	if (oldRefresherStatus == undefined || oldRefresherStatus != state.refresherStatus || oldIsTouchmoving !=
-		isTouchmoving) {
+	if (hasTouchmove) {
+		ownerInstance.callMethod('_handleWxsPullingDown', {moveDistance:moveDistance, diffDis:moveDistanceObj.diffDis});
+	}
+	if (oldRefresherStatus == undefined || oldRefresherStatus != state.refresherStatus || oldIsTouchmoving != isTouchmoving) {
 		ownerInstance.callMethod('_handleRefresherTouchmove', moveDistance, touch);
 	}
 	_handleTouchMovePullingDown(state, ownerInstance, prevent);
@@ -135,16 +140,20 @@ function touchend(e, ownerInstance) {
 
 // #ifdef H5
 function isPC() {
+	if (isPCFlag != -1){
+		return isPCFlag;
+	}
 	var userAgentInfo = navigator.userAgent;
 	var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
 	var flag = true;
-	for (var v = 0; v < Agents.length - 1; v++) {
-		if (userAgentInfo.indexOf(Agents[v]) > 0) {
+	for (var i = 0; i < Agents.length; i++) {
+		if (userAgentInfo.indexOf(Agents[i]) > 0) {
 			flag = false;
 			break;
 		}
 	}
-	return flag;
+	isPCFlag = flag;
+	return isPCFlag;
 }
 
 var movable = false;
@@ -224,6 +233,7 @@ function _getMoveDistance(e, instance) {
 	}
 	return {
 		currentMoveDistance: currentMoveDistance,
+		diffDis: diffDis,
 		isDown: diffDis > 0
 	};
 }
@@ -277,28 +287,25 @@ function _getRefresherTouchDisabled(e, instance, processTag) {
 	if (!isIos && processTag === 2) {
 		fixedIsTop = true;
 	}
-	var res = loading || useChatRecordMode || !refresherEnabled || !useCustomRefresher || ((
-		usePageScroll && useCustomRefresher && pageScrollTop > 5) && !fixedIsTop) || ((
-		!usePageScroll && useCustomRefresher && scrollTop > 5) && !fixedIsTop);
-	return res;
+	return loading || useChatRecordMode || !refresherEnabled || !useCustomRefresher || ((usePageScroll && useCustomRefresher && pageScrollTop > 5) && !fixedIsTop) || 
+	((!usePageScroll && useCustomRefresher && scrollTop > 5) && !fixedIsTop);
 }
 
 function _getAngleIsInRange(e, touch, state, dataset) {
 	var refresherMaxAngle = dataset.refreshermaxangle;
 	var refresherAecc = _getIsTrue(dataset.refresheraecc);
-	var lastRefresherTouchmove = state.lastRefresherTouchmove;
+	var lastTouch = state.lastTouch;
 	var refresherReachMaxAngle = state.refresherReachMaxAngle;
 	var moveDistance = state.oldMoveDistance;
-	if (!lastRefresherTouchmove) {
+	if (!lastTouch) {
 		return true;
 	}
-	if (refresherMaxAngle >= 0 && refresherMaxAngle <= 90 && lastRefresherTouchmove) {
-		if ((!moveDistance || moveDistance < 1) && !refresherAecc && refresherReachMaxAngle != null && !
-			refresherReachMaxAngle) {
+	if (refresherMaxAngle >= 0 && refresherMaxAngle <= 90 && lastTouch) {
+		if ((!moveDistance || moveDistance < 1) && !refresherAecc && refresherReachMaxAngle != null && !refresherReachMaxAngle) {
 			return false;
 		}
-		var x = Math.abs(touch.touchX - lastRefresherTouchmove.touchX);
-		var y = Math.abs(touch.touchY - lastRefresherTouchmove.touchY);
+		var x = Math.abs(touch.touchX - lastTouch.touchX);
+		var y = Math.abs(touch.touchY - lastTouch.touchY);
 		var z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 		if ((x || y) && x > 1) {
 			var angle = Math.asin(y / z) / Math.PI * 180;
@@ -306,21 +313,21 @@ function _getAngleIsInRange(e, touch, state, dataset) {
 				var hitReachMaxAngleCount = state.hitReachMaxAngleCount || 0;
 				state.hitReachMaxAngleCount = ++hitReachMaxAngleCount;
 				if (state.hitReachMaxAngleCount > 2) {
-					state.lastRefresherTouchmove = touch;
+					state.lastTouch = touch;
 					state.refresherReachMaxAngle = false;
 				}
 				return false;
 			}
 		}
 	}
-	state.lastRefresherTouchmove = touch;
+	state.lastTouch = touch;
 	return true;
 }
 
 function _handleTouchMovePullingDown(state, instance, onPullingDown) {
 	var oldOnPullingDown = state.onPullingDown || false;
 	if (oldOnPullingDown != onPullingDown) {
-		instance.callMethod('_handleWxsOnPullingDown', onPullingDown);
+		instance.callMethod('_handleWxsPullingDownStatusChange', onPullingDown);
 	}
 	state.onPullingDown = onPullingDown;
 }
