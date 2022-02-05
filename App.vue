@@ -39,8 +39,7 @@
 			// #ifdef APP
 			const {
 				clientid
-			}
-			plus.push.getClientInfo()
+			} = plus.push.getClientInfo()
 			console.log(clientid)
 
 			plus.push.addEventListener('click', function(msg) {
