@@ -18,7 +18,7 @@ export default {
 			this.params = {
 				r: 'user/userlist',
 				type: 'all',
-				orderBy: 'search',
+				orderBy: 'dateline',
 				kw: this.keyword
 			};
 		}
