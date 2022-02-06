@@ -1,125 +1,143 @@
 <script>
-import store from './store/index.js';
-import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
+	import store from './store/index.js';
+	// #ifdef APP
+	import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
+	// #endif
 
-export default {
-	onLaunch: function() {
-		let systemInfo = uni.getSystemInfoSync();
-		// #ifdef APP-PLUS
-		systemInfo.env = 'app';
-		// #endif
-		// #ifdef H5
-		if ('micromessenger' == window.navigator.userAgent.toLowerCase().match(/micromessenger/i)) {
-			systemInfo.env = 'gh';
-		} else {
-			systemInfo.env = 'h5';
-		}
-		// #endif
-		// #ifdef MP-360
-		systemInfo.env = '360';
-		// #endif
-		// #ifdef MP-ALIPAY
-		systemInfo.env = 'alipay';
-		// #endif
-		// #ifdef MP-BAIDU
-		systemInfo.env = 'baidu';
-		// #endif
-		// #ifdef MP-QQ
-		systemInfo.env = 'qq';
-		// #endif
-		// #ifdef MP-TOUTIAO
-		systemInfo.env = 'toutiao';
-		// #endif
-		// #ifdef MP-WEIXIN
-		systemInfo.env = 'weixin';
-		// #endif
-		systemInfo.platType = 'ios' == systemInfo.platform ? 5 : 'android' == systemInfo.platform ? 1 : 0;
-		this.globalData.systemInfo = systemInfo;
-
-		// #ifdef APP
-		const { clientid } = plus.push.getClientInfo();
-		this.globalData.clientid = clientid;
-
-		plus.push.addEventListener('click', function(msg) {
-			console.log(msg);
-			// TODO: 获取帖子id，打开帖子详情页
-			// setTimeout(() => {
-			// 	uni.navigateTo({
-			// 		url: '/pages/detail/detail?id=' + msg.payload
-			// 	});
-			// }, 1000);
-		});
-
-		// 在线收到通知
-		plus.push.addEventListener('receive', function(msg) {
-			console.log(msg);
-			if ('receive' == msg.type) {
-				plus.push.createMessage(msg.payload.content, '', {
-					cover: false,
-					title: msg.payload.title
-				});
+	export default {
+		onLaunch: function() {
+			let systemInfo = uni.getSystemInfoSync();
+			// #ifdef APP-PLUS
+			systemInfo.env = 'app';
+			// #endif
+			// #ifdef H5
+			if ('micromessenger' == window.navigator.userAgent.toLowerCase().match(/micromessenger/i)) {
+				systemInfo.env = 'gh';
+			} else {
+				systemInfo.env = 'h5';
 			}
-		});
-		// #endif
+			// #endif
+			// #ifdef MP-360
+			systemInfo.env = '360';
+			// #endif
+			// #ifdef MP-ALIPAY
+			systemInfo.env = 'alipay';
+			// #endif
+			// #ifdef MP-BAIDU
+			systemInfo.env = 'baidu';
+			// #endif
+			// #ifdef MP-QQ
+			systemInfo.env = 'qq';
+			// #endif
+			// #ifdef MP-TOUTIAO
+			systemInfo.env = 'toutiao';
+			// #endif
+			// #ifdef MP-WEIXIN
+			systemInfo.env = 'weixin';
+			// #endif
+			systemInfo.platType = 'ios' == systemInfo.platform ? 5 : 'android' == systemInfo.platform ? 1 : 0;
+			this.globalData.systemInfo = systemInfo;
 
-		console.log('App Launch');
-	},
-	onShow: function() {
-		// #ifdef APP
-		try {
-			callCheckVersion();
-		} catch (e) {
-			//TODO handle the exception
-		}
-		// #endif
-		try {
-			const location = uni.getStorageSync('location');
-			if (false !== location) {
-				uni.getLocation({
-					geocode: true,
-					success: res => {
-						this.globalData.location = res;
-						if (res.address) {
-							const { province, city, district, street } = res.address;
-							this.globalData.location.position = (province || '') + (city || '') + (district || '') + (street || '');
-						}
-						this.$nextTick(async () => {
-							if (store.state.auth.user) {
-								await this.$http.post({
-									r: 'user/location',
-									longitude: res.longitude,
-									latitude: res.latitude,
-									location: this.globalData.location.position || ''
-								});
+			// #ifdef APP
+			const {
+				clientid
+			} = plus.push.getClientInfo();
+			this.globalData.clientid = clientid;
+
+			plus.push.addEventListener('click', function(msg) {
+				console.log('click')
+				console.log(msg);
+				setTimeout(() => {
+					uni.navigateTo({
+						url: '/pages/detail/detail?id=' + msg.payload
+					});
+				}, 1000)
+			});
+
+			// 在线收到通知
+			plus.push.addEventListener('receive', function(msg) {
+				console.log('receive')
+				console.log(msg);
+				if ('receive' == msg.type) {
+					const {
+						title,
+						content,
+						id
+					} = msg.payload
+					plus.push.createMessage(content, id, {
+						cover: false,
+						title
+					});
+				}
+			});
+			// #endif
+
+			console.log('App Launch');
+		},
+		onShow: function() {
+			// #ifdef APP
+			try {
+				console.log('checkUpdate')
+				checkUpdate();
+			} catch (e) {
+				console.log(e)
+			}
+			// #endif
+			try {
+				const location = uni.getStorageSync('location');
+				if (false !== location) {
+					uni.getLocation({
+						geocode: true,
+						success: res => {
+							this.globalData.location = res;
+							if (res.address) {
+								const {
+									province,
+									city,
+									district,
+									street
+								} = res.address;
+								this.globalData.location.position = (province || '') + (city || '') + (
+									district || '') + (street || '');
 							}
-						});
-					}
-				});
+							this.$nextTick(async () => {
+								if (store.state.auth.user) {
+									await this.$http.post({
+										r: 'user/location',
+										longitude: res.longitude,
+										latitude: res.latitude,
+										location: this.globalData.location.position ||
+											''
+									});
+								}
+							});
+						}
+					});
+				}
+			} catch (e) {
+				//TODO handle the exception
 			}
-		} catch (e) {
-			//TODO handle the exception
-		}
 
-		if (store.state.auth.user) {
-			this.globalData.heartInterval = setInterval(async () => {
-				const result = await this.$http.get({
-					r: 'message/heart'
-				});
-				store.commit('setHeart', result);
-			}, 120000);
-		}
+			if (store.state.auth.user) {
+				this.globalData.heartInterval = setInterval(async () => {
+					const result = await this.$http.get({
+						r: 'message/heart'
+					});
+					store.commit('setHeart', result);
+				}, 120000);
+			}
 
-		console.log('App Show');
-	},
-	onHide: function() {
-		console.log('App Hide');
-	}
-};
+			console.log('App Show');
+		},
+		onHide: function() {
+			console.log('App Hide');
+		}
+	};
 </script>
 
 <style lang="scss">
-@import 'colorui/main.css';
-@import 'colorui/icon.css';
+	@import 'colorui/main.css';
+	@import 'colorui/icon.css';
 
-@import 'uview-ui/index.scss';
+	@import 'uview-ui/index.scss';
 </style>

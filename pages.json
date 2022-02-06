@@ -44,7 +44,7 @@
 			"path": "pages/board/board",
 			"style": {
 				"navigationBarTitleText": "社区",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 
