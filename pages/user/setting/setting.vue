@@ -12,9 +12,6 @@
 			<u-cell-item @click="showShare = true" icon="share" title="分享"></u-cell-item>
 			<u-cell-item @click="$util.helper.goto('/pages/feedback/feedback', true)" icon="question-circle"
 				title="意见反馈"></u-cell-item>
-		</u-cell-group>
-		<u-gap :bg-color="$u.color['infoLight']"></u-gap>
-		<u-cell-group>
 			<u-cell-item @click="navTo()" icon="info-circle" title="隐私政策"></u-cell-item>
 		</u-cell-group>
 		<u-popup v-model="showShare" mode="bottom" safe-area-inset-bottom>
