@@ -2,8 +2,8 @@
     "name" : "DiscuzX",
     "appid" : "__UNI__8BD3CF8",
     "description" : "Discuz! X 论坛前端，基于 uViewUI、ColorUI 开发，兼容全平台",
-    "versionName" : "1.0.9",
-    "versionCode" : 109,
+    "versionName" : "1.0.10",
+    "versionCode" : 1010,
     "transformPx" : false,
     "app-plus" : {
         "compatible" : {
