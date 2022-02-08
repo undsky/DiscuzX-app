@@ -14,7 +14,7 @@
 							<view class="text-cut">{{ item.title || item.topic_subject || item.note }}</view>
 						</view>
 						<view class="text-cut text-grey text-sm">
-							{{ item.subject || item.reply_content }}
+							{{ item.subject || item.reply_content || '' }}
 							<!-- <mp-html lazy-load :preview-img="false"
 								:content="$util.mobcent.phiz(item.subject || item.reply_content)" /> -->
 						</view>

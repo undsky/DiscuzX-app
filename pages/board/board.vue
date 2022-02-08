@@ -3,7 +3,8 @@
 		<dx-navbar title="社区"></dx-navbar>
 		<u-tabs-swiper ref="tabs" :list="tabList" :is-scroll="false" :current="tabIndex" @change="tabChange">
 		</u-tabs-swiper>
-		<swiper class="swiper" :current="currentIndex" @transition="transition" @animationfinish="animationfinish">
+		<swiper class="swiper" :current="currentIndex" @change="swiperChange" @transition="transition"
+			@animationfinish="animationfinish">
 			<swiper-item>
 				<view v-for="item in boardList" :key="item.board_category_id">
 					<view class="cu-bar bg-white">
@@ -24,8 +25,8 @@
 				</view>
 			</swiper-item>
 			<swiper-item>
-				<scroll-view class="sv" scroll-y="true" :refresher-enabled="true" @refresherrefresh="reloadPhoto"
-					:refresher-triggered="triggered" @refresherpulling="onPulling" @scrolltolower="loadMorePhoto">
+				<scroll-view class="sv" scroll-y="true" :refresher-enabled="true" :refresher-triggered="triggered"
+					@refresherrefresh="reloadPhoto" @refresherpulling="onPulling" @scrolltolower="loadMorePhoto">
 					<u-waterfall v-model="photoList" ref="uWaterfall">
 						<template v-slot:left="{ leftList }">
 							<view class="cu-card dynamic no-card">
@@ -98,10 +99,6 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex';
-
 	export default {
 		data() {
 			return {
@@ -122,15 +119,14 @@
 				triggered: false
 			};
 		},
-		computed: {
-			...mapState({
-				user: state => state.auth.user
-			})
-		},
 		methods: {
-			tabChange: async function(index) {
+			tabChange(index) {
 				this.currentIndex = index;
-				if (1 == index && 0 == this.photoList.length) {
+			},
+			swiperChange: async function(e) {
+				this.tabIndex = e.detail.current;
+
+				if (1 == this.tabIndex && 0 == this.photoList.length) {
 					await this.reloadPhoto();
 				}
 			},
@@ -138,9 +134,7 @@
 				this.$refs.tabs.setDx(e.detail.dx);
 			},
 			animationfinish(e) {
-				let current = e.detail.current;
-				this.$refs.tabs.setFinishCurrent(current);
-				this.tabIndex = current;
+				this.$refs.tabs.setFinishCurrent(e.detail.current);
 			},
 			onPulling() {
 				if (!this.triggered)
@@ -156,16 +150,26 @@
 					});
 					try {
 						const result = await this.$http.get({
-							r: 'forum/photogallery',
+							// r: 'forum/photogallery',
+							// pageSize: 20
 							page: this.page,
-							pageSize: 20
+							r: 'forum/topiclist',
+							boardId: 0,
+							filterType: 'typeid',
+							filterId: 0,
+							sortby: 'photo'
+						}, {
+							custom: {
+								auth: false
+							}
 						});
 
 						if (result) {
 							await this.$refs.uWaterfall.clear();
 							setTimeout(() => {
 								this.photoList = result.list.map(item => {
-									item.last_reply_date = this.$u.timeFrom(item.last_reply_date);
+									item.last_reply_date = this.$u.timeFrom(item
+										.last_reply_date);
 									return item;
 								});
 							}, 500)
@@ -189,9 +193,18 @@
 					});
 					try {
 						const result = await this.$http.get({
-							r: 'forum/photogallery',
+							// r: 'forum/photogallery',
+							// pageSize: 20
 							page: this.page,
-							pageSize: 20
+							r: 'forum/topiclist',
+							boardId: 0,
+							filterType: 'typeid',
+							filterId: 0,
+							sortby: 'photo'
+						}, {
+							custom: {
+								auth: false
+							}
 						});
 
 						if (result) {
@@ -228,9 +241,6 @@
 		},
 		onLoad: async function(options) {
 			await this.loadBoard();
-		},
-		onShow: async function() {
-			if (this.user && 0 == this.photoList.length) await this.reloadPhoto();
 		}
 	};
 </script>

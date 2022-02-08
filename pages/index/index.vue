@@ -37,10 +37,10 @@
 						name: '置顶',
 						sortby: 'top'
 					},
-					{
-						name: '图文',
-						sortby: 'photo'
-					}
+					// {
+					// 	name: '图文',
+					// 	sortby: 'photo'
+					// }
 				],
 				tabIndex: 0,
 				currentIndex: 0
