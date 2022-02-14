@@ -15,7 +15,8 @@
 				<u-input :border="border" placeholder="请输入标题" v-model="model.title" type="text"></u-input>
 			</u-form-item>
 			<u-form-item :label-position="labelPosition" label="内容" prop="content">
-				<u-input type="textarea" :maxlength="-1" :border="border" height="230" placeholder="请填写内容" v-model="model.content" />
+				<u-input type="textarea" :maxlength="-1" :border="border" height="230" placeholder="请填写内容"
+					v-model="model.content" />
 				<view @click="chooseEmoji" class="choose-emoji"><text class="cuIcon-emojifill text-grey"></text></view>
 			</u-form-item>
 			<u-form-item label-position="top" label="上传图片" prop="photo" label-width="150">
@@ -218,7 +219,7 @@
 			this.boardList = _boardList;
 
 			// 录音
-			// #ifndef H5 || MP-ALIPAY || MP-KUAISHOU
+			// #ifdef APP || MP-WEIXIN
 			music = uni.createInnerAudioContext();
 			music.onEnded(() => {
 				clearInterval(playTimeInterval);
@@ -445,13 +446,15 @@
 				music.stop();
 			},
 			end() {
-				music.stop();
+				// #ifdef APP || MP-WEIXIN
+				if (music) music.stop();
 				if (this.hasRecord) recorderManager.stop();
 				clearInterval(recordTimeInterval);
 				clearInterval(playTimeInterval);
 				(this.recording = false), (this.playing = false), (this.hasRecord = false);
 				(this.playTime = 0), (this.recordTime = 0);
 				(this.formatedRecordTime = '00:00:00'), (this.formatedRecordTime = '00:00:00');
+				// #endif
 			},
 			clear() {
 				this.end();
