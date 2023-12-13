@@ -21,6 +21,15 @@
 			</view>
 		</view>
 		<u-gap bg-color="#f1f1f1" height="7"></u-gap>
+		<view v-if="topic.sortContent">
+			<view class="flex flex-wrap">
+				<view v-for="(item,index) in topic.sortContent.summary" :key="index"
+					class="basis-df bg-gray padding-sm flex flex-direction">
+					{{item.value}}<text class="text-sm text-grey">{{item.title}}</text>
+				</view>
+			</view>
+			<u-gap bg-color="#f1f1f1" height="7"></u-gap>
+		</view>
 		<view class="cu-list menu-avatar">
 			<view class="cu-item cur">
 				<view @click="userSheet()" class="cu-avatar round lg"
@@ -155,7 +164,7 @@
 				user: state => state.auth.user
 			}),
 			content: function() {
-				return this.$util.mobcent.content(this.topic.content);
+				return this.$util.mobcent.content(this.topic.content, this.topic.sortContent);
 			}
 		},
 		onPullDownRefresh: function() {

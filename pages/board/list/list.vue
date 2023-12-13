@@ -9,7 +9,8 @@
 					r:'forum/topiclist',
 					boardId : board_id,
 					filterType: 'typeid',
-					filterId: item.classificationType_id
+					filterId: item.classificationType_id,
+					isImageList:3
 				}" :tabIndex="tabIndex" :currentIndex="currentIndex"></dx-post-paging>
 			</swiper-item>
 		</swiper>
@@ -61,6 +62,15 @@
 				_tabList.push(...result.classificationType_list)
 			}
 			this.tabList = _tabList;
+
+			console.log('分类信息', result.classificationTop_list)
+			if (result.classificationTop_list && result.classificationTop_list.length > 0) {
+				const classificationTop_info = await this.$http.get({
+					r: 'forum/classification',
+					sortid: result.classificationTop_list[0].classificationTop_id
+				})
+				console.log('分类信息详情', classificationTop_info)
+			}
 		}
 	}
 </script>

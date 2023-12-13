@@ -10,7 +10,8 @@
 						boardId: 0,
 						filterType: 'typeid',
 						filterId: 0,
-						sortby: item.sortby
+						sortby: item.sortby,
+						isImageList:3
 					}" :tabIndex="tabIndex" :currentIndex="currentIndex"></dx-post-paging>
 			</swiper-item>
 		</swiper>
