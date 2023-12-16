@@ -4,8 +4,9 @@
 			autowire-query-name="zQuery" :auto="false" :enable-back-to-top="currentIndex === tabIndex">
 			<view class="cu-list" :class="[hasAvatar ? 'menu-avatar' : 'padding-lr']">
 				<block v-for="(item, index) in zList" :key="index">
-					<view v-if="item.imageList.length == 0" class="cu-item cur post-item" :data-id="item.topic_id"
-						:data-note="item.note" :data-announce_id="item.announce_id" @click="gotoDetail">
+					<view v-if="!item.imageList || item.imageList.length == 0" class="cu-item cur post-item"
+						:data-id="item.topic_id" :data-note="item.note" :data-announce_id="item.announce_id"
+						@click="gotoDetail">
 						<view v-if="hasAvatar" class="cu-avatar">
 							<u-avatar :show-sex="!!item.gender" :sex-icon="1 == item.gender ? 'man' : 'woman'"
 								:src="item.userAvatar || item.icon || item.authorAvatar"></u-avatar>
