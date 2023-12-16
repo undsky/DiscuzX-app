@@ -2,10 +2,9 @@
 
 > 基于 uViewUI、ColorUI 开发，兼容全平台
 
-
 ### 修改接口地址
 
-``` javascript 
+```javascript
 // ./common/request.js
 const config = {
 	baseURL: 'https://你的论坛网址/mobcent/app/web/index.php',
@@ -17,8 +16,10 @@ const config = {
 
 [https://ask.dcloud.net.cn/article/35267](https://ask.dcloud.net.cn/article/35267)
 
-### 项目演示
+### [项目演示](https://bbs.undsky.com/h5)
 
-[https://bbs.undsky.com/h5](https://bbs.undsky.com/h5)
+### [https://bbs.undsky.com/h5](https://bbs.undsky.com/h5)
 
-![](https://cdn.cloud.undsky.com/portal/discuzx/h5.png)
+### 体验账号：test
+
+### 密码：test123
