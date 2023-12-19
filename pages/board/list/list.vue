@@ -73,15 +73,16 @@
 			}
 			this.tabList = _tabList;
 
-			if (result.classificationTop_list && result.classificationTop_list.length > 0) {
-				const classificationTop_info = await this.$http.get({
-					r: 'forum/classification',
-					sortid: result.classificationTop_list[0].classificationTop_id
-				})
-				if (classificationTop_info && classificationTop_info.body) {
-					this.classified = classificationTop_info.body.classified
-				}
-			}
+			// TODO 根据分类信息查询
+			// if (result.classificationTop_list && result.classificationTop_list.length > 0) {
+			// 	const classificationTop_info = await this.$http.get({
+			// 		r: 'forum/classification',
+			// 		sortid: result.classificationTop_list[0].classificationTop_id
+			// 	})
+			// 	if (classificationTop_info && classificationTop_info.body) {
+			// 		this.classified = classificationTop_info.body.classified
+			// 	}
+			// }
 		}
 	}
 </script>
