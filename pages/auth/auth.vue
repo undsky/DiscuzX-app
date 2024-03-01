@@ -89,6 +89,10 @@
 							this.$store.commit('setHeart', result);
 						}, 120000);
 
+						await this.$http.get({
+							r: 'message/heart'
+						});
+
 						this.$util.helper.modal('登录成功', res => {
 							uni.navigateBack();
 						})

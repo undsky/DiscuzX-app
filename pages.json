@@ -298,6 +298,13 @@
 
 				}
 			}
+		},
+		{
+			"path": "pages/user/lock/lock",
+			"style": {
+				"navigationBarTitleText": "账号注销",
+				"enablePullDownRefresh": false
+			}
 		}
 	]
 }

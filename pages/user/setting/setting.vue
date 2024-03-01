@@ -13,6 +13,8 @@
 			<u-cell-item @click="$util.helper.goto('/pages/feedback/feedback', true)" icon="question-circle"
 				title="意见反馈"></u-cell-item>
 			<u-cell-item @click="navTo()" icon="info-circle" title="隐私政策"></u-cell-item>
+			<u-cell-item v-if="user" @click="$util.helper.goto('/pages/user/lock/lock', true)" icon="lock"
+				title="账号注销"></u-cell-item>
 		</u-cell-group>
 		<u-popup v-model="showShare" mode="bottom" safe-area-inset-bottom>
 			<dx-share></dx-share>
@@ -21,6 +23,10 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex';
+
 	export default {
 		data() {
 			return {
@@ -28,6 +34,11 @@
 				noticeChecked: true,
 				showShare: false
 			};
+		},
+		computed: {
+			...mapState({
+				user: state => state.auth.user
+			})
 		},
 		methods: {
 			locationChange(e) {
