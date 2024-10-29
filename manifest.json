@@ -19,7 +19,6 @@
             "delay" : 0
         },
         "modules" : {
-            "Push" : {},
             "Share" : {},
             "Geolocation" : {}
         },
@@ -49,12 +48,12 @@
                 ],
                 "abiFilters" : [ "armeabi-v7a", "x86" ]
             },
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             "sdkConfigs" : {
                 "maps" : {},
-                "push" : {
-                    "unipush" : {}
-                },
+                "push" : {},
                 "share" : {},
                 "geolocation" : {
                     "amap" : {
