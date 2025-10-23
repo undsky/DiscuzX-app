@@ -16,10 +16,18 @@ const config = {
 
 [https://ask.dcloud.net.cn/article/35267](https://ask.dcloud.net.cn/article/35267)
 
-### [项目演示](https://bbs.undsky.com/h5)
+### 项目演示
 
-### [https://bbs.undsky.com/h5](https://bbs.undsky.com/h5)
+#### [https://bbs.undsky.com/h5](https://bbs.undsky.com/h5)
 
-### 体验账号：test
+#### 体验账号：test
 
-### 密码：test123
+#### 密码：test123
+
+### 开源地址
+
+[https://github.com/undsky/DiscuzX-app](https://github.com/undsky/DiscuzX-app)
+
+### 个人主页
+
+[https://www.undsky.com/](https://www.undsky.com/)
