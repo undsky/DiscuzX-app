@@ -28,6 +28,10 @@ const config = {
 
 [https://github.com/undsky/DiscuzX-app](https://github.com/undsky/DiscuzX-app)
 
+### Dcloud 插件市场
+
+[https://ext.dcloud.net.cn/plugin?id=5450](https://ext.dcloud.net.cn/plugin?id=5450)
+
 ### 个人主页
 
 [https://www.undsky.com/](https://www.undsky.com/)
