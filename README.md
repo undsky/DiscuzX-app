@@ -2,6 +2,18 @@
 
 > 基于 uViewUI、ColorUI 开发，兼容全平台
 
+### 开源地址（给个 star）
+
+[https://github.com/undsky/DiscuzX-app](https://github.com/undsky/DiscuzX-app)
+
+### Dcloud 插件市场
+
+[https://ext.dcloud.net.cn/plugin?id=5450](https://ext.dcloud.net.cn/plugin?id=5450)
+
+### 个人主页
+
+[https://www.undsky.com/](https://www.undsky.com/)
+
 ### 修改接口地址
 
 ```javascript
@@ -23,15 +35,3 @@ const config = {
 #### 体验账号：test
 
 #### 密码：test123
-
-### 开源地址
-
-[https://github.com/undsky/DiscuzX-app](https://github.com/undsky/DiscuzX-app)
-
-### Dcloud 插件市场
-
-[https://ext.dcloud.net.cn/plugin?id=5450](https://ext.dcloud.net.cn/plugin?id=5450)
-
-### 个人主页
-
-[https://www.undsky.com/](https://www.undsky.com/)
